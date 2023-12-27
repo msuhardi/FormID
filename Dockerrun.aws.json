@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "652261905145.dkr.ecr.ap-southeast-1.amazonaws.com/formsg:@TAG",
+    "Name": "596169030285.dkr.ecr.ap-southeast-1.amazonaws.com/formid:@TAG",
     "Update": "true"
   },
   "Ports": [
@@ -15,8 +15,8 @@
       "ContainerDirectory": "/certs"
     },
     {
-      "HostDirectory": "/etc/formsg/.env",
-      "ContainerDirectory": "/opt/formsg/.env"
+      "HostDirectory": "/etc/formid/.env",
+      "ContainerDirectory": "/opt/formid/.env"
     }
   ]
 }
