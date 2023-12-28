@@ -71,7 +71,12 @@ export const compulsoryVarsSchema: Schema<ICompulsoryVarsSchema> = {
   awsConfig: {
     imageS3Bucket: {
       doc: 'S3 Bucket to upload images to',
-      format: String,
+      format: function check(val) {
+        if (typeof val !== 'string') {
+          // eslint-disable-next-line typesafe/no-throw-sync-func
+          throw new TypeError(`imageS3Bucket is not a string: ${val}`)
+        }
+      },
       default: null,
       env: 'IMAGE_S3_BUCKET',
     },

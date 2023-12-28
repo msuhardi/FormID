@@ -31,9 +31,16 @@ const optionalVars = convict(optionalVarsSchema)
 
 // Load and validate compulsory configuration values
 // If environment variables are not present, an error will be thrown
-const compulsoryVars = convict(compulsoryVarsSchema)
-  .validate({ allowed: 'strict' })
-  .getProperties()
+let compulsoryVars
+try {
+  compulsoryVars = convict(compulsoryVarsSchema)
+    .validate({
+      allowed: 'strict',
+    })
+    .getProperties()
+} catch (e) {
+  throw new Error(`HAHAHAHHAHA: ${e}`)
+}
 
 // Deep merge nested objects optionalVars and compulsoryVars
 const basicVars = merge(optionalVars, compulsoryVars)
@@ -68,23 +75,18 @@ const s3BucketUrlSchema = loadS3BucketUrlSchema({
   region: basicVars.awsConfig.region,
 })
 const awsEndpoint = convict(s3BucketUrlSchema).getProperties().endPoint
-let s3BucketUrlVars
-try {
-  s3BucketUrlVars = convict(s3BucketUrlSchema)
-    .load({
-      logoBucketUrl: `${awsEndpoint}/${basicVars.awsConfig.logoS3Bucket}`,
-      imageBucketUrl: `${awsEndpoint}/${basicVars.awsConfig.imageS3Bucket}`,
-      staticAssetsBucketUrl: `${awsEndpoint}/${basicVars.awsConfig.staticAssetsS3Bucket}`,
-      // NOTE THE TRAILING / AT THE END OF THIS URL! This is only for attachments!
-      attachmentBucketUrl: `${awsEndpoint}/${basicVars.awsConfig.attachmentS3Bucket}/`,
-      virusScannerQuarantineS3BucketUrl: `${awsEndpoint}/${basicVars.awsConfig.virusScannerQuarantineS3Bucket}`,
-      paymentProofS3BucketUrl: `${awsEndpoint}/${basicVars.awsConfig.paymentProofS3Bucket}`,
-    })
-    .validate({ allowed: 'strict' })
-    .getProperties()
-} catch (e) {
-  throw new Error(`AWS Config Error: ${e}: ${basicVars}`)
-}
+const s3BucketUrlVars = convict(s3BucketUrlSchema)
+  .load({
+    logoBucketUrl: `${awsEndpoint}/${basicVars.awsConfig.logoS3Bucket}`,
+    imageBucketUrl: `${awsEndpoint}/${basicVars.awsConfig.imageS3Bucket}`,
+    staticAssetsBucketUrl: `${awsEndpoint}/${basicVars.awsConfig.staticAssetsS3Bucket}`,
+    // NOTE THE TRAILING / AT THE END OF THIS URL! This is only for attachments!
+    attachmentBucketUrl: `${awsEndpoint}/${basicVars.awsConfig.attachmentS3Bucket}/`,
+    virusScannerQuarantineS3BucketUrl: `${awsEndpoint}/${basicVars.awsConfig.virusScannerQuarantineS3Bucket}`,
+    paymentProofS3BucketUrl: `${awsEndpoint}/${basicVars.awsConfig.paymentProofS3Bucket}`,
+  })
+  .validate({ allowed: 'strict' })
+  .getProperties()
 
 const s3 = new aws.S3({
   region: basicVars.awsConfig.region,
