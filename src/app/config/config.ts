@@ -85,9 +85,7 @@ const s3BucketUrlVars = convict(s3BucketUrlSchema)
     virusScannerQuarantineS3BucketUrl: `${awsEndpoint}/${basicVars.awsConfig.virusScannerQuarantineS3Bucket}`,
     paymentProofS3BucketUrl: `${awsEndpoint}/${basicVars.awsConfig.paymentProofS3Bucket}`,
   })
-  .validate({
-    allowed: 'strict',
-  })
+  .validate({ allowed: 'strict' })
   .getProperties()
 
 const s3 = new aws.S3({

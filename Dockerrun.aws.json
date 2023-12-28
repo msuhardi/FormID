@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "652261905145.dkr.ecr.ap-southeast-1.amazonaws.com/formid:@TAG",
+    "Name": "596169030285.dkr.ecr.ap-southeast-1.amazonaws.com/formid:@TAG",
     "Update": "true"
   },
   "Ports": [
