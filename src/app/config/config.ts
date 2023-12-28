@@ -31,16 +31,11 @@ const optionalVars = convict(optionalVarsSchema)
 
 // Load and validate compulsory configuration values
 // If environment variables are not present, an error will be thrown
-let compulsoryVars
-try {
-  compulsoryVars = convict(compulsoryVarsSchema)
-    .validate({
-      allowed: 'strict',
-    })
-    .getProperties()
-} catch (e) {
-  throw new Error(`HAHAHAHHAHA: ${e}`)
-}
+const compulsoryVars = convict(compulsoryVarsSchema)
+  .validate({
+    allowed: 'strict',
+  })
+  .getProperties()
 
 // Deep merge nested objects optionalVars and compulsoryVars
 const basicVars = merge(optionalVars, compulsoryVars)
