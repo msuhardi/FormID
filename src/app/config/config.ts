@@ -31,9 +31,16 @@ const optionalVars = convict(optionalVarsSchema)
 
 // Load and validate compulsory configuration values
 // If environment variables are not present, an error will be thrown
-const compulsoryVars = convict(compulsoryVarsSchema)
-  .validate({ allowed: 'strict' })
-  .getProperties()
+let compulsoryVars
+try {
+  compulsoryVars = convict(compulsoryVarsSchema)
+    .validate({
+      allowed: 'strict',
+    })
+    .getProperties()
+} catch (e) {
+  throw new Error(`HAHAHAHHAHA: ${e}`)
+}
 
 // Deep merge nested objects optionalVars and compulsoryVars
 const basicVars = merge(optionalVars, compulsoryVars)
@@ -78,7 +85,9 @@ const s3BucketUrlVars = convict(s3BucketUrlSchema)
     virusScannerQuarantineS3BucketUrl: `${awsEndpoint}/${basicVars.awsConfig.virusScannerQuarantineS3Bucket}`,
     paymentProofS3BucketUrl: `${awsEndpoint}/${basicVars.awsConfig.paymentProofS3Bucket}`,
   })
-  .validate({ allowed: 'strict' })
+  .validate({
+    allowed: 'strict',
+  })
   .getProperties()
 
 const s3 = new aws.S3({
