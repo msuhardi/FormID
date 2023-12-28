@@ -62,16 +62,16 @@ RUN npm prune --production --legacy-peer-deps
 # This stage builds the final container
 FROM node:hydrogen-alpine3.18
 LABEL maintainer=FormSG<formsg@data.gov.sg>
-WORKDIR /opt/formsg
+WORKDIR /opt/formid
 
 # Install build from backend-build
-COPY --from=build /build/node_modules /opt/formsg/node_modules
-COPY --from=build /build/package.json /opt/formsg/package.json
-COPY --from=build /build/dist /opt/formsg/dist
+COPY --from=build /build/node_modules /opt/formid/node_modules
+COPY --from=build /build/package.json /opt/formid/package.json
+COPY --from=build /build/dist /opt/formid/dist
 
 # Built backend goes back to root working directory
-RUN mv /opt/formsg/dist/backend/src /opt/formsg/
-RUN mv /opt/formsg/dist/backend/shared /opt/formsg/
+RUN mv /opt/formid/dist/backend/src /opt/formid/
+RUN mv /opt/formid/dist/backend/shared /opt/formid/
 
 # Install chromium from official docs
 # https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md#running-on-alpine
