@@ -37,6 +37,7 @@ const compulsoryVars = convict(compulsoryVarsSchema)
 
 // Deep merge nested objects optionalVars and compulsoryVars
 const basicVars = merge(optionalVars, compulsoryVars)
+console.log('THIS IS BASIC VARS', basicVars)
 
 const isDev =
   basicVars.core.nodeEnv === Environment.Dev ||
