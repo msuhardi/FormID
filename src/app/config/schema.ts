@@ -434,7 +434,7 @@ export const prodOnlyVarsSchema: Schema<IProdOnlyVarsSchema> = {
         }
       */
       if (uriObject.scheme !== 'mongodb') {
-        throw new Error(`Scheme must be mongodb ${uriObject.scheme}`)
+        throw new Error(`Scheme must be mongodb`)
       }
       if (isNil(uriObject.database)) {
         throw new Error('Database must be specified')
