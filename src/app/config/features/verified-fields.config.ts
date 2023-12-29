@@ -8,7 +8,7 @@ const verifiedFieldsSchema: Schema<IVerifiedFields> = {
   verificationSecretKey: {
     doc: 'The secret key for signing verified responses (email, mobile)',
     format: String,
-    default: null,
+    default: '',
     env: 'VERIFICATION_SECRET_KEY',
   },
 }

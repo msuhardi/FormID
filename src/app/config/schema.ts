@@ -71,16 +71,7 @@ export const compulsoryVarsSchema: Schema<ICompulsoryVarsSchema> = {
   awsConfig: {
     imageS3Bucket: {
       doc: 'S3 Bucket to upload images to',
-      format: function check(val) {
-        if (typeof val !== 'string') {
-          // eslint-disable-next-line typesafe/no-throw-sync-func
-          throw new TypeError(
-            `imageS3Bucket is not a string: ${val} ${JSON.stringify(
-              process.env,
-            )}`,
-          )
-        }
-      },
+      format: String,
       default: null,
       env: 'IMAGE_S3_BUCKET',
     },
@@ -443,7 +434,7 @@ export const prodOnlyVarsSchema: Schema<IProdOnlyVarsSchema> = {
         }
       */
       if (uriObject.scheme !== 'mongodb') {
-        throw new Error('Scheme must be mongodb')
+        throw new Error(`Scheme must be mongodb`)
       }
       if (isNil(uriObject.database)) {
         throw new Error('Database must be specified')

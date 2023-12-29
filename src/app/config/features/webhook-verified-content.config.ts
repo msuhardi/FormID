@@ -9,7 +9,7 @@ const webhooksAndVerifiedContentSchema: Schema<IWebhooksAndVerifiedContent> = {
   signingSecretKey: {
     doc: 'The secret key for signing verified content passed into the database and for signing webhooks',
     format: String,
-    default: null,
+    default: '',
     env: 'SIGNING_SECRET_KEY',
   },
   webhookQueueUrl: {

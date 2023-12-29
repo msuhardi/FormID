@@ -9,13 +9,13 @@ const captchaSchema: Schema<ICaptcha> = {
   captchaPrivateKey: {
     doc: 'Google Captcha private key',
     format: String,
-    default: null,
+    default: '',
     env: 'GOOGLE_CAPTCHA',
   },
   captchaPublicKey: {
     doc: 'Google Captcha public key.',
     format: String,
-    default: '6Lchkl0UAAAAANw4DUdja4W6A5xFwuomkcaiqnkC',
+    default: '',
     env: 'GOOGLE_CAPTCHA_PUBLIC',
   },
 }
