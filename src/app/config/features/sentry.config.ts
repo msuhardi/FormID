@@ -12,13 +12,13 @@ const sentryFeature: Schema<ISentry> = {
   sentryConfigUrl: {
     doc: 'Sentry.io URL for configuring the Sentry SDK',
     format: 'url',
-    default: null,
+    default: '',
     env: 'SENTRY_CONFIG_URL',
   },
   cspReportUri: {
     doc: 'Endpoint for content security policy reporting',
     format: 'url',
-    default: null,
+    default: '',
     env: 'CSP_REPORT_URI',
   },
 }
