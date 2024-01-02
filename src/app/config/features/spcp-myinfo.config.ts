@@ -90,7 +90,7 @@ const spcpMyInfoSchema: Schema<ISpcpMyInfo> = {
   spEsrvcId: {
     doc: 'e-service ID registered with National Digital Identity office for SingPass authentication. Needed for MyInfo.',
     format: String,
-    default: '',
+    default: 'mockEsrvcId',
     env: 'SINGPASS_ESRVC_ID',
   },
   myInfoClientMode: {
@@ -102,25 +102,25 @@ const spcpMyInfoSchema: Schema<ISpcpMyInfo> = {
   myInfoKeyPath: {
     doc: 'Filepath to MyInfo private key, which is used to decrypt data and sign requests when communicating with MyInfo.',
     format: String,
-    default: '',
+    default: './node_modules/@opengovsg/mockpass/static/certs/key.pem',
     env: 'MYINFO_FORMSG_KEY_PATH',
   },
   myInfoCertPath: {
     doc: "Path to MyInfo's public certificate, which is used to verify their signature.",
     format: String,
-    default: '',
+    default: './node_modules/@opengovsg/mockpass/static/certs/server.crt',
     env: 'MYINFO_CERT_PATH',
   },
   myInfoClientId: {
     doc: 'OAuth2 client ID registered with MyInfo.',
     format: String,
-    default: '',
+    default: 'mockClientId',
     env: 'MYINFO_CLIENT_ID',
   },
   myInfoClientSecret: {
     doc: 'OAuth2 client secret registered with MyInfo.',
     format: String,
-    default: '',
+    default: 'mockClientSecret',
     env: 'MYINFO_CLIENT_SECRET',
   },
   myInfoJwtSecret: {
@@ -132,13 +132,13 @@ const spcpMyInfoSchema: Schema<ISpcpMyInfo> = {
   spOidcNdiDiscoveryEndpoint: {
     doc: "NDI's Singpass OIDC Discovery Endpoint",
     format: String,
-    default: '',
+    default: 'spOidcNdiDiscoveryEndpoint',
     env: 'SP_OIDC_NDI_DISCOVERY_ENDPOINT',
   },
   spOidcNdiJwksEndpoint: {
     doc: "NDI's Singpass OIDC JWKS Endpoint",
     format: String,
-    default: '',
+    default: 'spOidcNdiJwksEndpoint',
     env: 'SP_OIDC_NDI_JWKS_ENDPOINT',
   },
   spOidcRpClientId: {
@@ -156,13 +156,13 @@ const spcpMyInfoSchema: Schema<ISpcpMyInfo> = {
   spOidcRpJwksPublicPath: {
     doc: "Path to the Relying Party's Public Json Web Key Set used for Singpass-related communication with NDI.  This will be hosted at /singpass/.well-known/jwks.json endpoint.",
     format: String,
-    default: '',
+    default: './__tests__/setup/certs/test_sp_rp_public_jwks.json',
     env: 'SP_OIDC_RP_JWKS_PUBLIC_PATH',
   },
   spOidcRpJwksSecretPath: {
     doc: "Path to the Relying Party's Secret Json Web Key Set used for Singpass-related communication with NDI",
     format: String,
-    default: '',
+    default: './__tests__/setup/certs/test_sp_rp_secret_jwks.json',
     env: 'SP_OIDC_RP_JWKS_SECRET_PATH',
   },
   cpOidcNdiDiscoveryEndpoint: {
@@ -192,13 +192,13 @@ const spcpMyInfoSchema: Schema<ISpcpMyInfo> = {
   cpOidcRpJwksPublicPath: {
     doc: "Path to the Relying Party's Public Json Web Key Set used for Corppass-related communication with NDI.  This will be hosted at api/v3/corppass/.well-known/jwks.json endpoint.",
     format: String,
-    default: '',
+    default: './__tests__/setup/certs/test_cp_rp_public_jwks.json',
     env: 'CP_OIDC_RP_JWKS_PUBLIC_PATH',
   },
   cpOidcRpJwksSecretPath: {
     doc: "Path to the Relying Party's Secret Json Web Key Set used for Cingpass-related communication with NDI",
     format: String,
-    default: '',
+    default: './__tests__/setup/certs/test_cp_rp_secret_jwks.json',
     env: 'CP_OIDC_RP_JWKS_SECRET_PATH',
   },
 }
