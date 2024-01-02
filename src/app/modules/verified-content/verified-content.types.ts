@@ -1,6 +1,5 @@
 import { Result } from 'neverthrow'
 
-import { FormAuthType } from '../../../../shared/types'
 import { VerifiedKeys } from '../../../../shared/utils/verified-content'
 
 import { MalformedVerifiedContentError } from './verified-content.errors'
@@ -13,12 +12,6 @@ export type ICpVerifiedKeys = {
   uinFin: VerifiedKeys.CpUen
   userInfo: VerifiedKeys.CpUid
 }
-
-export type SgidVerifiedKeys = {
-  uinFin: VerifiedKeys.SgidUinFin
-}
-
-export type VerifiedKeyMap = SpVerifiedKeys | ICpVerifiedKeys | SgidVerifiedKeys
 
 export type CpVerifiedContent = {
   [VerifiedKeys.CpUen]: string
@@ -38,9 +31,4 @@ export type VerifiedContentResult<T> = Result<T, MalformedVerifiedContentError>
 export type EncryptVerificationContentParams = {
   verifiedContent: CpVerifiedContent | SpVerifiedContent
   formPublicKey: string
-}
-
-export type GetVerifiedContentParams = {
-  type: FormAuthType.SP | FormAuthType.CP
-  data: Record<string, unknown>
 }

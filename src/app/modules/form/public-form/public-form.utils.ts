@@ -5,7 +5,6 @@ import { MapRouteError } from 'src/types'
 import { createLoggerWithLabel } from '../../../config/logger'
 import { ApplicationError, DatabaseError } from '../../core/core.errors'
 import { ErrorResponseData } from '../../core/core.types'
-import { CreateRedirectUrlError } from '../../spcp/spcp.errors'
 import * as FormErrors from '../form.errors'
 
 const logger = createLoggerWithLabel(module)
@@ -86,7 +85,6 @@ export const mapFormAuthError: MapRouteError = (
           'Please ensure that the form has authentication enabled. Please refresh and try again.',
       }
     case DatabaseError:
-    case CreateRedirectUrlError:
       return {
         statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
         errorMessage: coreErrorMessage,

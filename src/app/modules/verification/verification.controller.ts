@@ -2,11 +2,7 @@ import { celebrate, Joi, Segments } from 'celebrate'
 import { StatusCodes } from 'http-status-codes'
 import { ok } from 'neverthrow'
 
-import {
-  ErrorDto,
-  FormAuthType,
-  SendFormOtpResponseDto,
-} from '../../../../shared/types'
+import { ErrorDto, SendFormOtpResponseDto } from '../../../../shared/types'
 import { SALT_ROUNDS } from '../../../../shared/utils/verification'
 import { createLoggerWithLabel } from '../../config/logger'
 import { generateOtpWithHash } from '../../utils/otp'
@@ -14,7 +10,6 @@ import { createReqMeta, getRequestIp } from '../../utils/request'
 import { ControllerHandler } from '../core/core.types'
 import { setFormTags } from '../datadog/datadog.utils'
 import * as FormService from '../form/form.service'
-import { getOidcService } from '../spcp/spcp.oidc.service'
 
 import * as VerificationService from './verification.service'
 import { Transaction } from './verification.types'
@@ -99,89 +94,52 @@ export const _handleGenerateOtp: ControllerHandler<
     ...createReqMeta(req),
   }
   // Step 1: Ensure that the form for the specified transaction exists
-  return (
-    FormService.retrieveFullFormById(formId)
-      // Step 2: Verify SPCP/MyInfo, if form requires it
-      .andThen((form) => {
-        setFormTags(form)
-        const { authType } = form
-        switch (authType) {
-          case FormAuthType.CP: {
-            const oidcService = getOidcService(FormAuthType.CP)
-            return oidcService
-              .extractJwt(req.cookies)
-              .asyncAndThen((jwt) => oidcService.extractJwtPayload(jwt))
-              .map(() => form)
-              .mapErr((error) => {
-                logger.error({
-                  message: 'Failed to verify Corppass JWT with cp oidc client',
-                  meta: logMeta,
-                  error,
-                })
-                return error
-              })
-          }
-          case FormAuthType.SP: {
-            const oidcService = getOidcService(FormAuthType.SP)
-            return oidcService
-              .extractJwt(req.cookies)
-              .asyncAndThen((jwt) => oidcService.extractJwtPayload(jwt))
-              .map(() => form)
-              .mapErr((error) => {
-                logger.error({
-                  message: 'Failed to verify Singpass JWT with sp oidc client',
-                  meta: logMeta,
-                  error,
-                })
-                return error
-              })
-          }
-          default:
-            return ok(form)
-        }
-      })
-      .andThen((form) =>
-        generateOtpWithHash(logMeta, SALT_ROUNDS).andThen(
-          ({ otp, hashedOtp, otpPrefix }) =>
-            // Step 3: Send Otp
-            {
-              return VerificationService.sendNewOtp({
-                fieldId,
-                hashedOtp,
-                otp,
+  return FormService.retrieveFullFormById(formId)
+    .andThen((form) => {
+      setFormTags(form)
+      return ok(form)
+    })
+    .andThen((form) =>
+      generateOtpWithHash(logMeta, SALT_ROUNDS).andThen(
+        ({ otp, hashedOtp, otpPrefix }) =>
+          // Step 3: Send Otp
+          {
+            return VerificationService.sendNewOtp({
+              fieldId,
+              hashedOtp,
+              otp,
+              otpPrefix,
+              recipient: answer,
+              transactionId,
+              senderIp,
+            }) // Return the required data for next steps.
+              .map((updatedTransaction) => ({
+                updatedTransaction,
+                form,
                 otpPrefix,
-                recipient: answer,
-                transactionId,
-                senderIp,
-              }) // Return the required data for next steps.
-                .map((updatedTransaction) => ({
-                  updatedTransaction,
-                  form,
-                  otpPrefix,
-                }))
-            },
-        ),
+              }))
+          },
+      ),
+    )
+    .map(({ updatedTransaction, form, otpPrefix }) => {
+      res.status(StatusCodes.CREATED).json({ otpPrefix })
+      // NOTE: This is returned because tests require this to avoid async mocks interfering with each other.
+      // However, this is not an issue in reality because express does not require awaiting on the sendStatus call.
+      return VerificationService.disableVerifiedFieldsIfRequired(
+        form,
+        updatedTransaction,
+        fieldId,
       )
-      .map(({ updatedTransaction, form, otpPrefix }) => {
-        res.status(StatusCodes.CREATED).json({ otpPrefix })
-        // NOTE: This is returned because tests require this to avoid async mocks interfering with each other.
-        // However, this is not an issue in reality because express does not require awaiting on the sendStatus call.
-        return VerificationService.disableVerifiedFieldsIfRequired(
-          form,
-          updatedTransaction,
-          fieldId,
-        )
+    })
+    .mapErr((error) => {
+      logger.error({
+        message: 'Error creating new OTP',
+        meta: logMeta,
+        error,
       })
-      .mapErr((error) => {
-        logger.error({
-          message: 'Error creating new OTP',
-          meta: logMeta,
-          error,
-        })
-        const { errorMessage, statusCode } = mapRouteError(error)
-        return res.status(statusCode).json({ message: errorMessage })
-      })
-  )
+      const { errorMessage, statusCode } = mapRouteError(error)
+      return res.status(statusCode).json({ message: errorMessage })
+    })
 }
 
 /**

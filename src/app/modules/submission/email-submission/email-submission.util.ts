@@ -10,7 +10,6 @@ import {
   EmailRespondentConfirmationField,
   IAttachmentInfo,
   MapRouteError,
-  SPCPFieldTitle,
 } from '../../../../types'
 import { createLoggerWithLabel } from '../../../config/logger'
 import {
@@ -44,11 +43,6 @@ import {
   FormNotFoundError,
   PrivateFormError,
 } from '../../form/form.errors'
-import {
-  InvalidJwtError,
-  MissingJwtError,
-  VerifyJwtError,
-} from '../../spcp/spcp.errors'
 import { MissingUserError } from '../../user/user.errors'
 import {
   AttachmentTooLargeError,
@@ -331,9 +325,6 @@ export const mapRouteError: MapRouteError = (error) => {
         errorMessage:
           'Missing Turnstile challenge. Please refresh and submit again.',
       }
-    case MissingJwtError:
-    case VerifyJwtError:
-    case InvalidJwtError:
     default:
       logger.error({
         message: 'mapRouteError called with unknown error type',
@@ -396,55 +387,6 @@ const createFormattedDataForOneField = <T extends EmailDataFields | undefined>(
   } else {
     return [getFormattedFunction(response)]
   }
-}
-
-/**
- * Helper function to mask the front of a string
- * Used to mask NRICs in Corppass Validated UID
- * @param field The string to be masked
- * @param charsToReveal The number of characters at the tail to reveal
- */
-const maskStringHead = (field: string, charsToReveal = 4): string => {
-  // Defensive, in case a negative number is passed in
-  // the entire string is masked
-  if (charsToReveal < 0) return '*'.repeat(field.length)
-
-  return field.length >= charsToReveal
-    ? '*'.repeat(field.length - charsToReveal) + field.substr(-charsToReveal)
-    : field
-}
-
-/**
- * Helper function that masks the UID on the last
- * field of autoReplyData using maskStringHead function
- */
-const maskUidOnLastField = (
-  autoReplyData: EmailRespondentConfirmationField[],
-): EmailRespondentConfirmationField[] => {
-  // Mask corppass UID and show only last 4 chars in autoreply to form filler
-  // This does not affect response email to form admin
-  // Function assumes corppass UID is last in the autoReplyData array
-  // TODO(#1104): Refactor to move validation and construction of parsedResponses in class constructor
-  // This will allow for proper tagging of corppass UID field instead of checking field title and position
-
-  return autoReplyData.map(
-    (autoReplyField: EmailRespondentConfirmationField, index) => {
-      if (
-        autoReplyField.question === SPCPFieldTitle.CpUid && // Check field title
-        index === autoReplyData.length - 1 // Check field position
-      ) {
-        const maskedAnswerTemplate = autoReplyField.answerTemplate.map(
-          (answer) => maskStringHead(answer, 4),
-        )
-        return {
-          question: autoReplyField.question,
-          answerTemplate: maskedAnswerTemplate,
-        }
-      } else {
-        return autoReplyField
-      }
-    },
-  )
 }
 
 /**
@@ -537,15 +479,11 @@ export class SubmissionEmailObj {
   get autoReplyData(): EmailRespondentConfirmationField[] {
     // Compact is necessary because getAutoReplyFormattedResponse
     // will return undefined for non-visible fields
-    const unmaskedAutoReplyData = compact(
+    return compact(
       this.parsedResponses.flatMap((response) =>
         createFormattedDataForOneField(response, getAutoReplyFormattedResponse),
       ),
     )
-
-    return this.authType === FormAuthType.CP
-      ? maskUidOnLastField(unmaskedAutoReplyData)
-      : unmaskedAutoReplyData
   }
   /**
    * Getter function to return formData which is used to send responses to admin

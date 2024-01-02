@@ -1,7 +1,6 @@
 import { ok, okAsync, ResultAsync } from 'neverthrow'
 
 import {
-  FormAuthType,
   SubmissionErrorDto,
   SubmissionResponseDto,
 } from '../../../../../shared/types'
@@ -18,7 +17,6 @@ import { createReqMeta, getRequestIp } from '../../../utils/request'
 import { ControllerHandler } from '../../core/core.types'
 import { setFormTags } from '../../datadog/datadog.utils'
 import * as FormService from '../../form/form.service'
-import { getOidcService } from '../../spcp/spcp.oidc.service'
 import * as EmailSubmissionMiddleware from '../email-submission/email-submission.middleware'
 import ParsedResponsesObject from '../ParsedResponsesObject.class'
 import * as ReceiverMiddleware from '../receiver/receiver.middleware'
@@ -180,56 +178,10 @@ const submitEmailModeForm: ControllerHandler<
           }),
       )
       .andThen(({ parsedResponses, form }) => {
-        const { authType } = form
-        switch (authType) {
-          case FormAuthType.CP: {
-            const oidcService = getOidcService(FormAuthType.CP)
-            return oidcService
-              .extractJwt(req.cookies)
-              .asyncAndThen((jwt) => oidcService.extractJwtPayload(jwt))
-              .map<IPopulatedEmailFormWithResponsesAndHash>((jwt) => ({
-                form,
-                parsedResponses: parsedResponses.addNdiResponses({
-                  authType,
-                  uinFin: jwt.userName,
-                  userInfo: jwt.userInfo,
-                }),
-              }))
-              .mapErr((error) => {
-                spcpSubmissionFailure = true
-                logger.error({
-                  message: 'Failed to verify Corppass JWT with oidc client',
-                  meta: logMeta,
-                  error,
-                })
-                return error
-              })
-          }
-          case FormAuthType.SP: {
-            const oidcService = getOidcService(FormAuthType.SP)
-            return oidcService
-              .extractJwt(req.cookies)
-              .asyncAndThen((jwt) => oidcService.extractJwtPayload(jwt))
-              .map<IPopulatedEmailFormWithResponsesAndHash>(() => ({
-                form,
-                parsedResponses,
-              }))
-              .mapErr((error) => {
-                spcpSubmissionFailure = true
-                logger.error({
-                  message: 'Failed to verify Singpass JWT with auth client',
-                  meta: logMeta,
-                  error,
-                })
-                return error
-              })
-          }
-          default:
-            return ok<IPopulatedEmailFormWithResponsesAndHash, never>({
-              form,
-              parsedResponses,
-            })
-        }
+        return ok<IPopulatedEmailFormWithResponsesAndHash, never>({
+          form,
+          parsedResponses,
+        })
       })
       .andThen(({ form, parsedResponses }) => {
         // Create data for response email as well as email confirmation
