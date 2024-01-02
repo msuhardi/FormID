@@ -1,6 +1,6 @@
 import { celebrate, Joi, Segments } from 'celebrate'
 import { StatusCodes } from 'http-status-codes'
-import { err, ok } from 'neverthrow'
+import { err } from 'neverthrow'
 import { UnreachableCaseError } from 'ts-essentials'
 
 import {
@@ -17,13 +17,6 @@ import { isMongoError } from '../../../utils/handle-mongo-error'
 import { createReqMeta, getRequestIp } from '../../../utils/request'
 import { getFormIfPublic } from '../../auth/auth.service'
 import { ControllerHandler } from '../../core/core.types'
-import {
-  SGID_CODE_VERIFIER_COOKIE_NAME,
-  SGID_COOKIE_NAME,
-} from '../../sgid/sgid.constants'
-import { SgidInvalidJwtError, SgidVerifyJwtError } from '../../sgid/sgid.errors'
-import { SgidService } from '../../sgid/sgid.service'
-import { validateSgidForm } from '../../sgid/sgid.util'
 import { InvalidJwtError, VerifyJwtError } from '../../spcp/spcp.errors'
 import { getOidcService } from '../../spcp/spcp.oidc.service'
 import {
@@ -140,31 +133,6 @@ export const handleGetPublicForm: ControllerHandler<
           if (
             error instanceof VerifyJwtError ||
             error instanceof InvalidJwtError
-          ) {
-            logger.error({
-              message: 'Error getting public form',
-              meta: logMeta,
-              error,
-            })
-          }
-          return res.json({ form: publicForm, isIntranetUser })
-        })
-    case FormAuthType.SGID:
-      return SgidService.extractSgidSingpassJwtPayload(
-        req.cookies[SGID_COOKIE_NAME],
-      )
-        .map((spcpSession) => {
-          return res.json({
-            form: publicForm,
-            isIntranetUser,
-            spcpSession,
-          })
-        })
-        .mapErr((error) => {
-          // Report only relevant errors - verification failed for user here
-          if (
-            error instanceof SgidVerifyJwtError ||
-            error instanceof SgidInvalidJwtError
           ) {
             logger.error({
               message: 'Error getting public form',
@@ -296,24 +264,6 @@ export const _handleFormAuthRedirect: ControllerHandler<
             )
           })
         }
-        case FormAuthType.SGID:
-          return validateSgidForm(form)
-            .andThen(() =>
-              SgidService.createRedirectUrl(
-                formId,
-                Boolean(isPersistentLogin),
-                [],
-                encodedQuery,
-              ),
-            )
-            .andThen(({ redirectUrl, codeVerifier }) => {
-              res.cookie(
-                SGID_CODE_VERIFIER_COOKIE_NAME,
-                codeVerifier,
-                SgidService.getCookieSettings(),
-              )
-              return ok(redirectUrl)
-            })
         default:
           return err<never, AuthTypeMismatchError>(
             new AuthTypeMismatchError(form.authType),
@@ -341,7 +291,6 @@ export const _handleFormAuthRedirect: ControllerHandler<
         error,
       })
       const { statusCode, errorMessage } = mapFormAuthError(error)
-      res.clearCookie(SGID_CODE_VERIFIER_COOKIE_NAME)
       return res.status(statusCode).json({ message: errorMessage })
     })
 }
@@ -364,7 +313,7 @@ export const handleFormAuthRedirect = [
 
 /**
  * NOTE: This is exported only for testing
- * Logs user out of SP / CP / SGID by deleting cookie
+ * Logs user out of SP / CP by deleting cookie
  * @param authType type of authentication
  *
  * @returns 200 with success message when user logs out successfully
@@ -372,7 +321,7 @@ export const handleFormAuthRedirect = [
  */
 export const _handlePublicAuthLogout: ControllerHandler<
   {
-    authType: FormAuthType.SP | FormAuthType.CP | FormAuthType.SGID
+    authType: FormAuthType.SP | FormAuthType.CP
   },
   PublicFormAuthLogoutDto
 > = (req, res) => {
@@ -388,14 +337,12 @@ export const _handlePublicAuthLogout: ControllerHandler<
 
 /**
  * Handler for /forms/auth/:authType/logout
- * Valid AuthTypes are SP / CP / SGID
+ * Valid AuthTypes are SP / CP
  */
 export const handlePublicAuthLogout = [
   celebrate({
     [Segments.PARAMS]: Joi.object({
-      authType: Joi.string()
-        .valid(FormAuthType.SP, FormAuthType.CP, FormAuthType.SGID)
-        .required(),
+      authType: Joi.string().valid(FormAuthType.SP, FormAuthType.CP).required(),
     }),
   }),
   _handlePublicAuthLogout,

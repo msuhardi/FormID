@@ -36,11 +36,11 @@ export type SgidVerifiedContent = {
 export type VerifiedContentResult<T> = Result<T, MalformedVerifiedContentError>
 
 export type EncryptVerificationContentParams = {
-  verifiedContent: CpVerifiedContent | SpVerifiedContent | SgidVerifiedContent
+  verifiedContent: CpVerifiedContent | SpVerifiedContent
   formPublicKey: string
 }
 
 export type GetVerifiedContentParams = {
-  type: FormAuthType.SP | FormAuthType.CP | FormAuthType.SGID
+  type: FormAuthType.SP | FormAuthType.CP
   data: Record<string, unknown>
 }

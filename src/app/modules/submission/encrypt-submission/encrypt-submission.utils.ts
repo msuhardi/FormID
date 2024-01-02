@@ -56,11 +56,6 @@ import {
 } from '../../form/form.errors'
 import { PaymentNotFoundError } from '../../payments/payments.errors'
 import {
-  SgidInvalidJwtError,
-  SgidMissingJwtError,
-  SgidVerifyJwtError,
-} from '../../sgid/sgid.errors'
-import {
   CreateRedirectUrlError,
   InvalidJwtError,
   MissingJwtError,
@@ -114,9 +109,6 @@ const errorMapper: MapRouteError = (
         statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
         errorMessage: coreErrorMessage,
       }
-    case SgidMissingJwtError:
-    case SgidVerifyJwtError:
-    case SgidInvalidJwtError:
     case MissingJwtError:
     case VerifyJwtError:
     case InvalidJwtError:

@@ -45,11 +45,6 @@ import {
   PrivateFormError,
 } from '../../form/form.errors'
 import {
-  SgidInvalidJwtError,
-  SgidMissingJwtError,
-  SgidVerifyJwtError,
-} from '../../sgid/sgid.errors'
-import {
   InvalidJwtError,
   MissingJwtError,
   VerifyJwtError,
@@ -336,9 +331,6 @@ export const mapRouteError: MapRouteError = (error) => {
         errorMessage:
           'Missing Turnstile challenge. Please refresh and submit again.',
       }
-    case SgidMissingJwtError:
-    case SgidVerifyJwtError:
-    case SgidInvalidJwtError:
     case MissingJwtError:
     case VerifyJwtError:
     case InvalidJwtError:

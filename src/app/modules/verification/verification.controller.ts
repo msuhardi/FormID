@@ -14,8 +14,6 @@ import { createReqMeta, getRequestIp } from '../../utils/request'
 import { ControllerHandler } from '../core/core.types'
 import { setFormTags } from '../datadog/datadog.utils'
 import * as FormService from '../form/form.service'
-import { SGID_COOKIE_NAME } from '../sgid/sgid.constants'
-import { SgidService } from '../sgid/sgid.service'
 import { getOidcService } from '../spcp/spcp.oidc.service'
 
 import * as VerificationService from './verification.service'
@@ -138,19 +136,6 @@ export const _handleGenerateOtp: ControllerHandler<
                 return error
               })
           }
-          case FormAuthType.SGID:
-            return SgidService.extractSgidSingpassJwtPayload(
-              req.cookies[SGID_COOKIE_NAME],
-            )
-              .map(() => form)
-              .mapErr((error) => {
-                logger.error({
-                  message: 'Failed to verify sgID JWT with auth client',
-                  meta: logMeta,
-                  error,
-                })
-                return error
-              })
           default:
             return ok(form)
         }

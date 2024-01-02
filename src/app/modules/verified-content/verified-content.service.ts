@@ -10,13 +10,11 @@ import {
   CpVerifiedContent,
   EncryptVerificationContentParams,
   GetVerifiedContentParams,
-  SgidVerifiedContent,
   SpVerifiedContent,
   VerifiedContentResult,
 } from './verified-content.types'
 import {
   getCpVerifiedContent,
-  getSgidVerifiedContent,
   getSpVerifiedContent,
 } from './verified-content.utils'
 
@@ -31,15 +29,13 @@ export const getVerifiedContent = ({
   type,
   data,
 }: GetVerifiedContentParams): VerifiedContentResult<
-  CpVerifiedContent | SpVerifiedContent | SgidVerifiedContent
+  CpVerifiedContent | SpVerifiedContent
 > => {
   switch (type) {
     case FormAuthType.SP:
       return getSpVerifiedContent(data)
     case FormAuthType.CP:
       return getCpVerifiedContent(data)
-    case FormAuthType.SGID:
-      return getSgidVerifiedContent(data)
   }
 }
 
