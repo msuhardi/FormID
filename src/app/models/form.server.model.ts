@@ -1,5 +1,5 @@
 import BSON, { ObjectId } from 'bson-ext'
-import { compact, omit, pick, uniq } from 'lodash'
+import { omit, pick } from 'lodash'
 import mongoose, {
   ClientSession,
   Mongoose,
@@ -68,7 +68,6 @@ import {
 import { IPopulatedUser, IUserSchema } from '../../types/user'
 import { OverrideProps } from '../modules/form/admin-form/admin-form.types'
 import { getFormFieldById, transformEmails } from '../modules/form/form.utils'
-import { getMyInfoAttr } from '../modules/myinfo/myinfo.util'
 import { validateWebhookUrl } from '../modules/webhook/webhook.validation'
 
 import { ProductSchema } from './payments/productSchema'
@@ -314,12 +313,7 @@ const compileFormModel = (db: Mongoose): IFormModel => {
               (acc, field) => acc + (field.myInfo ? 1 : 0),
               0,
             )
-            return (
-              myInfoFieldCount === 0 ||
-              ((this.authType === FormAuthType.MyInfo ||
-                this.authType === FormAuthType.SGID_MyInfo) &&
-                myInfoFieldCount <= 30)
-            )
+            return myInfoFieldCount === 0
           },
           message:
             'Check that your form is MyInfo-authenticated and has 30 or fewer MyInfo fields.',
@@ -616,21 +610,7 @@ const compileFormModel = (db: Mongoose): IFormModel => {
 
   // Method to return myInfo attributes
   FormSchema.methods.getUniqueMyInfoAttrs = function () {
-    if (
-      this.authType !== FormAuthType.MyInfo &&
-      this.authType !== FormAuthType.SGID_MyInfo
-    ) {
-      return []
-    }
-
-    // Compact is used to remove undefined from array
-    return compact(
-      uniq(
-        this.form_fields?.flatMap((field) => {
-          return getMyInfoAttr(field)
-        }),
-      ),
-    )
+    return []
   }
 
   // Return essential form creation parameters with the given properties

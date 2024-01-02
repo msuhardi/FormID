@@ -28,16 +28,11 @@ import {
   ParsedClearFormFieldResponse,
 } from '../../../types/api'
 import { AutoReplyMailData } from '../../services/mail/mail.types'
-import { MyInfoKey } from '../myinfo/myinfo.types'
-import { getMyInfoChildHashKey } from '../myinfo/myinfo.util'
 
-import { MYINFO_PREFIX } from './email-submission/email-submission.constants'
-import { ResponseFormattedForEmail } from './email-submission/email-submission.types'
 import { ConflictError } from './submission.errors'
 import {
   FilteredResponse,
   ProcessedChildrenResponse,
-  ProcessedFieldResponse,
   ProcessedSingleAnswerResponse,
 } from './submission.types'
 
@@ -279,22 +274,6 @@ export const mapAttachmentsFromResponses = (
 }
 
 /**
- * Determines the prefix for a question based on whether it is verified
- * by MyInfo.
- * @param response
- * @param hashedFields Field ids of hashed fields.
- * @returns the prefix
- */
-export const getMyInfoPrefix = (
-  response: ResponseFormattedForEmail | ProcessedFieldResponse,
-  hashedFields: Set<MyInfoKey>,
-): string => {
-  return !!response.myInfo?.attr && hashedFields.has(response._id)
-    ? MYINFO_PREFIX
-    : ''
-}
-
-/**
  * Expands child subfields into individual fields, so that they are no longer nested under
  * 1 parent field.
  * @param response
@@ -309,17 +288,10 @@ export const getAnswersForChild = (
     return []
   }
   return response.answerArray.flatMap((arr, childIdx) => {
-    // First array element is always child name
-    const childName = arr[0]
     return arr.map((answer, idx) => {
       const subfield = subFields[idx]
       return {
-        _id: getMyInfoChildHashKey(
-          response._id,
-          subFields[idx],
-          childIdx,
-          childName,
-        ),
+        _id: response._id,
         fieldType: response.fieldType,
         // qnChildIdx represents the index of the MyInfo field
         // childIdx represents the index of the child in this MyInfo field

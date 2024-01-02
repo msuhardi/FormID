@@ -45,15 +45,6 @@ import {
   PrivateFormError,
 } from '../../form/form.errors'
 import {
-  MyInfoCookieStateError,
-  MyInfoHashDidNotMatchError,
-  MyInfoHashingError,
-  MyInfoInvalidLoginCookieError,
-  MyInfoMissingHashError,
-  MyInfoMissingLoginCookieError,
-} from '../../myinfo/myinfo.errors'
-import { MyInfoKey } from '../../myinfo/myinfo.types'
-import {
   SgidInvalidJwtError,
   SgidMissingJwtError,
   SgidVerifyJwtError,
@@ -77,7 +68,7 @@ import {
   ProcessedFieldResponse,
   ProcessedTableResponse,
 } from '../submission.types'
-import { getAnswersForChild, getMyInfoPrefix } from '../submission.utils'
+import { getAnswersForChild } from '../submission.utils'
 
 import {
   ATTACHMENT_PREFIX,
@@ -140,11 +131,9 @@ export const getJsonPrefixedQuestion = (
  */
 export const getFormDataPrefixedQuestion = (
   response: ResponseFormattedForEmail,
-  hashedFields: Set<string>,
 ): string => {
   const questionComponents = [
     getFieldTypePrefix(response),
-    getMyInfoPrefix(response, hashedFields),
     getVerifiedPrefix(response),
     response.question,
   ]
@@ -202,7 +191,6 @@ export const getAnswerForCheckbox = (
  */
 export const getFormattedResponse = (
   response: ResponseFormattedForEmail,
-  hashedFields: Set<string>,
 ): EmailDataForOneField => {
   const { question, answer, fieldType, isVisible } = response
   const answerSplitByNewLine = answer.split('\n')
@@ -227,7 +215,7 @@ export const getFormattedResponse = (
 
   // Send all the fields to admin
   const formData = {
-    question: getFormDataPrefixedQuestion(response, hashedFields),
+    question: getFormDataPrefixedQuestion(response),
     answerTemplate: answerSplitByNewLine,
     answer,
     fieldType,
@@ -354,31 +342,6 @@ export const mapRouteError: MapRouteError = (error) => {
     case MissingJwtError:
     case VerifyJwtError:
     case InvalidJwtError:
-    case MyInfoMissingLoginCookieError:
-    case MyInfoCookieStateError:
-    case MyInfoInvalidLoginCookieError:
-      return {
-        statusCode: StatusCodes.UNAUTHORIZED,
-        errorMessage:
-          'Something went wrong with your login. Please try logging in and submitting again.',
-      }
-    case MyInfoMissingHashError:
-      return {
-        statusCode: StatusCodes.GONE,
-        errorMessage:
-          'MyInfo verification expired, please refresh and try again.',
-      }
-    case MyInfoHashDidNotMatchError:
-      return {
-        statusCode: StatusCodes.UNAUTHORIZED,
-        errorMessage: 'MyInfo verification failed.',
-      }
-    case MyInfoHashingError:
-      return {
-        statusCode: StatusCodes.SERVICE_UNAVAILABLE,
-        errorMessage:
-          'MyInfo verification unavailable, please try again later.',
-      }
     default:
       logger.error({
         message: 'mapRouteError called with unknown error type',
@@ -425,25 +388,21 @@ export const concatAttachmentsAndResponses = (
  */
 const createFormattedDataForOneField = <T extends EmailDataFields | undefined>(
   response: ProcessedFieldResponse,
-  hashedFields: Set<MyInfoKey>,
-  getFormattedFunction: (
-    response: ResponseFormattedForEmail,
-    hashedFields: Set<MyInfoKey>,
-  ) => T,
+  getFormattedFunction: (response: ResponseFormattedForEmail) => T,
 ): T[] => {
   if (isProcessedTableResponse(response)) {
     return getAnswerRowsForTable(response).map((row) =>
-      getFormattedFunction(row, hashedFields),
+      getFormattedFunction(row),
     )
   } else if (isProcessedCheckboxResponse(response)) {
     const checkbox = getAnswerForCheckbox(response)
-    return [getFormattedFunction(checkbox, hashedFields)]
+    return [getFormattedFunction(checkbox)]
   } else if (isProcessedChildResponse(response)) {
     return getAnswersForChild(response).map((childField) =>
-      getFormattedFunction(childField, hashedFields),
+      getFormattedFunction(childField),
     )
   } else {
-    return [getFormattedFunction(response, hashedFields)]
+    return [getFormattedFunction(response)]
   }
 }
 
@@ -520,12 +479,11 @@ const getDataCollationFormattedResponse = (
  */
 const getFormFormattedResponse = (
   response: ResponseFormattedForEmail,
-  hashedFields: Set<MyInfoKey>,
 ): EmailAdminDataField => {
   const { answer, fieldType } = response
   const answerSplitByNewLine = answer.split('\n')
   return {
-    question: getFormDataPrefixedQuestion(response, hashedFields),
+    question: getFormDataPrefixedQuestion(response),
     answerTemplate: answerSplitByNewLine,
     answer,
     fieldType,
@@ -553,16 +511,13 @@ const getAutoReplyFormattedResponse = (
 
 export class SubmissionEmailObj {
   parsedResponses: ProcessedFieldResponse[]
-  hashedFields: Set<MyInfoKey>
   authType: FormAuthType
 
   constructor(
     parsedResponses: ProcessedFieldResponse[],
-    hashedFields: Set<MyInfoKey> = new Set<MyInfoKey>(),
     authType: FormAuthType,
   ) {
     this.parsedResponses = parsedResponses
-    this.hashedFields = hashedFields
     this.authType = authType
   }
 
@@ -574,7 +529,6 @@ export class SubmissionEmailObj {
       (response) =>
         createFormattedDataForOneField(
           response,
-          this.hashedFields,
           getDataCollationFormattedResponse,
         ),
     )
@@ -593,11 +547,7 @@ export class SubmissionEmailObj {
     // will return undefined for non-visible fields
     const unmaskedAutoReplyData = compact(
       this.parsedResponses.flatMap((response) =>
-        createFormattedDataForOneField(
-          response,
-          this.hashedFields,
-          getAutoReplyFormattedResponse,
-        ),
+        createFormattedDataForOneField(response, getAutoReplyFormattedResponse),
       ),
     )
 
@@ -610,11 +560,7 @@ export class SubmissionEmailObj {
    */
   get formData(): EmailAdminDataField[] {
     return this.parsedResponses.flatMap((response) =>
-      createFormattedDataForOneField(
-        response,
-        this.hashedFields,
-        getFormFormattedResponse,
-      ),
+      createFormattedDataForOneField(response, getFormFormattedResponse),
     )
   }
 }

@@ -6,7 +6,6 @@ import {
   OmitUnusedValidatorProps,
 } from '../../../../types/field'
 import { ResponseValidator } from '../../../../types/field/utils/validation'
-import { getMyInfoFieldOptions } from '../../../modules/myinfo/myinfo.util'
 import { ProcessedSingleAnswerResponse } from '../../../modules/submission/submission.types'
 
 import { notEmptySingleAnswerResponse } from './common'
@@ -23,13 +22,8 @@ type DropdownValidatorConstructor = (
  */
 const makeDropdownValidator: DropdownValidatorConstructor =
   (dropdownField) => (response) => {
-    const { myInfo, fieldOptions } = dropdownField
-    // Inject fieldOptions for MyInfo. This is necessary because the
-    // client strips out MyInfo data to keep each form submission lightweight
-    const validOptions = myInfo?.attr
-      ? getMyInfoFieldOptions(myInfo.attr)
-      : // TODO #4279: Revisit decision to trim in backend after React rollout is complete
-        fieldOptions.map((opt) => opt.trim())
+    const { fieldOptions } = dropdownField
+    const validOptions = fieldOptions.map((opt) => opt.trim())
     const { answer } = response
     const trimmedAnswer = answer.trim()
     return isOneOfOptions(validOptions, trimmedAnswer)

@@ -23,6 +23,7 @@ export const MOCK_SERVICE_PARAMS: ISpcpMyInfo = {
   cpCookieMaxAge: 3,
   spEsrvcId: 'spEsrvcId', // Needed for MyInfo
   myInfoClientMode: MyInfoMode.Dev,
+  myInfoJwtSecret: 'myInfoJwtSecret',
   myInfoKeyPath: 'myInfoKeyPath',
   myInfoCertPath: 'myInfoCertPath',
   myInfoClientId: 'myInfoClientId',
@@ -84,16 +85,6 @@ export const MOCK_CP_FORM = {
     agency: new ObjectId().toHexString(),
   },
   getPublicView: () => _.omit(this, 'admin'),
-} as unknown as IPopulatedForm
-
-export const MOCK_MYINFO_FORM = {
-  authType: 'MyInfo',
-  title: 'Mock MyInfo form',
-  _id: new ObjectId().toHexString(),
-  admin: {
-    _id: new ObjectId().toHexString(),
-    agency: new ObjectId().toHexString(),
-  },
 } as unknown as IPopulatedForm
 
 export const MOCK_LOGIN_DOC = {

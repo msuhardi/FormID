@@ -14,11 +14,11 @@ import {
   SubmissionType,
 } from '../../../../../shared/types'
 import { calculatePrice } from '../../../../../shared/utils/paymentProductPrice'
-import { isProcessedChildResponse } from '../../../../app/utils/field-validation/field-validation.guards'
 import {
   IEncryptedSubmissionSchema,
   IPopulatedEncryptedForm,
   ISubmissionSchema,
+  MapRouteError,
   MapRouteErrors,
   SubmissionData,
 } from '../../../../types'
@@ -26,9 +26,7 @@ import {
   EncryptFormFieldResponse,
   ParsedClearFormFieldResponse,
 } from '../../../../types/api'
-import { MapRouteError } from '../../../../types/routing'
 import { createLoggerWithLabel } from '../../../config/logger'
-import { MalformedVerifiedContentError } from '../../../modules/verified-content/verified-content.errors'
 import {
   CaptchaConnectionError,
   MissingCaptchaError,
@@ -56,15 +54,6 @@ import {
   FormNotFoundError,
   PrivateFormError,
 } from '../../form/form.errors'
-import {
-  MyInfoCookieStateError,
-  MyInfoHashDidNotMatchError,
-  MyInfoHashingError,
-  MyInfoInvalidLoginCookieError,
-  MyInfoMissingHashError,
-  MyInfoMissingLoginCookieError,
-} from '../../myinfo/myinfo.errors'
-import { MyInfoKey } from '../../myinfo/myinfo.types'
 import { PaymentNotFoundError } from '../../payments/payments.errors'
 import {
   SgidInvalidJwtError,
@@ -78,6 +67,7 @@ import {
   VerifyJwtError,
 } from '../../spcp/spcp.errors'
 import { MissingUserError } from '../../user/user.errors'
+import { MalformedVerifiedContentError } from '../../verified-content/verified-content.errors'
 import {
   AttachmentTooLargeError,
   ConflictError,
@@ -89,7 +79,6 @@ import {
   ValidateFieldError,
 } from '../submission.errors'
 import { ProcessedFieldResponse } from '../submission.types'
-import { getAnswersForChild, getMyInfoPrefix } from '../submission.utils'
 
 import {
   AttachmentSizeLimitExceededError,
@@ -131,31 +120,11 @@ const errorMapper: MapRouteError = (
     case MissingJwtError:
     case VerifyJwtError:
     case InvalidJwtError:
-    case MyInfoMissingLoginCookieError:
-    case MyInfoCookieStateError:
-    case MyInfoInvalidLoginCookieError:
     case MalformedVerifiedContentError:
       return {
         statusCode: StatusCodes.UNAUTHORIZED,
         errorMessage:
           'Something went wrong with your login. Please try logging in and submitting again.',
-      }
-    case MyInfoMissingHashError:
-      return {
-        statusCode: StatusCodes.GONE,
-        errorMessage:
-          'MyInfo verification expired, please refresh and try again.',
-      }
-    case MyInfoHashDidNotMatchError:
-      return {
-        statusCode: StatusCodes.UNAUTHORIZED,
-        errorMessage: 'MyInfo verification failed.',
-      }
-    case MyInfoHashingError:
-      return {
-        statusCode: StatusCodes.SERVICE_UNAVAILABLE,
-        errorMessage:
-          'MyInfo verification unavailable, please try again later.',
       }
     case MissingUserError:
       return {
@@ -413,28 +382,10 @@ const omitResponseKeys = (
 
 export const formatMyInfoStorageResponseData = (
   parsedResponses: ProcessedFieldResponse[],
-  hashedFields?: Set<MyInfoKey>,
 ) => {
-  if (!hashedFields) {
-    return parsedResponses.flatMap((response: ProcessedFieldResponse) => {
-      return omitResponseKeys(response)
-    })
-  } else {
-    return parsedResponses.flatMap((response) => {
-      if (isProcessedChildResponse(response)) {
-        return getAnswersForChild(response).map((childField) => {
-          const myInfoPrefix = getMyInfoPrefix(childField, hashedFields)
-          childField.question = `${myInfoPrefix}${childField.question}`
-          return childField
-        })
-      } else {
-        // Obtain prefix for question based on whether it is verified by MyInfo.
-        const myInfoPrefix = getMyInfoPrefix(response, hashedFields)
-        response.question = `${myInfoPrefix}${response.question}`
-        return omitResponseKeys(response)
-      }
-    })
-  }
+  return parsedResponses.flatMap((response: ProcessedFieldResponse) => {
+    return omitResponseKeys(response)
+  })
 }
 
 export const getStripePaymentMethod = (

@@ -41,11 +41,6 @@ export type EncryptVerificationContentParams = {
 }
 
 export type GetVerifiedContentParams = {
-  type:
-    | FormAuthType.SP
-    | FormAuthType.CP
-    | FormAuthType.SGID
-    | FormAuthType.MyInfo
-    | FormAuthType.SGID_MyInfo
+  type: FormAuthType.SP | FormAuthType.CP | FormAuthType.SGID
   data: Record<string, unknown>
 }
