@@ -55,12 +55,6 @@ import {
   PrivateFormError,
 } from '../../form/form.errors'
 import { PaymentNotFoundError } from '../../payments/payments.errors'
-import {
-  CreateRedirectUrlError,
-  InvalidJwtError,
-  MissingJwtError,
-  VerifyJwtError,
-} from '../../spcp/spcp.errors'
 import { MissingUserError } from '../../user/user.errors'
 import { MalformedVerifiedContentError } from '../../verified-content/verified-content.errors'
 import {
@@ -93,10 +87,7 @@ const logger = createLoggerWithLabel(module)
  * messages.
  * @param error The error to retrieve the status codes and error messages
  */
-const errorMapper: MapRouteError = (
-  error,
-  coreErrorMessage = 'Sorry, something went wrong. Please try again.',
-) => {
+const errorMapper: MapRouteError = (error) => {
   switch (error.constructor) {
     case AttachmentUploadError:
       return {
@@ -104,14 +95,6 @@ const errorMapper: MapRouteError = (
         errorMessage:
           'Could not upload attachments for submission. For assistance, please contact the person who asked you to fill in this form.',
       }
-    case CreateRedirectUrlError:
-      return {
-        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-        errorMessage: coreErrorMessage,
-      }
-    case MissingJwtError:
-    case VerifyJwtError:
-    case InvalidJwtError:
     case MalformedVerifiedContentError:
       return {
         statusCode: StatusCodes.UNAUTHORIZED,

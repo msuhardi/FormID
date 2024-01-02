@@ -48,8 +48,6 @@ export type FormEndPage = {
 
 export enum FormAuthType {
   NIL = 'NIL',
-  SP = 'SP',
-  CP = 'CP',
 }
 
 export enum FormStatus {

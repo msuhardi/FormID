@@ -7,7 +7,6 @@ import {
   ErrorDto,
   FormAuthType,
   PrivateFormErrorDto,
-  PublicFormAuthLogoutDto,
   PublicFormAuthRedirectDto,
   PublicFormDto,
   PublicFormViewDto,
@@ -17,16 +16,9 @@ import { isMongoError } from '../../../utils/handle-mongo-error'
 import { createReqMeta, getRequestIp } from '../../../utils/request'
 import { getFormIfPublic } from '../../auth/auth.service'
 import { ControllerHandler } from '../../core/core.types'
-import { InvalidJwtError, VerifyJwtError } from '../../spcp/spcp.errors'
-import { getOidcService } from '../../spcp/spcp.oidc.service'
-import {
-  getRedirectTargetSpcpOidc,
-  validateSpcpForm,
-} from '../../spcp/spcp.util'
 import { AuthTypeMismatchError, PrivateFormError } from '../form.errors'
 import * as FormService from '../form.service'
 
-import * as PublicFormService from './public-form.service'
 import { mapFormAuthError, mapRouteError } from './public-form.utils'
 
 const logger = createLoggerWithLabel(module)
@@ -94,54 +86,6 @@ export const handleGetPublicForm: ControllerHandler<
   switch (authType) {
     case FormAuthType.NIL:
       return res.json({ form: publicForm, isIntranetUser })
-    case FormAuthType.SP:
-      return getOidcService(FormAuthType.SP)
-        .extractJwtPayloadFromRequest(req.cookies)
-        .map((spcpSession) => {
-          return res.json({
-            form: publicForm,
-            isIntranetUser,
-            spcpSession,
-          })
-        })
-        .mapErr((error) => {
-          // Report only relevant errors - verification failed for user here
-          if (
-            error instanceof VerifyJwtError ||
-            error instanceof InvalidJwtError
-          ) {
-            logger.error({
-              message: 'Error getting public form',
-              meta: logMeta,
-              error,
-            })
-          }
-          return res.json({ form: publicForm, isIntranetUser })
-        })
-    case FormAuthType.CP:
-      return getOidcService(FormAuthType.CP)
-        .extractJwtPayloadFromRequest(req.cookies)
-        .map((spcpSession) => {
-          return res.json({
-            form: publicForm,
-            isIntranetUser,
-            spcpSession,
-          })
-        })
-        .mapErr((error) => {
-          // Report only relevant errors - verification failed for user here
-          if (
-            error instanceof VerifyJwtError ||
-            error instanceof InvalidJwtError
-          ) {
-            logger.error({
-              message: 'Error getting public form',
-              meta: logMeta,
-              error,
-            })
-          }
-          return res.json({ form: publicForm, isIntranetUser })
-        })
     default:
       return new UnreachableCaseError(authType)
   }
@@ -221,7 +165,6 @@ export const _handleFormAuthRedirect: ControllerHandler<
   { isPersistentLogin?: boolean; encodedQuery?: string }
 > = (req, res) => {
   const { formId } = req.params
-  const { isPersistentLogin, encodedQuery } = req.query
   const logMeta = {
     action: 'handleFormAuthRedirect',
     ...createReqMeta(req),
@@ -232,43 +175,9 @@ export const _handleFormAuthRedirect: ControllerHandler<
   // NOTE: Using retrieveFullForm instead of retrieveForm to ensure authType always exists
   return FormService.retrieveFullFormById(formId)
     .andThen((form) => {
-      formAuthType = form.authType
-      switch (form.authType) {
-        case FormAuthType.SP: {
-          return validateSpcpForm(form).asyncAndThen((form) => {
-            const target = getRedirectTargetSpcpOidc(
-              formId,
-              FormAuthType.SP,
-              isPersistentLogin,
-              encodedQuery,
-            )
-            return getOidcService(FormAuthType.SP).createRedirectUrl(
-              target,
-              form.esrvcId,
-            )
-          })
-        }
-        case FormAuthType.CP: {
-          // NOTE: Persistent login is only set (and relevant) when the authType is SP.
-          // If authType is not SP, assume that it was set erroneously and default it to false
-          return validateSpcpForm(form).asyncAndThen((form) => {
-            const target = getRedirectTargetSpcpOidc(
-              formId,
-              FormAuthType.CP,
-              isPersistentLogin,
-              encodedQuery,
-            )
-            return getOidcService(FormAuthType.CP).createRedirectUrl(
-              target,
-              form.esrvcId,
-            )
-          })
-        }
-        default:
-          return err<never, AuthTypeMismatchError>(
-            new AuthTypeMismatchError(form.authType),
-          )
-      }
+      return err<never, AuthTypeMismatchError>(
+        new AuthTypeMismatchError(form.authType),
+      )
     })
     .map((redirectURL) => {
       logger.info({
@@ -309,41 +218,4 @@ export const handleFormAuthRedirect = [
     }),
   }),
   _handleFormAuthRedirect,
-] as ControllerHandler[]
-
-/**
- * NOTE: This is exported only for testing
- * Logs user out of SP / CP by deleting cookie
- * @param authType type of authentication
- *
- * @returns 200 with success message when user logs out successfully
- * @returns 400 if authType is invalid
- */
-export const _handlePublicAuthLogout: ControllerHandler<
-  {
-    authType: FormAuthType.SP | FormAuthType.CP
-  },
-  PublicFormAuthLogoutDto
-> = (req, res) => {
-  const { authType } = req.params
-
-  const cookieName = PublicFormService.getCookieNameByAuthType(authType)
-
-  return res
-    .clearCookie(cookieName)
-    .status(200)
-    .json({ message: 'Successfully logged out.' })
-}
-
-/**
- * Handler for /forms/auth/:authType/logout
- * Valid AuthTypes are SP / CP
- */
-export const handlePublicAuthLogout = [
-  celebrate({
-    [Segments.PARAMS]: Joi.object({
-      authType: Joi.string().valid(FormAuthType.SP, FormAuthType.CP).required(),
-    }),
-  }),
-  _handlePublicAuthLogout,
 ] as ControllerHandler[]

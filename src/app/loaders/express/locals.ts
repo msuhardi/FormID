@@ -5,7 +5,6 @@ import { captchaConfig } from '../../config/features/captcha.config'
 import { googleAnalyticsConfig } from '../../config/features/google-analytics.config'
 import { paymentConfig } from '../../config/features/payment.config'
 import { sentryConfig } from '../../config/features/sentry.config'
-import { spcpMyInfoConfig } from '../../config/features/spcp-myinfo.config'
 
 // Construct js with environment variables needed by frontend
 const frontendVars = {
@@ -17,12 +16,8 @@ const frontendVars = {
   formsgSdkMode: config.formsgSdkMode,
   captchaPublicKey: captchaConfig.captchaPublicKey, // Recaptcha
   sentryConfigUrl: sentryConfig.sentryConfigUrl, // Sentry.IO
-  isSPMaintenance: spcpMyInfoConfig.isSPMaintenance, // Singpass maintenance message
-  isCPMaintenance: spcpMyInfoConfig.isCPMaintenance, // Corppass maintenance message
-  myInfoBannerContent: spcpMyInfoConfig.myInfoBannerContent, // MyInfo maintenance message
   // TODO: remove after React rollout #4786
   GATrackingID: googleAnalyticsConfig.GATrackingID,
-  spcpCookieDomain: spcpMyInfoConfig.spcpCookieDomain, // Cookie domain used for removing spcp cookies
   // payment variables
   reactMigrationUseFetchForSubmissions:
     config.reactMigration.useFetchForSubmissions,
@@ -35,10 +30,6 @@ const frontendVars = {
 }
 const environment = ejs.render(
   `
-    // Singpass/Corppass maintenance message
-    var isSPMaintenance = "<%- isSPMaintenance %>"
-    var isCPMaintenance = "<%- isCPMaintenance %>"
-    var myInfoBannerContent = "<%- myInfoBannerContent %>"
     var isGeneralMaintenance = "<%- isGeneralMaintenance %>"
     var isLoginBanner = "<%- isLoginBanner %>"
     var siteBannerContent = "<%- siteBannerContent %>"
@@ -53,8 +44,6 @@ const environment = ejs.render(
     var logoBucketUrl = "<%= logoBucketUrl%>"
     // Node env
     var formsgSdkMode = "<%= formsgSdkMode%>"
-    // SPCP Cookie
-    var spcpCookieDomain = "<%= spcpCookieDomain%>"
     // React Migration
     var reactMigrationUseFetchForSubmissions = <%= reactMigrationUseFetchForSubmissions%>
     // Payment

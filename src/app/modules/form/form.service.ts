@@ -4,7 +4,6 @@ import { err, errAsync, ok, okAsync, Result, ResultAsync } from 'neverthrow'
 
 import {
   BasicField,
-  FormAuthType,
   FormField,
   FormFieldDto,
   FormResponseMode,
@@ -295,10 +294,7 @@ export const checkIsIntranetFormAccess = (
   const isIntranetUser = IntranetService.isIntranetIp(ip)
   // Warn if form is being accessed from within intranet
   // and the form has authentication set
-  if (
-    isIntranetUser &&
-    [FormAuthType.SP, FormAuthType.CP].includes(form.authType)
-  ) {
+  if (isIntranetUser) {
     logger.warn({
       message:
         'Attempting to access SingPass, CorpPass, MyInfo, SGID or SGID MyInfo form from intranet',

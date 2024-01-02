@@ -5,13 +5,11 @@ import { AnalyticsRouter } from './analytics'
 import { AuthRouter } from './auth'
 import { BillingsRouter } from './billings'
 import { ClientRouter } from './client'
-import { CorppassOidcRouter } from './corppass'
 import { FeatureFlagsRouter } from './feature-flags'
 import { PublicFormsRouter } from './forms'
 import { IntranetRouter } from './intranet'
 import { NotificationsRouter } from './notifications'
 import { PaymentsRouter } from './payments'
-import { SingpassOidcRouter } from './singpass'
 import { UserRouter } from './user'
 
 export const V3Router = Router()
@@ -24,8 +22,6 @@ V3Router.use('/notifications', NotificationsRouter)
 V3Router.use('/billings', BillingsRouter)
 V3Router.use('/analytics', AnalyticsRouter)
 V3Router.use('/forms', PublicFormsRouter)
-V3Router.use('/singpass', SingpassOidcRouter)
-V3Router.use('/corppass', CorppassOidcRouter)
 V3Router.use('/payments', PaymentsRouter)
 V3Router.use('/feature-flags', FeatureFlagsRouter)
 V3Router.use('/intranet', IntranetRouter)

@@ -22,13 +22,8 @@ export type ClientEnvVars = {
   captchaPublicKey: string // Recaptcha
   turnstileSiteKey: string // Turnstile
   sentryConfigUrl: string // Sentry.IO
-  isSPMaintenance: string // Singpass maintenance message
-  isCPMaintenance: string // Corppass maintenance message
-  myInfoBannerContent: string // MyInfo maintenance message
   // TODO: remove after React rollout #4786
   GATrackingID: string | null
-
-  spcpCookieDomain: string // Cookie domain used for removing spcp cookies
   stripePublishableKey: string
   maxPaymentAmountCents: number
   minPaymentAmountCents: number

@@ -1,13 +1,11 @@
 import mongoose from 'mongoose'
 import { errAsync, okAsync, ResultAsync } from 'neverthrow'
 
-import { FormAuthType } from '../../../../../shared/types'
 import { IFormFeedbackSchema } from '../../../../types'
 import { createLoggerWithLabel } from '../../../config/logger'
 import getFormModel from '../../../models/form.server.model'
 import getFormFeedbackModel from '../../../models/form_feedback.server.model'
 import { DatabaseError } from '../../core/core.errors'
-import { JwtName } from '../../spcp/spcp.types'
 import { FormNotFoundError } from '../form.errors'
 
 import { Metatags } from './public-form.types'
@@ -60,19 +58,6 @@ export const insertFormFeedback = ({
       return new DatabaseError('Form feedback could not be created')
     },
   )
-}
-
-/**
- * Returns the cookie name based on auth type
- * Valid AuthTypes are SP / CP / MyInfo / SGID
- */
-export const getCookieNameByAuthType = (
-  authType: FormAuthType.SP | FormAuthType.CP,
-): string => {
-  switch (authType) {
-    default:
-      return JwtName[authType]
-  }
 }
 
 /**

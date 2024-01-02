@@ -13,7 +13,6 @@ import {
   AttachmentSizeMapType,
   DateString,
   ErrorDto,
-  FormAuthType,
   FormResponseMode,
   FormSubmissionMetadataQueryDto,
   PaymentChannel,
@@ -44,9 +43,7 @@ import { ControllerHandler } from '../../core/core.types'
 import { setFormTags } from '../../datadog/datadog.utils'
 import { getFeatureFlag } from '../../feature-flags/feature-flags.service'
 import { PermissionLevel } from '../../form/admin-form/admin-form.types'
-import { getOidcService } from '../../spcp/spcp.oidc.service'
 import { getPopulatedUserById } from '../../user/user.service'
-import * as VerifiedContentService from '../../verified-content/verified-content.service'
 import * as EncryptSubmissionMiddleware from '../encrypt-submission/encrypt-submission.middleware'
 import * as ReceiverMiddleware from '../receiver/receiver.middleware'
 import { fileSizeLimit, fileSizeLimitBytes } from '../submission.utils'
@@ -142,88 +139,8 @@ const submitEncryptModeForm = async (
   const { encryptedContent, responseMetadata, paymentProducts } =
     encryptedPayload
 
-  // Checks if user is SPCP-authenticated before allowing submission
-  let uinFin
-  let userInfo
-  const { authType } = formDef
-  switch (authType) {
-    case FormAuthType.SP: {
-      const oidcService = getOidcService(FormAuthType.SP)
-      const jwtPayloadResult = await oidcService
-        .extractJwt(req.cookies)
-        .asyncAndThen((jwt) => oidcService.extractJwtPayload(jwt))
-      if (jwtPayloadResult.isErr()) {
-        const { statusCode, errorMessage } = mapRouteError(
-          jwtPayloadResult.error,
-        )
-        logger.error({
-          message: 'Failed to verify Singpass JWT with auth client',
-          meta: logMeta,
-          error: jwtPayloadResult.error,
-        })
-        return res.status(statusCode).json({
-          message: errorMessage,
-          spcpSubmissionFailure: true,
-        })
-      }
-      uinFin = jwtPayloadResult.value.userName
-      break
-    }
-    case FormAuthType.CP: {
-      const oidcService = getOidcService(FormAuthType.CP)
-      const jwtPayloadResult = await oidcService
-        .extractJwt(req.cookies)
-        .asyncAndThen((jwt) => oidcService.extractJwtPayload(jwt))
-      if (jwtPayloadResult.isErr()) {
-        const { statusCode, errorMessage } = mapRouteError(
-          jwtPayloadResult.error,
-        )
-        logger.error({
-          message: 'Failed to verify Corppass JWT with auth client',
-          meta: logMeta,
-          error: jwtPayloadResult.error,
-        })
-        return res.status(statusCode).json({
-          message: errorMessage,
-          spcpSubmissionFailure: true,
-        })
-      }
-      uinFin = jwtPayloadResult.value.userName
-      userInfo = jwtPayloadResult.value.userInfo
-      break
-    }
-  }
-
   // Encrypt Verified SPCP Fields
   let verified
-  if (form.authType === FormAuthType.SP || form.authType === FormAuthType.CP) {
-    const encryptVerifiedContentResult =
-      VerifiedContentService.getVerifiedContent({
-        type: form.authType,
-        data: { uinFin, userInfo },
-      }).andThen((verifiedContent) =>
-        VerifiedContentService.encryptVerifiedContent({
-          verifiedContent,
-          formPublicKey: form.publicKey,
-        }),
-      )
-
-    if (encryptVerifiedContentResult.isErr()) {
-      const { error } = encryptVerifiedContentResult
-      logger.error({
-        message: 'Unable to encrypt verified content',
-        meta: logMeta,
-        error,
-      })
-
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ message: 'Invalid data was found. Please submit again.' })
-    } else {
-      // No errors, set local variable to the encrypted string.
-      verified = encryptVerifiedContentResult.value
-    }
-  }
 
   // Save Responses to Database
   let attachmentMetadata = new Map<string, string>()

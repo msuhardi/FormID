@@ -2,7 +2,6 @@ import { err, ok, Result } from 'neverthrow'
 
 import {
   ChildrenCompoundFieldBase,
-  FormAuthType,
   MyInfoAttribute,
 } from '../../../../shared/types'
 import { FieldResponse, FormFieldSchema, IFormDocument } from '../../../types'
@@ -11,10 +10,6 @@ import {
   getLogicUnitPreventingSubmit,
   getVisibleFieldIds,
 } from '../../utils/logic-adaptor'
-import {
-  createCorppassParsedResponses,
-  createSingpassParsedResponses,
-} from '../spcp/spcp.util'
 
 import {
   ConflictError,
@@ -27,36 +22,9 @@ import {
 } from './submission.types'
 import { getFilteredResponses } from './submission.utils'
 
-type NdiUserInfo =
-  | {
-      authType: FormAuthType.SP
-      uinFin: string
-    }
-  | { authType: FormAuthType.CP; uinFin: string; userInfo: string }
-
 export default class ParsedResponsesObject {
   public ndiResponses: ProcessedFieldResponse[] = []
   private constructor(public responses: ProcessedFieldResponse[]) {}
-
-  addNdiResponses(info: NdiUserInfo): ParsedResponsesObject {
-    /**
-     * No typescript destructuring being done in switch statement
-     * because typescript isn't smart enough to do narrowing with
-     * destructured variable switch cases.
-     */
-    switch (info.authType) {
-      case FormAuthType.SP:
-        this.ndiResponses = createSingpassParsedResponses(info.uinFin)
-        break
-      case FormAuthType.CP:
-        this.ndiResponses = createCorppassParsedResponses(
-          info.uinFin,
-          info.userInfo,
-        )
-        break
-    }
-    return this
-  }
 
   getAllResponses(): ProcessedFieldResponse[] {
     return [...this.responses, ...this.ndiResponses]

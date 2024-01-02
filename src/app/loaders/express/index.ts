@@ -11,7 +11,6 @@ import { FrontendRouter } from '../../modules/frontend/frontend.routes'
 import * as IntranetMiddleware from '../../modules/intranet/intranet.middleware'
 import { ApiRouter } from '../../routes/api'
 import { LegacyRedirectRouter } from '../../routes/legacy-redirect'
-import { SpOidcJwksRouter } from '../../routes/singpass'
 
 import {
   catchNonExistentStaticRoutesMiddleware,
@@ -102,9 +101,6 @@ const loadExpressApp = async (connection: Connection) => {
 
   // Log intranet usage
   app.use(IntranetMiddleware.logIntranetUsage)
-
-  // jwks endpoint for SP OIDC
-  app.use('/singpass/.well-known/jwks.json', SpOidcJwksRouter)
 
   // Legacy frontend routes which may still be in use
   app.use(LegacyRedirectRouter)
