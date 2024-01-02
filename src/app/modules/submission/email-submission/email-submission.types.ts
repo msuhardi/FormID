@@ -1,7 +1,6 @@
 import { ResponseMetadata } from 'shared/types'
 
 import { FieldResponse, IPopulatedEmailForm } from '../../../../types'
-import { MyInfoKey } from '../../myinfo/myinfo.types'
 import ParsedResponsesObject from '../ParsedResponsesObject.class'
 import { ProcessedResponse } from '../submission.types'
 
@@ -24,10 +23,8 @@ export interface SubmissionHash {
 export interface IPopulatedEmailFormWithResponsesAndHash {
   form: IPopulatedEmailForm
   parsedResponses: ParsedResponsesObject
-  hashedFields?: Set<MyInfoKey>
 }
 
 export interface IPopulatedStorageFormWithResponsesAndHash {
   parsedResponses: ParsedResponsesObject
-  hashedFields?: Set<MyInfoKey>
 }

@@ -11,7 +11,6 @@ import * as FormService from '../form/form.service'
 import {
   SGID_CODE_VERIFIER_COOKIE_NAME,
   SGID_COOKIE_NAME,
-  SGID_MYINFO_COOKIE_NAME,
   SGID_MYINFO_NRIC_NUMBER_SCOPE,
 } from './sgid.constants'
 import { SgidService } from './sgid.service'
@@ -61,10 +60,7 @@ export const handleLogin: ControllerHandler<
 
   const form = formResult.value
 
-  if (
-    form.authType !== FormAuthType.SGID &&
-    form.authType !== FormAuthType.SGID_MyInfo
-  ) {
+  if (form.authType !== FormAuthType.SGID) {
     logger.error({
       message: "Log in attempt to wrong endpoint for form's authType",
       meta: {
@@ -87,33 +83,6 @@ export const handleLogin: ControllerHandler<
     return res.redirect(target)
   }
   res.clearCookie(SGID_CODE_VERIFIER_COOKIE_NAME)
-
-  if (form.authType === FormAuthType.SGID_MyInfo) {
-    const jwtResult = await SgidService.retrieveAccessToken(
-      code,
-      codeVerifier,
-    ).andThen((data) => SgidService.createSgidMyInfoJwt(data))
-
-    if (jwtResult.isErr()) {
-      logger.error({
-        message: 'Error while handling login via sgID (MyInfo)',
-        meta,
-        error: jwtResult.error,
-      })
-      res.cookie('isLoginError', true)
-      return res.redirect(target)
-    }
-
-    const { maxAge, jwt, sub } = jwtResult.value
-    res.cookie(SGID_MYINFO_COOKIE_NAME, JSON.stringify({ jwt, sub }), {
-      maxAge,
-      httpOnly: true,
-      sameSite: 'lax', // Setting to 'strict' prevents Singpass login on Safari, Firefox
-      secure: !config.isDev,
-      ...SgidService.getCookieSettings(),
-    })
-    return res.redirect(target)
-  }
 
   const jwtResult = await SgidService.retrieveAccessToken(code, codeVerifier)
     .andThen((data) => SgidService.retrieveUserInfo(data))

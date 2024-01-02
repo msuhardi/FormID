@@ -8,8 +8,6 @@ import { PAYMENT_CONTACT_FIELD_ID } from 'shared/constants'
 import { FormAuthType } from 'shared/types'
 import { WAIT_FOR_OTP_SECONDS } from 'shared/utils/verification'
 
-import { MyInfoService } from 'src/app/modules/myinfo/myinfo.service'
-import * as MyInfoUtils from 'src/app/modules/myinfo/myinfo.util'
 import { MailSendError } from 'src/app/services/mail/mail.errors'
 import {
   InvalidNumberError,
@@ -28,14 +26,6 @@ import expressHandler from '../../../../../__tests__/unit/backend/helpers/jest-e
 import { DatabaseError, MalformedParametersError } from '../../core/core.errors'
 import { FormNotFoundError } from '../../form/form.errors'
 import * as FormService from '../../form/form.service'
-import {
-  MOCK_MYINFO_JWT,
-  MOCK_MYINFO_LOGIN_COOKIE,
-} from '../../myinfo/__tests__/myinfo.test.constants'
-import {
-  MyInfoInvalidLoginCookieError,
-  MyInfoMissingLoginCookieError,
-} from '../../myinfo/myinfo.errors'
 import { SGID_COOKIE_NAME } from '../../sgid/sgid.constants'
 import {
   SgidInvalidJwtError,
@@ -84,10 +74,6 @@ jest.mock('../../spcp/spcp.oidc.service/spcp.oidc.service.sp')
 const MockSpOidcServiceClass = jest.mocked(SpOidcServiceClass)
 jest.mock('../../spcp/spcp.oidc.service/spcp.oidc.service.cp')
 const MockCpOidcServiceClass = jest.mocked(CpOidcServiceClass)
-jest.mock('../../myinfo/myinfo.util')
-const MockMyInfoUtil = jest.mocked(MyInfoUtils)
-jest.mock('../../myinfo/myinfo.service')
-const MockMyInfoService = jest.mocked(MyInfoService)
 jest.mock('../../sgid/sgid.service')
 const MockSgidService = jest.mocked(SgidService)
 
@@ -264,10 +250,6 @@ describe('Verification controller', () => {
       ...MOCK_FORM,
       authType: FormAuthType.SGID,
     } as IPopulatedForm
-    const MOCK_MYINFO_FORM = {
-      ...MOCK_FORM,
-      authType: FormAuthType.MyInfo,
-    } as IPopulatedForm
 
     const MOCK_PAYMENT_REQ = expressHandler.mockRequest({
       body: { answer: MOCK_ANSWER },
@@ -326,8 +308,6 @@ describe('Verification controller', () => {
       expect(
         MockSgidService.extractSgidSingpassJwtPayload,
       ).not.toHaveBeenCalled()
-      expect(MockMyInfoUtil.extractMyInfoLoginJwt).not.toHaveBeenCalled()
-      expect(MockMyInfoService.verifyLoginJwt).not.toHaveBeenCalled()
       expect(MockOtpUtils.generateOtpWithHash).toHaveBeenCalled()
       expect(MockVerificationService.sendNewOtp).toHaveBeenCalledWith(
         EXPECTED_PARAMS_FOR_SENDING_FORM_OTP,
@@ -449,7 +429,6 @@ describe('Verification controller', () => {
 
     it('should return 201 when SGID authentication is enabled and sgid jwt token is valid', async () => {
       // Arrange
-      const MOCK_VALID_SGID_PAYLOAD = { userName: MOCK_JWT_PAYLOAD.userName }
       const MOCK_SGID_REQ = expressHandler.mockRequest({
         body: { answer: MOCK_ANSWER },
         params: {
@@ -466,9 +445,6 @@ describe('Verification controller', () => {
       )
       MockVerificationService.disableVerifiedFieldsIfRequired.mockReturnValueOnce(
         okAsync(true),
-      )
-      MockSgidService.extractSgidSingpassJwtPayload.mockReturnValueOnce(
-        ok(MOCK_VALID_SGID_PAYLOAD),
       )
 
       // Act
@@ -493,53 +469,6 @@ describe('Verification controller', () => {
         MockVerificationService.disableVerifiedFieldsIfRequired,
       ).toHaveBeenCalledWith(
         MOCK_SGID_FORM,
-        mockTransaction,
-        MOCK_FORM_REQ.params.fieldId,
-      )
-      expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.CREATED)
-    })
-
-    it('should return 201 when MyInfo authentication is enabled and MyInfo cookie is valid', async () => {
-      // Arrange
-      MockFormService.retrieveFullFormById.mockReturnValueOnce(
-        okAsync(MOCK_MYINFO_FORM),
-      )
-      MockMyInfoUtil.extractMyInfoLoginJwt.mockReturnValueOnce(
-        ok(MOCK_MYINFO_JWT),
-      )
-      MockMyInfoService.verifyLoginJwt.mockReturnValueOnce(
-        ok(MOCK_MYINFO_LOGIN_COOKIE),
-      )
-      MockVerificationService.disableVerifiedFieldsIfRequired.mockReturnValueOnce(
-        okAsync(true),
-      )
-
-      // Act
-      await VerificationController._handleGenerateOtp(
-        MOCK_FORM_REQ,
-        mockRes,
-        jest.fn(),
-      )
-
-      // Assert
-      expect(MockFormService.retrieveFullFormById).toHaveBeenCalledWith(
-        MOCK_FORM_ID,
-      )
-      expect(MockMyInfoUtil.extractMyInfoLoginJwt).toHaveBeenCalledWith(
-        MOCK_FORM_REQ.cookies,
-        FormAuthType.MyInfo,
-      )
-      expect(MockMyInfoService.verifyLoginJwt).toHaveBeenCalledWith(
-        MOCK_MYINFO_JWT,
-      )
-      expect(MockOtpUtils.generateOtpWithHash).toHaveBeenCalled()
-      expect(MockVerificationService.sendNewOtp).toHaveBeenCalledWith(
-        EXPECTED_PARAMS_FOR_SENDING_FORM_OTP,
-      )
-      expect(
-        MockVerificationService.disableVerifiedFieldsIfRequired,
-      ).toHaveBeenCalledWith(
-        MOCK_MYINFO_FORM,
         mockTransaction,
         MOCK_FORM_REQ.params.fieldId,
       )
@@ -963,79 +892,6 @@ describe('Verification controller', () => {
       expect(mockRes.json).toHaveBeenCalledWith(expectedResponse)
     })
 
-    it('should return 400 when MyInfo authentication is enabled but MyInfo cookie is missing in session', async () => {
-      // Arrange
-      MockFormService.retrieveFullFormById.mockReturnValueOnce(
-        okAsync(MOCK_MYINFO_FORM),
-      )
-      MockMyInfoUtil.extractMyInfoLoginJwt.mockReturnValueOnce(
-        err(new MyInfoMissingLoginCookieError()),
-      )
-      const expectedResponse = {
-        message: 'Sorry, something went wrong. Please refresh and try again.',
-      }
-
-      // Act
-      await VerificationController._handleGenerateOtp(
-        MOCK_FORM_REQ,
-        mockRes,
-        jest.fn(),
-      )
-
-      // Assert
-      expect(MockFormService.retrieveFullFormById).toHaveBeenCalledWith(
-        MOCK_FORM_ID,
-      )
-      expect(MockMyInfoUtil.extractMyInfoLoginJwt).toHaveBeenCalledWith(
-        MOCK_FORM_REQ.cookies,
-        FormAuthType.MyInfo,
-      )
-      expect(MockMyInfoService.verifyLoginJwt).not.toHaveBeenCalled()
-      expect(MockOtpUtils.generateOtpWithHash).not.toHaveBeenCalled()
-      expect(MockVerificationService.sendNewOtp).not.toHaveBeenCalled()
-      expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST)
-      expect(mockRes.json).toHaveBeenCalledWith(expectedResponse)
-    })
-
-    it('should return 400 when MyInfo authentication is enabled but MyInfo cookie is malformed', async () => {
-      // Arrange
-      MockFormService.retrieveFullFormById.mockReturnValueOnce(
-        okAsync(MOCK_MYINFO_FORM),
-      )
-      MockMyInfoUtil.extractMyInfoLoginJwt.mockReturnValueOnce(
-        ok(MOCK_MYINFO_JWT),
-      )
-      MockMyInfoService.verifyLoginJwt.mockReturnValueOnce(
-        err(new MyInfoInvalidLoginCookieError()),
-      )
-      const expectedResponse = {
-        message: 'Sorry, something went wrong. Please refresh and try again.',
-      }
-
-      // Act
-      await VerificationController._handleGenerateOtp(
-        MOCK_FORM_REQ,
-        mockRes,
-        jest.fn(),
-      )
-
-      // Assert
-      expect(MockFormService.retrieveFullFormById).toHaveBeenCalledWith(
-        MOCK_FORM_ID,
-      )
-      expect(MockMyInfoUtil.extractMyInfoLoginJwt).toHaveBeenCalledWith(
-        MOCK_FORM_REQ.cookies,
-        FormAuthType.MyInfo,
-      )
-      expect(MockMyInfoService.verifyLoginJwt).toHaveBeenCalledWith(
-        MOCK_MYINFO_JWT,
-      )
-      expect(MockOtpUtils.generateOtpWithHash).not.toHaveBeenCalled()
-      expect(MockVerificationService.sendNewOtp).not.toHaveBeenCalled()
-      expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST)
-      expect(mockRes.json).toHaveBeenCalledWith(expectedResponse)
-    })
-
     it('should return 404 when form is not found', async () => {
       // Arrange
       MockFormService.retrieveFullFormById.mockReturnValueOnce(
@@ -1228,8 +1084,6 @@ describe('Verification controller', () => {
       expect(
         MockSgidService.extractSgidSingpassJwtPayload,
       ).not.toHaveBeenCalled()
-      expect(MockMyInfoUtil.extractMyInfoLoginJwt).not.toHaveBeenCalled()
-      expect(MockMyInfoService.verifyLoginJwt).not.toHaveBeenCalled()
       expect(MockOtpUtils.generateOtpWithHash).toHaveBeenCalled()
       expect(MockVerificationService.sendNewOtp).toHaveBeenCalledWith(
         EXPECTED_PARAMS_FOR_SENDING_PAYMENT_OTP,
@@ -1351,7 +1205,10 @@ describe('Verification controller', () => {
 
     it('should return 201 when SGID authentication is enabled and sgid jwt token is valid for payment otp', async () => {
       // Arrange
-      const MOCK_VALID_SGID_PAYLOAD = { userName: MOCK_JWT_PAYLOAD.userName }
+      const MOCK_VALID_SGID_PAYLOAD = {
+        userName: MOCK_JWT_PAYLOAD.userName,
+        rememberMe: false,
+      }
       const MOCK_SGID_REQ = expressHandler.mockRequest({
         body: { answer: MOCK_ANSWER },
         params: {
@@ -1395,53 +1252,6 @@ describe('Verification controller', () => {
         MockVerificationService.disableVerifiedFieldsIfRequired,
       ).toHaveBeenCalledWith(
         MOCK_SGID_FORM,
-        mockTransaction,
-        MOCK_PAYMENT_REQ.params.fieldId,
-      )
-      expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.CREATED)
-    })
-
-    it('should return 201 when MyInfo authentication is enabled and MyInfo cookie is valid for payment otp', async () => {
-      // Arrange
-      MockFormService.retrieveFullFormById.mockReturnValueOnce(
-        okAsync(MOCK_MYINFO_FORM),
-      )
-      MockMyInfoUtil.extractMyInfoLoginJwt.mockReturnValueOnce(
-        ok(MOCK_MYINFO_JWT),
-      )
-      MockMyInfoService.verifyLoginJwt.mockReturnValueOnce(
-        ok(MOCK_MYINFO_LOGIN_COOKIE),
-      )
-      MockVerificationService.disableVerifiedFieldsIfRequired.mockReturnValueOnce(
-        okAsync(true),
-      )
-
-      // Act
-      await VerificationController._handleGenerateOtp(
-        MOCK_PAYMENT_REQ,
-        mockRes,
-        jest.fn(),
-      )
-
-      // Assert
-      expect(MockFormService.retrieveFullFormById).toHaveBeenCalledWith(
-        MOCK_FORM_ID,
-      )
-      expect(MockMyInfoUtil.extractMyInfoLoginJwt).toHaveBeenCalledWith(
-        MOCK_PAYMENT_REQ.cookies,
-        FormAuthType.MyInfo,
-      )
-      expect(MockMyInfoService.verifyLoginJwt).toHaveBeenCalledWith(
-        MOCK_MYINFO_JWT,
-      )
-      expect(MockOtpUtils.generateOtpWithHash).toHaveBeenCalled()
-      expect(MockVerificationService.sendNewOtp).toHaveBeenCalledWith(
-        EXPECTED_PARAMS_FOR_SENDING_PAYMENT_OTP,
-      )
-      expect(
-        MockVerificationService.disableVerifiedFieldsIfRequired,
-      ).toHaveBeenCalledWith(
-        MOCK_MYINFO_FORM,
         mockTransaction,
         MOCK_PAYMENT_REQ.params.fieldId,
       )
@@ -1859,79 +1669,6 @@ describe('Verification controller', () => {
       expect(
         MockSgidService.extractSgidSingpassJwtPayload,
       ).toHaveBeenCalledWith(MOCK_SGID_REQ.cookies.jwt)
-      expect(MockOtpUtils.generateOtpWithHash).not.toHaveBeenCalled()
-      expect(MockVerificationService.sendNewOtp).not.toHaveBeenCalled()
-      expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST)
-      expect(mockRes.json).toHaveBeenCalledWith(expectedResponse)
-    })
-
-    it('should return 400 when MyInfo authentication is enabled but MyInfo cookie is missing in session for payment otp', async () => {
-      // Arrange
-      MockFormService.retrieveFullFormById.mockReturnValueOnce(
-        okAsync(MOCK_MYINFO_FORM),
-      )
-      MockMyInfoUtil.extractMyInfoLoginJwt.mockReturnValueOnce(
-        err(new MyInfoMissingLoginCookieError()),
-      )
-      const expectedResponse = {
-        message: 'Sorry, something went wrong. Please refresh and try again.',
-      }
-
-      // Act
-      await VerificationController._handleGenerateOtp(
-        MOCK_PAYMENT_REQ,
-        mockRes,
-        jest.fn(),
-      )
-
-      // Assert
-      expect(MockFormService.retrieveFullFormById).toHaveBeenCalledWith(
-        MOCK_FORM_ID,
-      )
-      expect(MockMyInfoUtil.extractMyInfoLoginJwt).toHaveBeenCalledWith(
-        MOCK_PAYMENT_REQ.cookies,
-        FormAuthType.MyInfo,
-      )
-      expect(MockMyInfoService.verifyLoginJwt).not.toHaveBeenCalled()
-      expect(MockOtpUtils.generateOtpWithHash).not.toHaveBeenCalled()
-      expect(MockVerificationService.sendNewOtp).not.toHaveBeenCalled()
-      expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST)
-      expect(mockRes.json).toHaveBeenCalledWith(expectedResponse)
-    })
-
-    it('should return 400 when MyInfo authentication is enabled but MyInfo cookie is malformed for payment otp', async () => {
-      // Arrange
-      MockFormService.retrieveFullFormById.mockReturnValueOnce(
-        okAsync(MOCK_MYINFO_FORM),
-      )
-      MockMyInfoUtil.extractMyInfoLoginJwt.mockReturnValueOnce(
-        ok(MOCK_MYINFO_JWT),
-      )
-      MockMyInfoService.verifyLoginJwt.mockReturnValueOnce(
-        err(new MyInfoInvalidLoginCookieError()),
-      )
-      const expectedResponse = {
-        message: 'Sorry, something went wrong. Please refresh and try again.',
-      }
-
-      // Act
-      await VerificationController._handleGenerateOtp(
-        MOCK_PAYMENT_REQ,
-        mockRes,
-        jest.fn(),
-      )
-
-      // Assert
-      expect(MockFormService.retrieveFullFormById).toHaveBeenCalledWith(
-        MOCK_FORM_ID,
-      )
-      expect(MockMyInfoUtil.extractMyInfoLoginJwt).toHaveBeenCalledWith(
-        MOCK_PAYMENT_REQ.cookies,
-        FormAuthType.MyInfo,
-      )
-      expect(MockMyInfoService.verifyLoginJwt).toHaveBeenCalledWith(
-        MOCK_MYINFO_JWT,
-      )
       expect(MockOtpUtils.generateOtpWithHash).not.toHaveBeenCalled()
       expect(MockVerificationService.sendNewOtp).not.toHaveBeenCalled()
       expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST)

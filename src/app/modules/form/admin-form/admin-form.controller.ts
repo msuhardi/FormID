@@ -1828,9 +1828,9 @@ export const submitEmailPreview: ControllerHandler<
   const parsedResponses = parsedResponsesResult.value
   const attachments = mapAttachmentsFromResponses(req.body.responses)
 
-  // Handle SingPass, CorpPass and MyInfo authentication and validation
+  // Handle SingPass and CorpPass authentication and validation
   const { authType } = form
-  if (authType === FormAuthType.SP || authType === FormAuthType.MyInfo) {
+  if (authType === FormAuthType.SP) {
     parsedResponses.addNdiResponses({
       authType,
       uinFin: PREVIEW_SINGPASS_UINFIN,
@@ -1845,8 +1845,6 @@ export const submitEmailPreview: ControllerHandler<
 
   const emailData = new SubmissionEmailObj(
     parsedResponses.getAllResponses(),
-    // All MyInfo fields are verified in preview
-    new Set(AdminFormService.extractMyInfoFieldIds(form.form_fields)),
     form.authType,
   )
   const submission = EmailSubmissionService.createEmailSubmissionWithoutSave(

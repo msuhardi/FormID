@@ -14,8 +14,6 @@ import { createReqMeta, getRequestIp } from '../../utils/request'
 import { ControllerHandler } from '../core/core.types'
 import { setFormTags } from '../datadog/datadog.utils'
 import * as FormService from '../form/form.service'
-import { MyInfoService } from '../myinfo/myinfo.service'
-import * as MyInfoUtil from '../myinfo/myinfo.util'
 import { SGID_COOKIE_NAME } from '../sgid/sgid.constants'
 import { SgidService } from '../sgid/sgid.service'
 import { getOidcService } from '../spcp/spcp.oidc.service'
@@ -148,21 +146,6 @@ export const _handleGenerateOtp: ControllerHandler<
               .mapErr((error) => {
                 logger.error({
                   message: 'Failed to verify sgID JWT with auth client',
-                  meta: logMeta,
-                  error,
-                })
-                return error
-              })
-          case FormAuthType.SGID_MyInfo:
-          case FormAuthType.MyInfo:
-            return MyInfoUtil.extractMyInfoLoginJwt(req.cookies, authType)
-              .andThen(MyInfoService.verifyLoginJwt)
-              .map(() => form)
-              .mapErr((error) => {
-                logger.error({
-                  message: `Failed to verify MyInfo${
-                    authType === FormAuthType.SGID_MyInfo ? '(over sgID)' : ''
-                  } hashes`,
                   meta: logMeta,
                   error,
                 })

@@ -18,16 +18,7 @@ import { createReqMeta, getRequestIp } from '../../../utils/request'
 import { ControllerHandler } from '../../core/core.types'
 import { setFormTags } from '../../datadog/datadog.utils'
 import * as FormService from '../../form/form.service'
-import {
-  MYINFO_LOGIN_COOKIE_NAME,
-  MYINFO_LOGIN_COOKIE_OPTIONS,
-} from '../../myinfo/myinfo.constants'
-import { MyInfoService } from '../../myinfo/myinfo.service'
-import { extractMyInfoLoginJwt } from '../../myinfo/myinfo.util'
-import {
-  SGID_COOKIE_NAME,
-  SGID_MYINFO_LOGIN_COOKIE_NAME,
-} from '../../sgid/sgid.constants'
+import { SGID_COOKIE_NAME } from '../../sgid/sgid.constants'
 import { SgidService } from '../../sgid/sgid.service'
 import { getOidcService } from '../../spcp/spcp.oidc.service'
 import * as EmailSubmissionMiddleware from '../email-submission/email-submission.middleware'
@@ -238,40 +229,6 @@ const submitEmailModeForm: ControllerHandler<
                 return error
               })
           }
-          case FormAuthType.SGID_MyInfo:
-          case FormAuthType.MyInfo:
-            return extractMyInfoLoginJwt(req.cookies, authType)
-              .andThen(MyInfoService.verifyLoginJwt)
-              .asyncAndThen(({ uinFin }) =>
-                MyInfoService.fetchMyInfoHashes(uinFin, formId)
-                  .andThen((hashes) =>
-                    MyInfoService.checkMyInfoHashes(
-                      parsedResponses.responses,
-                      hashes,
-                    ),
-                  )
-                  .map<IPopulatedEmailFormWithResponsesAndHash>(
-                    (hashedFields) => ({
-                      form,
-                      hashedFields,
-                      parsedResponses: parsedResponses.addNdiResponses({
-                        authType,
-                        uinFin,
-                      }),
-                    }),
-                  ),
-              )
-              .mapErr((error) => {
-                spcpSubmissionFailure = true
-                logger.error({
-                  message: `Error verifying MyInfo${
-                    authType === FormAuthType.SGID_MyInfo ? '(over SGID)' : ''
-                  } hashes`,
-                  meta: logMeta,
-                  error,
-                })
-                return error
-              })
           case FormAuthType.SGID:
             return SgidService.extractSgidSingpassJwtPayload(
               req.cookies[SGID_COOKIE_NAME],
@@ -301,11 +258,10 @@ const submitEmailModeForm: ControllerHandler<
             })
         }
       })
-      .andThen(({ form, parsedResponses, hashedFields }) => {
+      .andThen(({ form, parsedResponses }) => {
         // Create data for response email as well as email confirmation
         const emailData = new SubmissionEmailObj(
           parsedResponses.getAllResponses(),
-          hashedFields,
           form.authType,
         )
 
@@ -425,18 +381,12 @@ const submitEmailModeForm: ControllerHandler<
           })
           // MyInfo access token is single-use, so clear it
           // Similarly for sgID-MyInfo
-          return res
-            .clearCookie(MYINFO_LOGIN_COOKIE_NAME, MYINFO_LOGIN_COOKIE_OPTIONS)
-            .clearCookie(
-              SGID_MYINFO_LOGIN_COOKIE_NAME,
-              MYINFO_LOGIN_COOKIE_OPTIONS,
-            )
-            .json({
-              // Return the reply early to the submitter
-              message: 'Form submission successful.',
-              submissionId: submission.id,
-              timestamp: (submission.created || new Date()).getTime(),
-            })
+          return res.json({
+            // Return the reply early to the submitter
+            message: 'Form submission successful.',
+            submissionId: submission.id,
+            timestamp: (submission.created || new Date()).getTime(),
+          })
         },
       )
       .mapErr((error) => {

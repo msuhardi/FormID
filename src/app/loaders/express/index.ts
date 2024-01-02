@@ -9,8 +9,6 @@ import url from 'url'
 import config from '../../config/config'
 import { FrontendRouter } from '../../modules/frontend/frontend.routes'
 import * as IntranetMiddleware from '../../modules/intranet/intranet.middleware'
-import { MYINFO_ROUTER_PREFIX } from '../../modules/myinfo/myinfo.constants'
-import { MyInfoRouter } from '../../modules/myinfo/myinfo.routes'
 import { SgidRouter } from '../../modules/sgid/sgid.routes'
 import { ApiRouter } from '../../routes/api'
 import { LegacyRedirectRouter } from '../../routes/legacy-redirect'
@@ -110,8 +108,6 @@ const loadExpressApp = async (connection: Connection) => {
   app.use('/singpass/.well-known/jwks.json', SpOidcJwksRouter)
   // Registered routes with sgID
   app.use('/sgid', SgidRouter)
-  // Use constant for registered routes with MyInfo servers
-  app.use(MYINFO_ROUTER_PREFIX, MyInfoRouter)
 
   // Legacy frontend routes which may still be in use
   app.use(LegacyRedirectRouter)

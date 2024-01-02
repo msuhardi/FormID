@@ -1,8 +1,6 @@
 import { setupApp } from '__tests__/integration/helpers/express-setup'
 import dbHandler from '__tests__/unit/backend/helpers/jest-db'
-import jwt from 'jsonwebtoken'
 import { omit } from 'lodash'
-import mongoose from 'mongoose'
 import { errAsync, okAsync } from 'neverthrow'
 import { featureFlags } from 'shared/constants'
 import session, { Session } from 'supertest-session'
@@ -13,13 +11,6 @@ import * as FeatureFlagsService from 'src/app/modules/feature-flags/feature-flag
 import { FormFieldSchema } from 'src/types'
 
 import { FormAuthType, FormStatus } from '../../../../../../../shared/types'
-import {
-  MOCK_COOKIE_AGE,
-  MOCK_MYINFO_JWT,
-  MOCK_UINFIN,
-} from '../../../../../modules/myinfo/__tests__/myinfo.test.constants'
-import { MYINFO_LOGIN_COOKIE_NAME } from '../../../../../modules/myinfo/myinfo.constants'
-import getMyInfoHashModel from '../../../../../modules/myinfo/myinfo_hash.model'
 import {
   CpOidcClient,
   SpOidcClient,
@@ -41,8 +32,6 @@ import {
   MOCK_TEXT_FIELD,
   MOCK_TEXTFIELD_RESPONSE,
 } from './public-forms.routes.spec.constants'
-
-const MyInfoHashModel = getMyInfoHashModel(mongoose)
 
 const MockCpOidcClient = jest.mocked(CpOidcClient)
 
@@ -620,173 +609,6 @@ describe('public-form.submissions.routes', () => {
             .field('body', JSON.stringify(MOCK_NO_RESPONSES_BODY))
             .query({ captchaResponse: 'null', captchaType: '' })
             .set('Cookie', ['jwtSp=mockJwt'])
-
-          // Assert
-          expect(response.status).toBe(401)
-          expect(response.body).toEqual({
-            message:
-              'Something went wrong with your login. Please try logging in and submitting again.',
-            spcpSubmissionFailure: true,
-          })
-        })
-      })
-
-      describe('MyInfo', () => {
-        afterEach(() => jest.restoreAllMocks())
-
-        it('should return 200 when submission is valid', async () => {
-          // Arrange
-          // Ignore TS errors as .verify has multiple overloads
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          jest.spyOn(jwt, 'verify').mockReturnValueOnce({ uinFin: MOCK_UINFIN })
-          const { form } = await dbHandler.insertEmailForm({
-            formOptions: {
-              esrvcId: 'mockEsrvcId',
-              authType: FormAuthType.MyInfo,
-              hasCaptcha: false,
-              status: FormStatus.Public,
-            },
-          })
-          await MyInfoHashModel.updateHashes(
-            MOCK_UINFIN,
-            form._id,
-            {},
-            MOCK_COOKIE_AGE,
-          )
-
-          // Act
-          const response = await request
-            .post(`/forms/${form._id}/submissions/email`)
-            .field('body', JSON.stringify(MOCK_NO_RESPONSES_BODY))
-            .query({ captchaResponse: 'null', captchaType: '' })
-            .set('Cookie', [
-              // The j: indicates that the cookie is in JSON
-              `${MYINFO_LOGIN_COOKIE_NAME}=j:${encodeURIComponent(
-                MOCK_MYINFO_JWT,
-              )}`,
-            ])
-
-          // Assert
-          expect(response.status).toBe(200)
-          expect(response.body).toEqual({
-            message: 'Form submission successful.',
-            submissionId: expect.any(String),
-            timestamp: expect.any(Number),
-          })
-        })
-
-        it('should return 401 when submission is missing MyInfo cookie', async () => {
-          // Arrange
-          const { form } = await dbHandler.insertEmailForm({
-            formOptions: {
-              esrvcId: 'mockEsrvcId',
-              authType: FormAuthType.MyInfo,
-              hasCaptcha: false,
-              status: FormStatus.Public,
-            },
-          })
-
-          // Act
-          const response = await request
-            .post(`/forms/${form._id}/submissions/email`)
-            .field('body', JSON.stringify(MOCK_NO_RESPONSES_BODY))
-            .query({ captchaResponse: 'null', captchaType: '' })
-          // Note cookie is not set
-
-          // Assert
-          expect(response.status).toBe(401)
-          expect(response.body).toEqual({
-            message:
-              'Something went wrong with your login. Please try logging in and submitting again.',
-            spcpSubmissionFailure: true,
-          })
-        })
-
-        it('should return 401 when submission has the wrong cookie type', async () => {
-          // Arrange
-          const { form } = await dbHandler.insertEmailForm({
-            formOptions: {
-              esrvcId: 'mockEsrvcId',
-              authType: FormAuthType.MyInfo,
-              hasCaptcha: false,
-              status: FormStatus.Public,
-            },
-          })
-
-          // Act
-          const response = await request
-            .post(`/forms/${form._id}/submissions/email`)
-            .field('body', JSON.stringify(MOCK_NO_RESPONSES_BODY))
-            .query({ captchaResponse: 'null', captchaType: '' })
-            // Note cookie is for SingPass, not MyInfo
-            .set('Cookie', ['jwtSp=mockJwt'])
-
-          // Assert
-          expect(response.status).toBe(401)
-          expect(response.body).toEqual({
-            message:
-              'Something went wrong with your login. Please try logging in and submitting again.',
-            spcpSubmissionFailure: true,
-          })
-        })
-
-        it('should return 401 when submission has invalid cookie', async () => {
-          // Arrange
-          // Mock MyInfoGovClient to return error when decoding JWT
-          jest.spyOn(jwt, 'verify').mockImplementationOnce(() => {
-            throw new Error()
-          })
-          const { form } = await dbHandler.insertEmailForm({
-            formOptions: {
-              esrvcId: 'mockEsrvcId',
-              authType: FormAuthType.MyInfo,
-              hasCaptcha: false,
-              status: FormStatus.Public,
-            },
-          })
-
-          // Act
-          const response = await request
-            .post(`/forms/${form._id}/submissions/email`)
-            .field('body', JSON.stringify(MOCK_NO_RESPONSES_BODY))
-            .query({ captchaResponse: 'null', captchaType: '' })
-            .set('Cookie', [`${MYINFO_LOGIN_COOKIE_NAME}=${MOCK_MYINFO_JWT}`])
-
-          // Assert
-          expect(response.status).toBe(401)
-          expect(response.body).toEqual({
-            message:
-              'Something went wrong with your login. Please try logging in and submitting again.',
-            spcpSubmissionFailure: true,
-          })
-        })
-
-        it('should return 401 when submission has cookie with the wrong shape', async () => {
-          // Arrange
-          jest
-            .spyOn(jwt, 'verify')
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            .mockReturnValueOnce({ someKey: 'someValue' })
-          const { form } = await dbHandler.insertEmailForm({
-            formOptions: {
-              esrvcId: 'mockEsrvcId',
-              authType: FormAuthType.MyInfo,
-              hasCaptcha: false,
-              status: FormStatus.Public,
-            },
-          })
-
-          // Act
-          const response = await request
-            .post(`/forms/${form._id}/submissions/email`)
-            .field('body', JSON.stringify(MOCK_NO_RESPONSES_BODY))
-            .query({ captchaResponse: 'null', captchaType: '' })
-            .set('Cookie', [
-              // The j: indicates that the cookie is in JSON
-              `${MYINFO_LOGIN_COOKIE_NAME}=j:${MOCK_MYINFO_JWT}`,
-            ])
 
           // Assert
           expect(response.status).toBe(401)
