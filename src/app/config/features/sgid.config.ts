@@ -12,37 +12,37 @@ export const sgidVarsSchema: Schema<ISgidVarsSchema> = {
   clientId: {
     doc: 'The client id registered with sgID',
     format: String,
-    default: '',
+    default: 'sgidclientid',
     env: 'SGID_CLIENT_ID',
   },
   clientSecret: {
     doc: 'The client secret registered with sgID',
     format: String,
-    default: '',
+    default: 'sgidclientsecret',
     env: 'SGID_CLIENT_SECRET',
   },
   privateKeyPath: {
     doc: 'The path to the private key to decrypt payloads from sgID.',
     format: String,
-    default: '',
+    default: './node_modules/@opengovsg/mockpass/static/certs/key.pem',
     env: 'SGID_PRIVATE_KEY',
   },
   publicKeyPath: {
     doc: 'The path to the public key given to sgID.',
     format: String,
-    default: '',
+    default: './node_modules/@opengovsg/mockpass/static/certs/server.crt',
     env: 'SGID_PUBLIC_KEY',
   },
   formLoginRedirectUri: {
     doc: 'The callback uri that sgID will pass the authorization code and state to for form logins',
     format: 'url',
-    default: '',
+    default: 'redirectUrl',
     env: 'SGID_FORM_LOGIN_REDIRECT_URI',
   },
   adminLoginRedirectUri: {
     doc: 'The callback uri that sgID will pass the authorization code and state to for admin application logins',
     format: 'url',
-    default: '',
+    default: 'redirectUrl',
     env: 'SGID_ADMIN_LOGIN_REDIRECT_URI',
   },
   cookieMaxAge: {
