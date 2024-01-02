@@ -18,8 +18,6 @@ import { createReqMeta, getRequestIp } from '../../../utils/request'
 import { ControllerHandler } from '../../core/core.types'
 import { setFormTags } from '../../datadog/datadog.utils'
 import * as FormService from '../../form/form.service'
-import { SGID_COOKIE_NAME } from '../../sgid/sgid.constants'
-import { SgidService } from '../../sgid/sgid.service'
 import { getOidcService } from '../../spcp/spcp.oidc.service'
 import * as EmailSubmissionMiddleware from '../email-submission/email-submission.middleware'
 import ParsedResponsesObject from '../ParsedResponsesObject.class'
@@ -212,12 +210,9 @@ const submitEmailModeForm: ControllerHandler<
             return oidcService
               .extractJwt(req.cookies)
               .asyncAndThen((jwt) => oidcService.extractJwtPayload(jwt))
-              .map<IPopulatedEmailFormWithResponsesAndHash>((jwt) => ({
+              .map<IPopulatedEmailFormWithResponsesAndHash>(() => ({
                 form,
-                parsedResponses: parsedResponses.addNdiResponses({
-                  authType,
-                  uinFin: jwt.userName,
-                }),
+                parsedResponses,
               }))
               .mapErr((error) => {
                 spcpSubmissionFailure = true
@@ -229,28 +224,6 @@ const submitEmailModeForm: ControllerHandler<
                 return error
               })
           }
-          case FormAuthType.SGID:
-            return SgidService.extractSgidSingpassJwtPayload(
-              req.cookies[SGID_COOKIE_NAME],
-            )
-              .map<IPopulatedEmailFormWithResponsesAndHash>(
-                ({ userName: uinFin }) => ({
-                  form,
-                  parsedResponses: parsedResponses.addNdiResponses({
-                    authType,
-                    uinFin,
-                  }),
-                }),
-              )
-              .mapErr((error) => {
-                spcpSubmissionFailure = true
-                logger.error({
-                  message: 'Failed to verify sgID JWT with auth client',
-                  meta: logMeta,
-                  error,
-                })
-                return error
-              })
           default:
             return ok<IPopulatedEmailFormWithResponsesAndHash, never>({
               form,

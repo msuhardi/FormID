@@ -33,11 +33,6 @@ import {
 } from '../core/core.errors'
 import { FormNotFoundError } from '../form/form.errors'
 import {
-  SgidInvalidJwtError,
-  SgidMissingJwtError,
-  SgidVerifyJwtError,
-} from '../sgid/sgid.errors'
-import {
   InvalidJwtError,
   MissingJwtError,
   VerifyJwtError,
@@ -202,9 +197,6 @@ export const mapRouteError: MapRouteError = (
     case MissingJwtError:
     case InvalidJwtError:
     case VerifyJwtError:
-    case SgidVerifyJwtError:
-    case SgidInvalidJwtError:
-    case SgidMissingJwtError:
       return {
         errorMessage: coreErrorMsg,
         statusCode: StatusCodes.BAD_REQUEST,

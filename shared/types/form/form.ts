@@ -50,7 +50,6 @@ export enum FormAuthType {
   NIL = 'NIL',
   SP = 'SP',
   CP = 'CP',
-  SGID = 'SGID',
 }
 
 export enum FormStatus {

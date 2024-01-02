@@ -297,9 +297,7 @@ export const checkIsIntranetFormAccess = (
   // and the form has authentication set
   if (
     isIntranetUser &&
-    [FormAuthType.SP, FormAuthType.CP, FormAuthType.SGID].includes(
-      form.authType,
-    )
+    [FormAuthType.SP, FormAuthType.CP].includes(form.authType)
   ) {
     logger.warn({
       message:

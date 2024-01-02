@@ -11,7 +11,6 @@ import {
   getLogicUnitPreventingSubmit,
   getVisibleFieldIds,
 } from '../../utils/logic-adaptor'
-import { createSgidParsedResponses } from '../sgid/sgid.util'
 import {
   createCorppassParsedResponses,
   createSingpassParsedResponses,
@@ -30,7 +29,7 @@ import { getFilteredResponses } from './submission.utils'
 
 type NdiUserInfo =
   | {
-      authType: FormAuthType.SP | FormAuthType.SGID
+      authType: FormAuthType.SP
       uinFin: string
     }
   | { authType: FormAuthType.CP; uinFin: string; userInfo: string }
@@ -54,9 +53,6 @@ export default class ParsedResponsesObject {
           info.uinFin,
           info.userInfo,
         )
-        break
-      case FormAuthType.SGID:
-        this.ndiResponses = createSgidParsedResponses(info.uinFin)
         break
     }
     return this

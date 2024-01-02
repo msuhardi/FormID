@@ -9,7 +9,6 @@ import url from 'url'
 import config from '../../config/config'
 import { FrontendRouter } from '../../modules/frontend/frontend.routes'
 import * as IntranetMiddleware from '../../modules/intranet/intranet.middleware'
-import { SgidRouter } from '../../modules/sgid/sgid.routes'
 import { ApiRouter } from '../../routes/api'
 import { LegacyRedirectRouter } from '../../routes/legacy-redirect'
 import { SpOidcJwksRouter } from '../../routes/singpass'
@@ -106,8 +105,6 @@ const loadExpressApp = async (connection: Connection) => {
 
   // jwks endpoint for SP OIDC
   app.use('/singpass/.well-known/jwks.json', SpOidcJwksRouter)
-  // Registered routes with sgID
-  app.use('/sgid', SgidRouter)
 
   // Legacy frontend routes which may still be in use
   app.use(LegacyRedirectRouter)
@@ -135,9 +132,7 @@ const loadExpressApp = async (connection: Connection) => {
   app.use(sentryMiddlewares())
   app.use(errorHandlerMiddlewares())
 
-  const server = http.createServer(app)
-
-  return server
+  return http.createServer(app)
 }
 
 export default loadExpressApp

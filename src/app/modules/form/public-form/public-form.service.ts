@@ -7,7 +7,6 @@ import { createLoggerWithLabel } from '../../../config/logger'
 import getFormModel from '../../../models/form.server.model'
 import getFormFeedbackModel from '../../../models/form_feedback.server.model'
 import { DatabaseError } from '../../core/core.errors'
-import { SGID_COOKIE_NAME } from '../../sgid/sgid.constants'
 import { JwtName } from '../../spcp/spcp.types'
 import { FormNotFoundError } from '../form.errors'
 
@@ -68,11 +67,9 @@ export const insertFormFeedback = ({
  * Valid AuthTypes are SP / CP / MyInfo / SGID
  */
 export const getCookieNameByAuthType = (
-  authType: FormAuthType.SP | FormAuthType.CP | FormAuthType.SGID,
+  authType: FormAuthType.SP | FormAuthType.CP,
 ): string => {
   switch (authType) {
-    case FormAuthType.SGID:
-      return SGID_COOKIE_NAME
     default:
       return JwtName[authType]
   }

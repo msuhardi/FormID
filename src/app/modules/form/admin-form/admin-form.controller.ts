@@ -21,7 +21,6 @@ import {
   ErrorDto,
   FieldCreateDto,
   FieldUpdateDto,
-  FormAuthType,
   FormColorTheme,
   FormDto,
   FormFeedbackMetaDto,
@@ -89,11 +88,6 @@ import { PrivateFormError } from '../form.errors'
 import * as FormService from '../form.service'
 
 import { TwilioCredentials } from './../../../services/sms/sms.types'
-import {
-  PREVIEW_CORPPASS_UID,
-  PREVIEW_CORPPASS_UINFIN,
-  PREVIEW_SINGPASS_UINFIN,
-} from './admin-form.constants'
 import { EditFieldError, GoGovServerError } from './admin-form.errors'
 import {
   getWebhookSettingsValidator,
@@ -1827,21 +1821,6 @@ export const submitEmailPreview: ControllerHandler<
   }
   const parsedResponses = parsedResponsesResult.value
   const attachments = mapAttachmentsFromResponses(req.body.responses)
-
-  // Handle SingPass and CorpPass authentication and validation
-  const { authType } = form
-  if (authType === FormAuthType.SP) {
-    parsedResponses.addNdiResponses({
-      authType,
-      uinFin: PREVIEW_SINGPASS_UINFIN,
-    })
-  } else if (authType === FormAuthType.CP) {
-    parsedResponses.addNdiResponses({
-      authType,
-      uinFin: PREVIEW_CORPPASS_UINFIN,
-      userInfo: PREVIEW_CORPPASS_UID,
-    })
-  }
 
   const emailData = new SubmissionEmailObj(
     parsedResponses.getAllResponses(),
