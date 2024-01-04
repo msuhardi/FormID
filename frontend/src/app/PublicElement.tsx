@@ -4,7 +4,7 @@ import { Flex } from '@chakra-ui/react'
 import { useAuth } from '~contexts/AuthContext'
 import { DASHBOARD_ROUTE } from '~constants/routes'
 import { fillHeightCss } from '~utils/fillHeightCss'
-import GovtMasthead from '~components/GovtMasthead'
+// import GovtMasthead from '~components/GovtMasthead'
 
 interface PublicElementProps {
   /**
@@ -34,7 +34,7 @@ export const PublicElement = ({
 
   return (
     <Flex flexDir="column" css={fillHeightCss} pos="relative">
-      <GovtMasthead />
+      {/*<GovtMasthead />*/}
       {element}
     </Flex>
   )
