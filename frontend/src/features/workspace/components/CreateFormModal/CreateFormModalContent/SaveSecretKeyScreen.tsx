@@ -70,7 +70,7 @@ const useSaveSecretKeyDefault = () => {
   const handleDownloadKey = useCallback(() => {
     FileSaver.saveAs(
       new Blob([secretKey], { type: 'text/plain;charset=utf-8' }),
-      `Form Secret Key - ${titleInputValue}.txt`,
+      `Kode form - ${titleInputValue}.txt`,
     )
     setHasDownloaded(true)
   }, [secretKey, titleInputValue])
@@ -139,20 +139,20 @@ export const SaveSecretKeyScreen = ({
                 color="danger.500"
               />
               <Text as="header" textStyle="h2" color="secondary.700">
-                Download Secret Key to proceed
+                Unduh kode untuk lanjut
               </Text>
             </Stack>
             <Text textStyle="body-1" color="secondary.500" mb="2.5rem">
-              You'll need it every time you access your responses to this form.
-              If you lose it,{' '}
+              Kode berikut dibutuhkan tiap kali Anda mengakses hasil tanggapan
+              formulir ini. Apabila hilang,{' '}
               <Text color="danger.500" textStyle="subhead-1" as="span">
-                all responses will be permanently lost
+                semua hasil tanggapan akan hilang
               </Text>
-              . You can also{' '}
+              . Anda juga bisa{' '}
               <Link variant="inline" href={mailToHref}>
-                email it
-              </Link>{' '}
-              for safekeeping.
+                kirim kode melalui email
+              </Link>
+              .
             </Text>
             <Stack direction={{ base: 'column', md: 'row' }}>
               <Tooltip mt={0} label={hasCopiedKey ? 'Copied!' : 'Copy key'}>
@@ -185,11 +185,11 @@ export const SaveSecretKeyScreen = ({
                 </Code>
               </Tooltip>
               <ButtonGroup>
-                <Button onClick={handleDownloadKey}>Download key</Button>
+                <Button onClick={handleDownloadKey}>Unduh kode</Button>
                 <IconButton
                   as="a"
                   icon={<BiMailSend />}
-                  aria-label="Email the secret key to someone"
+                  aria-label="Kirim kode melalui email"
                   href={mailToHref}
                   variant="outline"
                 />
@@ -199,13 +199,13 @@ export const SaveSecretKeyScreen = ({
           {hasDownloaded && (
             <Box mt="1rem">
               <Checkbox
-                aria-label="Storage mode form acknowledgement"
+                aria-label="Syarat penyimpanan hasil tanggapan"
                 {...register('storageAck', {
                   required: true,
                 })}
               >
-                If I lose my Secret Key, I cannot activate my form or access any
-                responses to it
+                Saya mengerti semua hasil tanggapan formulir akan hilang apabila
+                saya kehilangan kode ini.
               </Checkbox>
             </Box>
           )}
@@ -218,7 +218,9 @@ export const SaveSecretKeyScreen = ({
             onClick={handleCreateStorageModeForm}
             isFullWidth
           >
-            <Text lineHeight="1.5rem">I have saved my Secret Key safely</Text>
+            <Text lineHeight="1.5rem">
+              Saya sudah menyimpan kode formulir secara aman
+            </Text>
           </Button>
         </Container>
       </ModalBody>

@@ -174,7 +174,9 @@ const assertHashMatch = (
 ): ResultAsync<true, HashingError | InvalidOtpError> => {
   return compareHash(otp, otpHash, logMeta).andThen((isMatch) => {
     if (isMatch) return okAsync(isMatch)
-    return errAsync(new InvalidOtpError('OTP is invalid. Please try again.'))
+    return errAsync(
+      new InvalidOtpError('Kode OTP salah. Silahkan dicoba kembali.'),
+    )
   })
 }
 

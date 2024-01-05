@@ -76,28 +76,28 @@ export const CreatePageSidebar = (): JSX.Element | null => {
     >
       <Stack spacing="0.5rem">
         <DrawerTabIcon
-          label="Add fields"
+          label="Tambah pertanyaan"
           icon={<BxsWidget fontSize="1.5rem" />}
           onClick={handleDrawerBuilderClick}
           isActive={activeTab === DrawerTabs.Builder}
           id={FEATURE_TOUR[0].id}
         />
         <DrawerTabIcon
-          label="Edit header and instructions"
+          label="Ubah judul & instruksi formulir"
           icon={<BxsDockTop fontSize="1.5rem" />}
           onClick={handleDrawerDesignClick}
           isActive={activeTab === DrawerTabs.Design}
           id={FEATURE_TOUR[1].id}
         />
         <DrawerTabIcon
-          label="Add logic"
+          label="Tambah kondisi"
           icon={<BiGitMerge fontSize="1.5rem" />}
           onClick={handleDrawerLogicClick}
           isActive={activeTab === DrawerTabs.Logic}
           id={FEATURE_TOUR[2].id}
         />
         <DrawerTabIcon
-          label="Edit Thank you page"
+          label="Ubah halaman Terima Kasih"
           icon={<PhHandsClapping fontSize="1.5rem" />}
           onClick={handleDrawerEndpageClick}
           isActive={activeTab === DrawerTabs.EndPage}

@@ -180,7 +180,7 @@ export const FormBuilder = ({
               onClick={handleEditEndPageClick}
               textStyle="subhead-2"
             >
-              Customise Thank you page
+              Ubah halaman Terima Kasih
             </Button>
           </Skeleton>
         </Flex>

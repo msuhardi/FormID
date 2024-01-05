@@ -55,7 +55,7 @@ export const WorkspacePage = (): JSX.Element => {
   const DEFAULT_WORKSPACE = useMemo(() => {
     return {
       _id: '',
-      title: 'All forms',
+      title: 'Formulir',
       formIds: dashboardForms ? dashboardForms.map(({ _id }) => _id) : [],
       admin: user?._id,
     }

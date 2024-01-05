@@ -452,7 +452,7 @@ const assertHashesMatch = (
       .andThen((isOtpMatch) => {
         if (isOtpMatch) return okAsync(true)
         return errAsync(
-          new InvalidOtpError('OTP is invalid. Please try again.'),
+          new InvalidOtpError('Kode OTP salah. Silahkan dicoba kembali.'),
         )
       })
       // Must be success match if reaches here.

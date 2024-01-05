@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-import { FormControl, Stack, useBreakpointValue } from '@chakra-ui/react'
+import { FormControl, Stack, Text, useBreakpointValue } from '@chakra-ui/react'
 
 import Button from '~components/Button'
 import FormErrorMessage from '~components/FormControl/FormErrorMessage'
@@ -31,7 +31,8 @@ export const OtpForm = ({
   const isMobile = useBreakpointValue({ base: true, xs: true, lg: false })
 
   const validateOtp = useCallback(
-    (value: string) => value.length === 6 || 'Please enter a 6 digit OTP.',
+    (value: string) =>
+      value.length === 6 || 'Silahkan masukan 6 digit kode OTP.',
     [],
   )
 
@@ -45,7 +46,14 @@ export const OtpForm = ({
     <form onSubmit={handleSubmit(onSubmitForm)}>
       <FormControl isInvalid={!!formState.errors.otp} mb="2.5rem">
         <FormLabel isRequired htmlFor="otp">
-          {`Enter OTP sent to ${email.toLowerCase()}`}
+          {
+            (
+              <>
+                Masukan kode OTP yang telah dikirim ke alamat{' '}
+                <Text color="primary.500">{email.toLowerCase()}</Text>
+              </>
+            ) as unknown as string
+          }
         </FormLabel>
         <Input
           type="text"
@@ -54,10 +62,10 @@ export const OtpForm = ({
           autoComplete="one-time-code"
           autoFocus
           {...register('otp', {
-            required: 'OTP is required.',
+            required: 'Kode OTP harus diisi.',
             pattern: {
               value: /^[0-9\b]+$/,
-              message: 'Only numbers are allowed.',
+              message: 'Hanya diperbolehkan angka.',
             },
             validate: validateOtp,
           })}

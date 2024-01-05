@@ -79,11 +79,11 @@ export const FeatureTourTooltip = ({
         />
         {isLastStep ? (
           <Button {...primaryProps} title="Done">
-            Done
+            Tutup
           </Button>
         ) : (
           <Button rightIcon={<BiRightArrowAlt />} {...primaryProps}>
-            Next
+            Lanjut
           </Button>
         )}
       </Flex>

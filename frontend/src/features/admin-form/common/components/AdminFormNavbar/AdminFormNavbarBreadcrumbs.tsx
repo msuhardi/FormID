@@ -32,7 +32,7 @@ export const AdminFormNavbarBreadcrumbs = ({
         textDecorationLine="none"
         to={DASHBOARD_ROUTE}
       >
-        {isMobile ? <Icon as={BiHomeAlt} /> : 'All forms'}
+        {isMobile ? <Icon as={BiHomeAlt} /> : 'Formulir'}
       </Link>
 
       <Text color="secondary.300">/</Text>

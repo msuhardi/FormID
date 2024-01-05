@@ -28,7 +28,7 @@ export const EmptyFormPlaceholder = forwardRef<
       return 'Drop your field here'
     }
     return isMobile
-      ? 'Tap here to add a field'
+      ? 'Klik di sini untuk tambah pertanyaan'
       : 'Drag a field from the Builder on the left to start'
   }, [isDraggingOver, isMobile])
 

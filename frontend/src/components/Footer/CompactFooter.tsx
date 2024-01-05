@@ -2,6 +2,7 @@ import { chakra, Divider, Flex, Link, Stack, Wrap } from '@chakra-ui/react'
 
 import { ReactComponent as BrandHortSvg } from '~assets/svgs/brand/brand-hort-colour.svg'
 import { ReactComponent as BrandHortLightMonoSvg } from '~assets/svgs/brand/brand-hort-lightmono.svg'
+import { AdaptedText } from '~components/Footer/AdaptedText'
 
 import { FooterContainerProps, FooterVariantProps } from './common/types'
 
@@ -52,26 +53,30 @@ export const CompactFooter = ({
           />
         </Link>
       </Stack>
-      <Wrap
-        flex={1}
-        shouldWrapChildren
-        textStyle="body-2"
-        spacing="1.5rem"
-        justify="flex-end"
-      >
-        {footerLinks?.map(({ label, href }, index) => (
-          <Link
-            isExternal
-            m="-0.25rem"
-            key={index}
-            variant="standalone"
-            w="fit-content"
-            href={href}
-          >
-            {label}
-          </Link>
-        ))}
-      </Wrap>
+
+      <Stack spacing="1.5rem">
+        <Wrap
+          flex={1}
+          shouldWrapChildren
+          textStyle="body-2"
+          spacing="1.5rem"
+          justify="flex-end"
+        >
+          {footerLinks?.map(({ label, href }, index) => (
+            <Link
+              isExternal
+              m="-0.25rem"
+              key={index}
+              variant="standalone"
+              w="fit-content"
+              href={href}
+            >
+              {label}
+            </Link>
+          ))}
+        </Wrap>
+        <AdaptedText />
+      </Stack>
     </CompactFooter.Container>
   )
 }

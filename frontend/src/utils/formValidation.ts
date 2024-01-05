@@ -7,20 +7,20 @@ const MAX_TITLE_LENGTH = 200
 const MIN_TITLE_LENGTH = 4
 
 export const FORM_TITLE_VALIDATION_RULES: UseControllerProps['rules'] = {
-  required: 'Form name is required',
+  required: 'Silahkan masukan nama formulir',
   minLength: {
     value: MIN_TITLE_LENGTH,
-    message: `Form name must be at least ${MIN_TITLE_LENGTH} characters`,
+    message: `Nama formulir terlalu pendek, minimum ${MIN_TITLE_LENGTH} karakter`,
   },
   maxLength: {
     value: MAX_TITLE_LENGTH,
-    message: `Form name must be at most ${MAX_TITLE_LENGTH} characters`,
+    message: `Nama formulir terlalu panjang, maksimum ${MAX_TITLE_LENGTH} karakter`,
   },
   validate: {
     trimMinLength: (value: string) => {
       return (
         value.trim().length >= MIN_TITLE_LENGTH ||
-        `Form name must be at least ${MIN_TITLE_LENGTH} characters`
+        `Nama formulir terlalu pendek, minimum ${MIN_TITLE_LENGTH} karakter`
       )
     },
   },
