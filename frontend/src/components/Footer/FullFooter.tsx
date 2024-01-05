@@ -1,5 +1,7 @@
 import { Box, Divider, Flex, Link, Stack, Text, Wrap } from '@chakra-ui/react'
 
+import { AdaptedText } from '~components/Footer/AdaptedText'
+
 import {
   DEFAULT_FOOTER_ICON_LINK,
   DEFAULT_SOCIAL_MEDIA_LINKS,
@@ -33,6 +35,7 @@ export const FullFooter = ({
             colorScheme={textColorScheme}
             variant="standalone"
             m="-0.25rem"
+            p={0}
             isExternal
             href={appLink}
           >
@@ -107,9 +110,13 @@ export const FullFooter = ({
               </Link>
             ))}
           </Stack>
-          <Text textStyle="legal" color={`${textColorScheme}.500`}>
-            ©{currentYear} Open Government Products
-          </Text>
+          <Stack spacing="1rem">
+            <Text textStyle="legal" color={`${textColorScheme}.500`}>
+              ©{currentYear} Open Government Products
+            </Text>
+
+            <AdaptedText />
+          </Stack>
         </Box>
       </FullFooter.Section>
     </FullFooter.Container>

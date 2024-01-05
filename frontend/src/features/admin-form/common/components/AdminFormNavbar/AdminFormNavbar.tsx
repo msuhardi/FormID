@@ -98,14 +98,11 @@ export const AdminFormNavbar = ({
     const lastModified = formInfo ? new Date(formInfo.lastModified) : new Date()
     return (
       <Skeleton isLoaded={!!formInfo}>
-        <Text
-          textStyle="legal"
-          textTransform="uppercase"
-          color="neutral.700"
-          textAlign="right"
-        >
+        <Text textStyle="caption-2" color="neutral.700" textAlign="right">
           {/* Use spans with nowrap to break the second half of the date as a group */}
-          <chakra.span>Saved at {format(lastModified, 'h:mm a')}, </chakra.span>
+          <chakra.span>
+            Disimpan terakhir {format(lastModified, 'h:mm a')},{' '}
+          </chakra.span>
           <chakra.span whiteSpace="nowrap">
             {format(lastModified, 'dd LLL y')}
           </chakra.span>
@@ -165,20 +162,20 @@ export const AdminFormNavbar = ({
           to={ADMINFORM_BUILD_SUBROUTE}
           isActive={checkTabActive(ADMINFORM_BUILD_SUBROUTE)}
         >
-          Create
+          Formulir
         </NavigationTab>
         <NavigationTab
           hidden={viewOnly}
           to={ADMINFORM_SETTINGS_SUBROUTE}
           isActive={checkTabActive(ADMINFORM_SETTINGS_SUBROUTE)}
         >
-          Settings
+          Pengaturan
         </NavigationTab>
         <NavigationTab
           to={ADMINFORM_RESULTS_SUBROUTE}
           isActive={checkTabActive(ADMINFORM_RESULTS_SUBROUTE)}
         >
-          Results
+          Hasil Tanggapan
         </NavigationTab>
       </NavigationTabList>
       <Flex

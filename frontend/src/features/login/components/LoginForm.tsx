@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { FormControl, Stack } from '@chakra-ui/react'
+import parse from 'html-react-parser'
 import isEmail from 'validator/lib/isEmail'
 
 import { INVALID_EMAIL_ERROR } from '~constants/validation'
@@ -42,14 +43,18 @@ export const LoginForm = ({ onSubmit }: LoginFormProps): JSX.Element => {
         mb="2.5rem"
       >
         <FormLabel isRequired>
-          {t(
-            'features.login.components.LoginForm.onlyAvailableForPublicOfficers',
-          )}
+          {
+            parse(
+              t(
+                'features.login.components.LoginForm.onlyAvailableForPublicOfficers',
+              ),
+            ) as unknown as string
+          }
         </FormLabel>
         <Input
           autoComplete="email"
           autoFocus
-          placeholder="e.g. jane@data.gov.sg"
+          placeholder="e.g. budi@morowaliutarakab.go.id"
           {...register('email', {
             required: t(
               'features.login.components.LoginForm.emailEmptyErrorMsg',

@@ -55,7 +55,7 @@ export const EmptyWorkspace = ({
           leftIcon={<BiPlus fontSize="1.5rem" />}
           mt={{ base: '2.5rem', md: '2rem' }}
         >
-          Create form
+          Buat Formulir
         </Button>
       )}
       <EmptyWorkspaceSvgr

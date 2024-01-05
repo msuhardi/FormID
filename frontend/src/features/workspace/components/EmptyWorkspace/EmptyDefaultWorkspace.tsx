@@ -7,7 +7,7 @@ export const EmptyDefaultWorkspace = ({
   <EmptyWorkspace
     isLoading={isLoading}
     handleOpenCreateFormModal={handleOpenCreateFormModal}
-    title={"You don't have any forms yet"}
-    subText={'Get started by creating a new form'}
+    title={'Anda belum mempunyai formulir'}
+    subText={'Untuk memulai, klik tombol "Buat Formulir"'}
   />
 )

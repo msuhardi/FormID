@@ -3,6 +3,7 @@ import { isEmpty } from 'lodash'
 import { SendOtpResponseDto } from 'shared/types/user'
 
 import { SUPPORT_FORM_LINK } from '../../../../shared/constants/links'
+import { Environment } from '../../../types'
 import { createLoggerWithLabel } from '../../config/logger'
 import { ADMIN_LOGIN_SESSION_COOKIE_NAME } from '../../loaders/express/session'
 import MailService from '../../services/mail/mail.service'
@@ -90,7 +91,11 @@ export const _handleLoginSendOtp: ControllerHandler<
         // Step 5a: Successfully sent login otp.
         .map(() => {
           logger.info({
-            message: 'Login OTP sent successfully',
+            message: `Login OTP sent successfully${
+              process.env.NODE_ENV === Environment.Dev
+                ? ` ${otpPrefix}-${otp}`
+                : ''
+            }`,
             meta: logMeta,
           })
           return res

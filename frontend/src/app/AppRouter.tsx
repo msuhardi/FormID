@@ -9,9 +9,7 @@ import {
   ADMINFORM_ROUTE,
   ADMINFORM_SETTINGS_SUBROUTE,
   ADMINFORM_USETEMPLATE_ROUTE,
-  BILLING_ROUTE,
   DASHBOARD_ROUTE,
-  LANDING_PAYMENTS_ROUTE,
   LANDING_ROUTE,
   LOGIN_CALLBACK_ROUTE,
   LOGIN_ROUTE,
@@ -40,9 +38,7 @@ import { ChartsPage } from '~features/admin-form/responses/ChartsPage/ChartsPage
 import { SettingsPage } from '~features/admin-form/settings/SettingsPage'
 import { SelectProfilePage } from '~features/login'
 import { FormPaymentPage } from '~features/public-form/components/FormPaymentPage/FormPaymentPage'
-import { BillingPage } from '~features/user/billing'
 
-import { HashRouterElement } from './HashRouterElement'
 import { ParamIdValidator } from './ParamIdValidator'
 import { PrivateElement } from './PrivateElement'
 import { PublicElement } from './PublicElement'
@@ -106,10 +102,6 @@ export const AppRouter = (): JSX.Element => {
         <Route
           path={TOU_ROUTE}
           element={<PublicElement element={<TermsOfUsePage />} />}
-        />
-        <Route
-          path={BILLING_ROUTE}
-          element={<PrivateElement element={<BillingPage />} />}
         />
         <Route path={PUBLICFORM_ROUTE}>
           <Route

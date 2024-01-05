@@ -1,4 +1,5 @@
 import { Step } from 'react-joyride'
+import parse from 'html-react-parser'
 
 interface FeatureTourStepAttributes {
   id: string
@@ -9,25 +10,27 @@ interface FeatureTourStepAttributes {
 export const FEATURE_TOUR: FeatureTourStepAttributes[] = [
   {
     id: 'feature_tour_first_step',
-    title: 'Add fields',
-    content: 'Add fields to your form by dragging and dropping them.',
+    title: 'Tambah pertanyaan',
+    content:
+      'Tambahkan pertanyaan ke formulir Anda dengan cara menarik dan menjatuhkannya (<i>drag and drop</i>).',
   },
   {
     id: 'feature_tour_second_step',
-    title: 'Edit header and instructions',
+    title: 'Ubah judul & instruksi formulir',
     content:
-      'Change your agency logo, theme colours, layout and add instructions to your form.',
+      'Ubah logo, warna, dan <i>layout</i> formulir dan tambahkan instruksi ke formulir Anda.',
   },
   {
     id: 'feature_tour_third_step',
-    title: 'Add logic',
-    content: 'Decide what fields or sections a user sees based on their input.',
+    title: 'Tambah kondisi',
+    content:
+      'Tambahkan kondisi untuk menunjukan / menyembunyikan pertanyaan berdasarkan jawaban.',
   },
   {
     id: 'feature_tour_fourth_step',
-    title: 'Edit Thank you page',
+    title: 'Ubah halaman Terima Kasih',
     content:
-      'Customise your thank you message and add follow-up instructions that users can see after they submit your form.',
+      'Ubah pesan terima kasih dan tambahkan petunjuk selanjutnya setelah menanggapi formulir Anda.',
   },
 ]
 
@@ -36,7 +39,7 @@ export const FEATURE_STEPS: Step[] = FEATURE_TOUR.map(
     return {
       target: `#${id}`,
       title: title,
-      content: content,
+      content: parse(content),
       disableBeacon: true,
     }
   },

@@ -55,7 +55,7 @@ export const CreateFormDetailsScreen = (): JSX.Element => {
       <ModalBody whiteSpace="pre-wrap">
         <Container maxW="42.5rem" p={0}>
           <FormControl isRequired isInvalid={!!errors.title} mb="2.25rem">
-            <FormLabel useMarkdownForDescription>Form name</FormLabel>
+            <FormLabel useMarkdownForDescription>Nama formulir</FormLabel>
             <Skeleton isLoaded={!isFetching}>
               <Input
                 autoFocus
@@ -65,13 +65,13 @@ export const CreateFormDetailsScreen = (): JSX.Element => {
             <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
             {titleInputValue?.length > FORM_TITLE_LENGTH_WARNING ? (
               <FormFieldMessage>
-                It is advised to use a shorter, more succinct form name.
+                Gunakan nama singkat, padat dan jelas.
               </FormFieldMessage>
             ) : null}
           </FormControl>
           <FormControl isRequired isInvalid={!!errors.responseMode} mb="2.5rem">
             <FormLabel>
-              How do you want to receive your form responses?
+              Bagaimana Anda mau menerima hasil tanggapan formulir?
             </FormLabel>
             <Skeleton isLoaded={!isFetching}>
               <Controller
@@ -102,7 +102,7 @@ export const CreateFormDetailsScreen = (): JSX.Element => {
             onClick={handleDetailsSubmit}
             isFullWidth
           >
-            <Text lineHeight="1.5rem">Next step</Text>
+            <Text lineHeight="1.5rem">Lanjut</Text>
           </Button>
         </Container>
       </ModalBody>

@@ -439,7 +439,7 @@ const compileFormModel = (db: Mongoose): IFormModel => {
 
       hasCaptcha: {
         type: Boolean,
-        default: true,
+        default: false,
       },
 
       hasIssueNotification: {

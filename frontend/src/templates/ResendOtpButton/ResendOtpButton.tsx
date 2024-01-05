@@ -27,9 +27,9 @@ export const ResendOtpButton = ({
       colorScheme="primary"
       {...buttonProps}
     >
-      Resend OTP
+      Kirim lagi kode OTP
       <Text as="span" data-chromatic="ignore">
-        {timer > 0 && ` in ${timer}s`}
+        {timer > 0 && ` dalam ${timer}s`}
       </Text>
     </Button>
   )

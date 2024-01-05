@@ -104,7 +104,7 @@ const useCreateFormWizardContext = (): CreateFormWizardContextReturn => {
     formMethods,
     handleDetailsSubmit,
     handleCreateStorageModeForm,
-    modalHeader: 'Set up your form',
+    modalHeader: 'Atur formulir Anda',
   }
 }
 

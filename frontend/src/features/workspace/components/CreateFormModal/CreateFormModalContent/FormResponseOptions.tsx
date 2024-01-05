@@ -1,5 +1,6 @@
 import { BiLockAlt, BiMailSend } from 'react-icons/bi'
 import { forwardRef, Stack, UnorderedList } from '@chakra-ui/react'
+import parse from 'html-react-parser'
 
 import { FormResponseMode } from '~shared/types/form/form'
 
@@ -17,7 +18,7 @@ const OptionDescription = ({ listItems = [] }: { listItems: string[] }) => {
       <UnorderedList color="secondary.400" ml="1.5rem">
         {listItems.map((text, index) => (
           <Tile.ListItem key={index} textStyle="body-2" textAlign="left">
-            {text}
+            {parse(text)}
           </Tile.ListItem>
         ))}
       </UnorderedList>
@@ -34,20 +35,20 @@ export const FormResponseOptions = forwardRef<
       <Tile
         variant="complex"
         icon={BiLockAlt}
-        badge={<Badge colorScheme="success">Recommended</Badge>}
+        badge={<Badge colorScheme="success">Disarankan</Badge>}
         isActive={value === FormResponseMode.Encrypt}
         onClick={() => onChange(FormResponseMode.Encrypt)}
         isFullWidth
         flex={1}
       >
-        <Tile.Title>Storage Mode</Tile.Title>
-        <Tile.Subtitle>View or download responses in FormSG</Tile.Subtitle>
+        <Tile.Title>Disimpan di FormSG</Tile.Title>
+        <Tile.Subtitle>
+          Lihat / unduh hasil tanggapan formulir di FormSG
+        </Tile.Subtitle>
         <OptionDescription
           listItems={[
-            'Attachments: up to 20MB per form',
-            'Up to Restricted and Sensitive (Normal) data',
-            'Supports webhooks for responses',
-            'Supports payments',
+            'Maks. ukuran lampiran: 20MB per formulir',
+            'Mendukung Webhook untuk hasil tanggapan',
           ]}
         />
       </Tile>
@@ -60,12 +61,14 @@ export const FormResponseOptions = forwardRef<
         isFullWidth
         flex={1}
       >
-        <Tile.Title>Email Mode</Tile.Title>
-        <Tile.Subtitle>Receive responses in your inbox</Tile.Subtitle>
+        <Tile.Title>Melalui Email</Tile.Title>
+        <Tile.Subtitle>
+          Hasil tanggapan formulir akan dikirim ke email Anda
+        </Tile.Subtitle>
         <OptionDescription
           listItems={[
-            'Attachments: up to 7MB per form',
-            'Up to Restricted and Sensitive (High) data',
+            'Maks. ukuran lampiran: 7MB per formulir',
+            'Cocok untuk data <i>sensitive</i>',
           ]}
         />
       </Tile>
