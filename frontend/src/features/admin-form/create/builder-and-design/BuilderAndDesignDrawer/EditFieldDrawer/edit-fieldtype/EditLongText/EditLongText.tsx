@@ -1,22 +1,18 @@
 import { useMemo } from 'react'
-import { Controller, RegisterOptions } from 'react-hook-form'
-import { FormControl, SimpleGrid } from '@chakra-ui/react'
-import { extend, isEmpty, pick } from 'lodash'
+import { RegisterOptions } from 'react-hook-form'
+import { extend, pick } from 'lodash'
 
 import { LongTextFieldBase, TextSelectedValidation } from '~shared/types/field'
 
 import { createBaseValidationRules } from '~utils/fieldValidation'
-import { SingleSelect } from '~components/Dropdown'
-import FormErrorMessage from '~components/FormControl/FormErrorMessage'
-import FormLabel from '~components/FormControl/FormLabel'
-import Input from '~components/Input'
-import NumberInput from '~components/NumberInput'
-import Textarea from '~components/Textarea'
-import Toggle from '~components/Toggle'
-
-import { validateNumberInput } from '~features/admin-form/create/builder-and-design/utils/validateNumberInput'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
+import {
+  Description,
+  NumOfCharsAllowed,
+  Question,
+  RequiredToggle,
+} from '../common/CommonFieldComponents'
 import { FormFieldDrawerActions } from '../common/FormFieldDrawerActions'
 import { EditFieldProps } from '../common/types'
 import { useEditFieldForm } from '../common/useEditFieldForm'
@@ -129,67 +125,21 @@ export const EditLongText = ({ field }: EditLongTextProps): JSX.Element => {
 
   return (
     <CreatePageDrawerContentContainer>
-      <FormControl isRequired isReadOnly={isLoading} isInvalid={!!errors.title}>
-        <FormLabel>Question</FormLabel>
-        <Input autoFocus {...register('title', requiredValidationRule)} />
-        <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl
-        isRequired
-        isReadOnly={isLoading}
-        isInvalid={!!errors.description}
-      >
-        <FormLabel>Description</FormLabel>
-        <Textarea {...register('description')} />
-        <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading}>
-        <Toggle {...register('required')} label="Required" />
-      </FormControl>
-      <FormControl
-        isReadOnly={isLoading}
-        isInvalid={!isEmpty(errors.ValidationOptions)}
-      >
-        <FormLabel isRequired>Number of characters allowed</FormLabel>
-        <SimpleGrid
-          mt="0.5rem"
-          columns={{ base: 2, md: 1, lg: 2 }}
-          spacing="0.5rem"
-        >
-          <Controller
-            name="ValidationOptions.selectedValidation"
-            control={control}
-            rules={{
-              deps: ['ValidationOptions.customVal'],
-            }}
-            render={({ field }) => (
-              <SingleSelect
-                items={Object.values(TextSelectedValidation)}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name="ValidationOptions.customVal"
-            control={control}
-            rules={customValValidationOptions}
-            render={({ field: { onChange, ...rest } }) => (
-              <NumberInput
-                flex={1}
-                inputMode="numeric"
-                showSteppers={false}
-                placeholder="Number of characters"
-                isDisabled={!watchedSelectedValidation}
-                onChange={validateNumberInput(onChange)}
-                {...rest}
-              />
-            )}
-          />
-        </SimpleGrid>
-        <FormErrorMessage>
-          {errors?.ValidationOptions?.customVal?.message}
-        </FormErrorMessage>
-      </FormControl>
+      <Question
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+        requiredValidationRule={requiredValidationRule}
+      />
+      <Description isLoading={isLoading} errors={errors} register={register} />
+      <RequiredToggle isLoading={isLoading} register={register} />
+      <NumOfCharsAllowed
+        control={control}
+        customValValidationOptions={customValValidationOptions}
+        watchedSelectedValidation={watchedSelectedValidation}
+        isLoading={isLoading}
+        errors={errors}
+      />
       <FormFieldDrawerActions
         isLoading={isLoading}
         buttonText={buttonText}

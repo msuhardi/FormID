@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Controller, RegisterOptions } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { FormControl, SimpleGrid } from '@chakra-ui/react'
 import { extend, isEmpty, pick } from 'lodash'
 
@@ -7,13 +8,15 @@ import { DecimalFieldBase } from '~shared/types/field'
 
 import { createBaseValidationRules } from '~utils/fieldValidation'
 import FormErrorMessage from '~components/FormControl/FormErrorMessage'
-import FormLabel from '~components/FormControl/FormLabel'
-import Input from '~components/Input'
 import NumberInput from '~components/NumberInput'
-import Textarea from '~components/Textarea'
 import Toggle from '~components/Toggle'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
+import {
+  Description,
+  Question,
+  RequiredToggle,
+} from '../common/CommonFieldComponents'
 import { FormFieldDrawerActions } from '../common/FormFieldDrawerActions'
 import { EditFieldProps } from '../common/types'
 import { useEditFieldForm } from '../common/useEditFieldForm'
@@ -51,6 +54,7 @@ const transformDecimalEditFormToField = (
 }
 
 export const EditDecimal = ({ field }: EditDecimalProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     register,
     formState: { errors },
@@ -87,31 +91,22 @@ export const EditDecimal = ({ field }: EditDecimalProps): JSX.Element => {
           !val ||
           !getValues('validateByValue') ||
           Number(val) >= Number(getValues('ValidationOptions.customMin')) ||
-          'Maximum value cannot be smaller than the minimum value.'
+          t('features.adminFormBuilder.number.maxValueGreaterThanMin')
         )
       },
     }
-  }, [getValues])
+  }, [getValues, t])
 
   return (
     <CreatePageDrawerContentContainer>
-      <FormControl isRequired isReadOnly={isLoading} isInvalid={!!errors.title}>
-        <FormLabel>Question</FormLabel>
-        <Input autoFocus {...register('title', requiredValidationRule)} />
-        <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl
-        isRequired
-        isReadOnly={isLoading}
-        isInvalid={!!errors.description}
-      >
-        <FormLabel>Description</FormLabel>
-        <Textarea {...register('description')} />
-        <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading}>
-        <Toggle {...register('required')} label="Required" />
-      </FormControl>
+      <Question
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+        requiredValidationRule={requiredValidationRule}
+      />
+      <Description isLoading={isLoading} errors={errors} register={register} />
+      <RequiredToggle isLoading={isLoading} register={register} />
       <FormControl
         isReadOnly={isLoading}
         isInvalid={!isEmpty(errors.ValidationOptions)}
@@ -120,7 +115,7 @@ export const EditDecimal = ({ field }: EditDecimalProps): JSX.Element => {
           {...register('validateByValue', {
             deps: ['ValidationOptions'],
           })}
-          label="Number validation"
+          label={t('features.adminFormBuilder.number.validation')}
         />
         {watchValidateByValue ? (
           <SimpleGrid
@@ -134,7 +129,7 @@ export const EditDecimal = ({ field }: EditDecimalProps): JSX.Element => {
               render={({ field: { value, ...field } }) => (
                 <NumberInput
                   showSteppers={false}
-                  placeholder="Minimum value"
+                  placeholder={t('features.adminFormBuilder.number.minValue')}
                   value={value ?? ''}
                   {...field}
                 />
@@ -149,7 +144,7 @@ export const EditDecimal = ({ field }: EditDecimalProps): JSX.Element => {
                   showSteppers={false}
                   value={value ?? ''}
                   {...field}
-                  placeholder="Maximum value"
+                  placeholder={t('features.adminFormBuilder.number.maxValue')}
                 />
               )}
             />

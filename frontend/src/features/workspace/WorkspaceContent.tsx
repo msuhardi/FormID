@@ -17,8 +17,6 @@ export const WorkspaceContent = (): JSX.Element => {
     useWorkspaceContext()
   const createFormModalDisclosure = useDisclosure()
 
-  const dashboardMessage = `Introducing payments! Citizens can now pay for fees and services directly on your form. [Learn more](${GUIDE_PAYMENTS_ENTRY})`
-
   return (
     <>
       <CreateFormModal
@@ -46,16 +44,6 @@ export const WorkspaceContent = (): JSX.Element => {
             px={{ base: '2rem', md: '4rem' }}
             py="1rem"
           >
-            {isDefaultWorkspace && (
-              <InlineMessage
-                useMarkdown
-                mb="2rem"
-                mx="-2rem"
-                justifyContent="center"
-              >
-                {dashboardMessage}
-              </InlineMessage>
-            )}
             <WorkspaceHeader
               handleOpenCreateFormModal={createFormModalDisclosure.onOpen}
             />

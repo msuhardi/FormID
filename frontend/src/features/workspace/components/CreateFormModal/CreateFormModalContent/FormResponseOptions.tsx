@@ -42,13 +42,11 @@ export const FormResponseOptions = forwardRef<
         flex={1}
       >
         <Tile.Title>Disimpan di FormSG</Tile.Title>
-        <Tile.Subtitle>
-          Lihat / unduh hasil tanggapan formulir di FormSG
-        </Tile.Subtitle>
+        <Tile.Subtitle>Lihat / unduh respons formulir di FormSG</Tile.Subtitle>
         <OptionDescription
           listItems={[
             'Maks. ukuran lampiran: 20MB per formulir',
-            'Mendukung Webhook untuk hasil tanggapan',
+            'Mendukung Webhook untuk respons formulir',
           ]}
         />
       </Tile>
@@ -63,7 +61,7 @@ export const FormResponseOptions = forwardRef<
       >
         <Tile.Title>Melalui Email</Tile.Title>
         <Tile.Subtitle>
-          Hasil tanggapan formulir akan dikirim ke email Anda
+          Respons formulir akan dikirim ke email Anda
         </Tile.Subtitle>
         <OptionDescription
           listItems={[

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Box, Flex, Text, VisuallyHidden } from '@chakra-ui/react'
 import { format } from 'date-fns'
 
@@ -25,6 +26,7 @@ export const EndPageBlock = ({
   colorTheme = FormColorTheme.Blue,
   focusOnMount,
 }: EndPageBlockProps): JSX.Element => {
+  const { t } = useTranslation()
   const focusRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (focusOnMount) {
@@ -85,7 +87,8 @@ export const EndPageBlock = ({
           variant="solid"
           colorScheme={`theme-${colorTheme}`}
         >
-          {endPage.buttonText || 'Submit another response'}
+          {endPage.buttonText ||
+            t('features.adminFormBuilder.thankYouPage.defaultButtonText')}
         </Button>
       </Box>
     </Flex>

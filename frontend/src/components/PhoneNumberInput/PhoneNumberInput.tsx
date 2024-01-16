@@ -72,7 +72,7 @@ export interface PhoneNumberInputProps extends BasePhoneNumberInputProps {
 export const PhoneNumberInput = forwardRef<PhoneNumberInputProps, 'input'>(
   (
     {
-      defaultCountry = 'SG',
+      defaultCountry = 'ID',
       allowInternational = true,
       onChange,
       onBlur,

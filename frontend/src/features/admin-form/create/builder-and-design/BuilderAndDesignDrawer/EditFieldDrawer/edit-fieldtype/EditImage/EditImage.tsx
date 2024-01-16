@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { Controller } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
 import { FormControl } from '@chakra-ui/react'
@@ -17,9 +18,9 @@ import {
 } from '~components/Field/Attachment/utils'
 import FormErrorMessage from '~components/FormControl/FormErrorMessage'
 import FormLabel from '~components/FormControl/FormLabel'
-import Textarea from '~components/Textarea'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
+import { Description } from '../common/CommonFieldComponents'
 import { FormFieldDrawerActions } from '../common/FormFieldDrawerActions'
 import { EditFieldProps } from '../common/types'
 import { useEditFieldForm } from '../common/useEditFieldForm'
@@ -86,6 +87,7 @@ const transformImageEditFormToField = (
 }
 
 export const EditImage = ({ field }: EditImageProps): JSX.Element => {
+  const { t } = useTranslation()
   const toast = useToast({ status: 'danger' })
   const { formId } = useParams()
   if (!formId) throw new Error('No formId provided')
@@ -160,13 +162,17 @@ export const EditImage = ({ field }: EditImageProps): JSX.Element => {
         isReadOnly={isLoading || isSubmitting}
         isInvalid={!isEmpty(errors.attachment)}
       >
-        <FormLabel>Uploaded image</FormLabel>
+        <FormLabel>
+          {t('features.adminFormBuilder.imageAttachment.title')}
+        </FormLabel>
         <Controller
           control={control}
           rules={{
             validate: (val) => {
               if (val?.file && val.srcUrl) return true
-              return 'Please upload an image'
+              return t(
+                'features.adminFormBuilder.imageAttachment.requiredError',
+              )
             },
           }}
           name="attachment"
@@ -183,14 +189,12 @@ export const EditImage = ({ field }: EditImageProps): JSX.Element => {
         />
         <FormErrorMessage>{get(errors, 'attachment.message')}</FormErrorMessage>
       </FormControl>
-      <FormControl
-        isReadOnly={isLoading || isSubmitting}
-        isInvalid={!!errors.description}
-      >
-        <FormLabel isRequired>Description</FormLabel>
-        <Textarea {...register('description', requiredValidationRule)} />
-        <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-      </FormControl>
+      <Description
+        requiredValidationRule={requiredValidationRule}
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+      />
       <FormFieldDrawerActions
         isLoading={isLoading || isSubmitting}
         buttonText={buttonText}

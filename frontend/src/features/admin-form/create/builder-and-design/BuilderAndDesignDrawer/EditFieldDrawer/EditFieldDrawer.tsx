@@ -1,17 +1,10 @@
 import { memo, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import {
-  BasicField,
-  FieldCreateDto,
-  MyInfoAttribute,
-} from '~shared/types/field'
+import { BasicField, FieldCreateDto } from '~shared/types/field'
 
-import {
-  BASICFIELD_TO_DRAWER_META,
-  MYINFO_FIELD_TO_DRAWER_META,
-} from '~features/admin-form/create/constants'
-import { isMyInfo } from '~features/myinfo/utils'
-import { useUser } from '~features/user/queries'
+import { EditFieldProps } from '~features/admin-form/create/builder-and-design/BuilderAndDesignDrawer/EditFieldDrawer/edit-fieldtype/common/types'
+import { BASICFIELD_TO_DRAWER_META } from '~features/admin-form/create/constants'
 
 import { useBuilderFields } from '../../BuilderAndDesignContent/useBuilderFields'
 import {
@@ -21,10 +14,6 @@ import {
 } from '../../useFieldBuilderStore'
 import { BuilderDrawerContainer } from '../common/BuilderDrawerContainer'
 
-import {
-  ChildrenCompoundFieldMyInfo,
-  EditMyInfoChildren,
-} from './edit-fieldtype/EditMyInfoChildren'
 import {
   EditAttachment,
   EditCheckbox,
@@ -38,7 +27,6 @@ import {
   EditImage,
   EditLongText,
   EditMobile,
-  EditMyInfo,
   EditNric,
   EditNumber,
   EditParagraph,
@@ -46,11 +34,11 @@ import {
   EditRating,
   EditShortText,
   EditTable,
-  EditUen,
   EditYesNo,
 } from './edit-fieldtype'
 
 export const EditFieldDrawer = (): JSX.Element | null => {
+  const { t } = useTranslation()
   const stateData = useFieldBuilderStore(stateDataSelector)
 
   const fieldToEdit: FieldCreateDto | undefined = useMemo(() => {
@@ -64,11 +52,10 @@ export const EditFieldDrawer = (): JSX.Element | null => {
 
   const basicFieldText = useMemo(() => {
     if (!fieldToEdit?.fieldType) return ''
-    if (isMyInfo(fieldToEdit)) {
-      return MYINFO_FIELD_TO_DRAWER_META[fieldToEdit.myInfo.attr].label
-    }
-    return BASICFIELD_TO_DRAWER_META[fieldToEdit?.fieldType].label
-  }, [fieldToEdit])
+    return t(
+      BASICFIELD_TO_DRAWER_META[fieldToEdit?.fieldType as BasicField].label,
+    )
+  }, [fieldToEdit, t])
 
   // Hacky method of determining when to rerender the drawer,
   // i.e. when the user clicks into a different field.
@@ -102,28 +89,9 @@ export const EditFieldDrawer = (): JSX.Element | null => {
   )
 }
 
-interface MemoFieldDrawerContentProps {
-  field: FieldCreateDto
-}
-
+type MemoFieldDrawerContentProps = EditFieldProps<any>
 export const MemoFieldDrawerContent = memo<MemoFieldDrawerContentProps>(
-  ({ field, ...props }) => {
-    const { user } = useUser()
-    if (isMyInfo(field)) {
-      if (
-        field?.myInfo?.attr === MyInfoAttribute.ChildrenBirthRecords &&
-        user?.betaFlags?.children
-      ) {
-        return (
-          <EditMyInfoChildren
-            {...props}
-            field={field as ChildrenCompoundFieldMyInfo}
-          />
-        )
-      }
-      return <EditMyInfo {...props} field={field} />
-    }
-
+  ({ field, ...props }: MemoFieldDrawerContentProps) => {
     switch (field.fieldType) {
       case BasicField.Attachment:
         return <EditAttachment {...props} field={field} />
@@ -149,8 +117,6 @@ export const MemoFieldDrawerContent = memo<MemoFieldDrawerContentProps>(
         return <EditDecimal {...props} field={field} />
       case BasicField.Section:
         return <EditHeader {...props} field={field} />
-      case BasicField.Uen:
-        return <EditUen {...props} field={field} />
       case BasicField.YesNo:
         return <EditYesNo {...props} field={field} />
       case BasicField.Radio:

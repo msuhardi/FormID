@@ -111,7 +111,7 @@ export const WorkspaceHeader = ({
         <Box gridArea="searchFilter">
           {totalFormsCount ? (
             <WorkspaceSearchbar
-              placeholder="Search by title"
+              placeholder="Cari nama formulir"
               value={activeSearch}
               onChange={setActiveSearch}
               filterValue={activeFilter}
@@ -123,7 +123,7 @@ export const WorkspaceHeader = ({
         <MobileWorkspaceSearchbar
           isExpanded={isSearchExpanded}
           onToggleExpansion={onToggleSearchExpansion}
-          placeholder="Search by title"
+          placeholder="Cari nama formulir"
           value={activeSearch}
           onChange={setActiveSearch}
           filterValue={activeFilter}
@@ -139,7 +139,7 @@ export const WorkspaceHeader = ({
         leftIcon={<BiPlus fontSize="1.5rem" />}
         minW="9.625rem"
       >
-        Create form
+        Buat formulir
       </Button>
     </Grid>
   )

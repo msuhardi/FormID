@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import { UnsavedChangesModal } from '~templates/NavigationPrompt'
 
 import { usePaymentStore } from '~features/admin-form/create/builder-and-design/BuilderAndDesignDrawer/FieldListDrawer/field-panels/usePaymentStore'
@@ -91,6 +93,7 @@ export const useDirtyModal = () => {
  * @preconditions Must be nested in CreatePageSidebarProvider as context is used.
  */
 export const DirtyModal = (): JSX.Element => {
+  const { t } = useTranslation()
   const { isOpen, handleCancelNavigate, handleConfirmNavigate } =
     useDirtyModal()
 
@@ -98,7 +101,7 @@ export const DirtyModal = (): JSX.Element => {
     <UnsavedChangesModal
       isOpen={isOpen}
       onClose={handleCancelNavigate}
-      cancelButtonText="No, return to editing"
+      cancelButtonText={t('features.modal.dirty.cancelButton')}
       onConfirm={handleConfirmNavigate}
       onCancel={handleCancelNavigate}
     />

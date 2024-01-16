@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next'
+
 import { MYINFO_ATTRIBUTE_MAP } from '~shared/constants/field/myinfo'
 import {
   AttachmentSize,
@@ -23,7 +25,10 @@ import { createShortTextColumn } from './columnCreation'
 /**
  * Utility methods to create bare minimum meta required for field creation.
  */
-export const getFieldCreationMeta = (fieldType: BasicField): FieldCreateDto => {
+export const getFieldCreationMeta = (
+  fieldType: BasicField,
+  t?: TFunction,
+): FieldCreateDto => {
   const baseMeta: Pick<
     FieldCreateDto,
     'description' | 'disabled' | 'required' | 'title'
@@ -31,7 +36,9 @@ export const getFieldCreationMeta = (fieldType: BasicField): FieldCreateDto => {
     description: '',
     disabled: false,
     required: true,
-    title: BASICFIELD_TO_DRAWER_META[fieldType].label,
+    title: t
+      ? t(BASICFIELD_TO_DRAWER_META[fieldType].label)
+      : BASICFIELD_TO_DRAWER_META[fieldType].label,
   }
 
   switch (fieldType) {
@@ -44,7 +51,6 @@ export const getFieldCreationMeta = (fieldType: BasicField): FieldCreateDto => {
     }
     case BasicField.YesNo:
     case BasicField.Nric:
-    case BasicField.Uen:
     case BasicField.Section:
     case BasicField.Statement: {
       return {

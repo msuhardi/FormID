@@ -1,17 +1,19 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FormControl } from '@chakra-ui/react'
 import { extend, pick } from 'lodash'
 
 import { HomenoFieldBase } from '~shared/types/field'
 
 import { createBaseValidationRules } from '~utils/fieldValidation'
-import FormErrorMessage from '~components/FormControl/FormErrorMessage'
-import FormLabel from '~components/FormControl/FormLabel'
-import Input from '~components/Input'
-import Textarea from '~components/Textarea'
 import Toggle from '~components/Toggle'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
+import {
+  Description,
+  Question,
+  RequiredToggle,
+} from '../common/CommonFieldComponents'
 import { FormFieldDrawerActions } from '../common/FormFieldDrawerActions'
 import { EditFieldProps } from '../common/types'
 import { useEditFieldForm } from '../common/useEditFieldForm'
@@ -28,6 +30,7 @@ type EditHomenoProps = EditFieldProps<HomenoFieldBase>
 type EditHomenoInputs = Pick<HomenoFieldBase, typeof EDIT_HOMENO_KEYS[number]>
 
 export const EditHomeno = ({ field }: EditHomenoProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     register,
     formState: { errors },
@@ -51,27 +54,20 @@ export const EditHomeno = ({ field }: EditHomenoProps): JSX.Element => {
 
   return (
     <CreatePageDrawerContentContainer>
-      <FormControl isRequired isReadOnly={isLoading} isInvalid={!!errors.title}>
-        <FormLabel>Question</FormLabel>
-        <Input autoFocus {...register('title', requiredValidationRule)} />
-        <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl
-        isRequired
-        isReadOnly={isLoading}
-        isInvalid={!!errors.description}
-      >
-        <FormLabel>Description</FormLabel>
-        <Textarea {...register('description')} />
-        <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading}>
-        <Toggle {...register('required')} label="Required" />
-      </FormControl>
+      <Question
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+        requiredValidationRule={requiredValidationRule}
+      />
+      <Description isLoading={isLoading} errors={errors} register={register} />
+      <RequiredToggle isLoading={isLoading} register={register} />
       <FormControl isReadOnly={isLoading}>
         <Toggle
           {...register('allowIntlNumbers')}
-          label="Allow international numbers"
+          label={t(
+            'features.adminFormBuilder.mobileNo.allowInternationalNumber',
+          )}
         />
       </FormControl>
       <FormFieldDrawerActions

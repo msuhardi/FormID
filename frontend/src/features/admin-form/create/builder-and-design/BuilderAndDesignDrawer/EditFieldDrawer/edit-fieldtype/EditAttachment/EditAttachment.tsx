@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { Controller, RegisterOptions } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { FormControl, Skeleton } from '@chakra-ui/react'
 import { extend, pick } from 'lodash'
 
@@ -21,14 +22,16 @@ import type { ComboboxItem } from '~components/Dropdown/types'
 import FormErrorMessage from '~components/FormControl/FormErrorMessage'
 import FormLabel from '~components/FormControl/FormLabel'
 import InlineMessage from '~components/InlineMessage'
-import Input from '~components/Input'
-import Textarea from '~components/Textarea'
-import Toggle from '~components/Toggle'
 
 import { useCreateTabForm } from '~features/admin-form/create/builder-and-design/useCreateTabForm'
 import { getAttachmentSizeLimit } from '~features/admin-form/create/builder-and-design/utils/getAttachmentSizeLimit'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
+import {
+  Description,
+  Question,
+  RequiredToggle,
+} from '../common/CommonFieldComponents'
 import { FormFieldDrawerActions } from '../common/FormFieldDrawerActions'
 import { EditFieldProps } from '../common/types'
 import { useEditFieldForm } from '../common/useEditFieldForm'
@@ -62,6 +65,7 @@ const transformAttachmentEditFormToField = (
 }
 
 export const EditAttachment = ({ field }: EditAttachmentProps): JSX.Element => {
+  const { t } = useTranslation()
   const { data: form } = useCreateTabForm()
   const {
     register,
@@ -128,12 +132,13 @@ export const EditAttachment = ({ field }: EditAttachmentProps): JSX.Element => {
       validate: (val) => {
         return (
           maxTotalSizeMb - otherAttachmentsSize >= Number(val) ||
-          `You have exceeded your form's attachment size limit of ${maxTotalSizeMb} MB
-`
+          t('features.adminFormBuilder.attachment.error.exceedSize', {
+            maxTotalSizeMb,
+          })
         )
       },
     }),
-    [maxTotalSizeMb, otherAttachmentsSize],
+    [maxTotalSizeMb, otherAttachmentsSize, t],
   )
 
   const validateAttachmentSize = useCallback(() => {
@@ -150,25 +155,22 @@ export const EditAttachment = ({ field }: EditAttachmentProps): JSX.Element => {
 
   return (
     <CreatePageDrawerContentContainer>
-      <FormControl isRequired isReadOnly={isLoading} isInvalid={!!errors.title}>
-        <FormLabel>Question</FormLabel>
-        <Input autoFocus {...register('title', requiredValidationRule)} />
-        <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading} isInvalid={!!errors.description}>
-        <FormLabel>Description</FormLabel>
-        <Textarea {...register('description')} />
-        <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading}>
-        <Toggle {...register('required')} label="Required" />
-      </FormControl>
+      <Question
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+        requiredValidationRule={requiredValidationRule}
+      />
+      <Description isLoading={isLoading} errors={errors} register={register} />
+      <RequiredToggle isLoading={isLoading} register={register} />
       <FormControl
         id="attachmentSize"
         isReadOnly={isLoading}
         isInvalid={!!errors.attachmentSize}
       >
-        <FormLabel isRequired>Maximum size of individual attachment</FormLabel>
+        <FormLabel isRequired>
+          {t('features.adminFormBuilder.attachment.maximumSize')}
+        </FormLabel>
         <Skeleton isLoaded={!!form}>
           <Controller
             control={control}
@@ -197,7 +199,10 @@ export const EditAttachment = ({ field }: EditAttachmentProps): JSX.Element => {
         />
       </FormControl>
       <InlineMessage useMarkdown>
-        {`View our [complete list](${ACCEPTED_FILETYPES_SPREADSHEET}) of accepted file types. Please also read our [FAQ on email reliability](${GUIDE_EMAIL_RELIABILITY}) relating to unaccepted file types.`}
+        {t('features.adminFormBuilder.attachment.info', {
+          acceptedFiletypes: ACCEPTED_FILETYPES_SPREADSHEET,
+          guideEmailReliability: GUIDE_EMAIL_RELIABILITY,
+        })}
       </InlineMessage>
       <FormFieldDrawerActions
         isLoading={isLoading}

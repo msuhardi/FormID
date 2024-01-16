@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiGitMerge, BiQuestionMark } from 'react-icons/bi'
 import { Stack } from '@chakra-ui/react'
 
@@ -38,6 +39,7 @@ export const CreatePageSidebar = (): JSX.Element | null => {
     handleLogicClick,
     handleEndpageClick,
   } = useCreatePageSidebar()
+  const { t } = useTranslation()
 
   const handleDrawerBuilderClick = useCallback(() => {
     // Always show create field drawer when sidebar icon is tapped on mobile.
@@ -97,7 +99,7 @@ export const CreatePageSidebar = (): JSX.Element | null => {
           id={FEATURE_TOUR[2].id}
         />
         <DrawerTabIcon
-          label="Ubah halaman Terima Kasih"
+          label={t('features.adminFormBuilder.thankYouPage.title')}
           icon={<PhHandsClapping fontSize="1.5rem" />}
           onClick={handleDrawerEndpageClick}
           isActive={activeTab === DrawerTabs.EndPage}

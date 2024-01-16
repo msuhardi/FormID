@@ -3,7 +3,7 @@ import { EmptyWorkspace, EmptyWorkspacePage } from './EmptyWorkspace'
 export const EmptyNewWorkspace = ({ isLoading }: EmptyWorkspacePage) => (
   <EmptyWorkspace
     isLoading={isLoading}
-    title={'You don’t have any forms in this folder yet'}
-    subText={'Organise your forms by grouping them into folders'}
+    title="Anda belum mempunyai formulir di folder ini"
+    subText="Kelola formulir Anda dengan mengkategorikan mereka ke dalam folder"
   />
 )

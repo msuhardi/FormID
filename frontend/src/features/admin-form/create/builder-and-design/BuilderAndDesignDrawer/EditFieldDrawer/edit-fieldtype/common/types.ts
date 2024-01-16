@@ -1,13 +1,4 @@
-import { MutateOptions } from 'react-query'
-
-import { FieldBase, FieldCreateDto, FormFieldDto } from '~shared/types/field'
-
-export type FieldMutateOptions = MutateOptions<
-  FormFieldDto,
-  Error,
-  FieldCreateDto,
-  unknown
->
+import { FieldBase, FormFieldDto } from '~shared/types/field'
 
 export type EditFieldProps<T extends FieldBase> = {
   field: T & {

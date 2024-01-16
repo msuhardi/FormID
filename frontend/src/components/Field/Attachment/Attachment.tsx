@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { DropzoneProps, useDropzone } from 'react-dropzone'
+import { useTranslation } from 'react-i18next'
 import {
   Box,
   forwardRef,
@@ -85,6 +86,7 @@ export const Attachment = forwardRef<AttachmentProps, 'div'>(
     },
     ref,
   ) => {
+    const { t } = useTranslation()
     // Merge given props with any form control props, if they exist.
     const inputProps = useFormControl(props)
     // id to set on the rendered max size FormFieldMessage component.
@@ -108,11 +110,16 @@ export const Attachment = forwardRef<AttachmentProps, 'div'>(
           switch (firstError.code) {
             case 'file-invalid-type': {
               const fileExt = getFileExtension(rejectedFiles[0].file.name)
-              errorMessage = `Your file's extension ending in *${fileExt} is not allowed`
+              errorMessage = t(
+                `features.adminFormBuilder.imageAttachment.error.fileInvalidType`,
+                { fileExt },
+              )
               break
             }
             case 'too-many-files': {
-              errorMessage = 'You can only upload a single file in this input'
+              errorMessage = t(
+                'features.adminFormBuilder.imageAttachment.error.tooManyFiles',
+              )
               break
             }
             default:
@@ -134,12 +141,17 @@ export const Attachment = forwardRef<AttachmentProps, 'div'>(
               const hiddenQty = [numInvalidFiles, null]
               const stringOfInvalidExtensions = invalidFilesInZip.join(', ')
               return onError?.(
-                simplur`The following file ${hiddenQty} extension[|s] in your zip file ${hiddenQty} [is|are] not valid: ${stringOfInvalidExtensions}`,
+                simplur(
+                  t(
+                    'features.adminFormBuilder.imageAttachment.error.zipFileInvalidType',
+                    { hiddenQty, stringOfInvalidExtensions },
+                  ),
+                ),
               )
             }
           } catch {
             return onError?.(
-              'An error has occurred whilst parsing your zip file',
+              t('features.adminFormBuilder.imageAttachment.error.zipParsing'),
             )
           }
         }
@@ -167,7 +179,7 @@ export const Attachment = forwardRef<AttachmentProps, 'div'>(
 
         onChange(acceptedFile)
       },
-      [accept, maxSize, onChange, onError],
+      [accept, maxSize, onChange, onError, t],
     )
 
     const fileValidator = useCallback<NonNullable<DropzoneProps['validator']>>(
@@ -179,12 +191,15 @@ export const Attachment = forwardRef<AttachmentProps, 'div'>(
         ) {
           return {
             code: 'file-too-large',
-            message: `You have exceeded the limit, please upload a file below ${readableMaxSize}`,
+            message: t(
+              'features.adminFormBuilder.imageAttachment.error.fileTooLarge',
+              { readableMaxSize },
+            ),
           }
         }
         return null
       },
-      [maxSize, readableMaxSize],
+      [maxSize, readableMaxSize, t],
     )
 
     const { getRootProps, getInputProps, isDragActive, rootRef } = useDropzone({
@@ -264,7 +279,9 @@ export const Attachment = forwardRef<AttachmentProps, 'div'>(
               textStyle="body-2"
               aria-hidden
             >
-              Maximum file size: {readableMaxSize}
+              {t('features.adminFormBuilder.imageAttachment.maxFileSize', {
+                readableMaxSize,
+              })}
             </Text>
           ) : null}
         </Box>

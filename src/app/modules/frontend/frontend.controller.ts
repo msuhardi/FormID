@@ -38,8 +38,8 @@ const serveFormReact =
   (isPublicForm: boolean): ControllerHandler =>
   async (req, res) => {
     let tags: MetaTags = {
-      title: 'FormSG',
-      description: 'Trusted form manager of the Singapore Government',
+      title: process.env.APP_NAME || 'FormSG',
+      description: 'Pengelola formulir pemerintahan',
       image: 'og-img-metatag-nonpublicform.png',
     }
 

@@ -21,10 +21,10 @@ interface NavigationPromptProps {
 export const NavigationPrompt = memo(
   ({
     when,
-    title = 'You have unsaved changes',
-    description = 'Are you sure you want to leave? Your changes will be lost.',
-    confirmButtonText = 'Yes, discard changes',
-    cancelButtonText = 'No, stay on page',
+    title,
+    description,
+    confirmButtonText,
+    cancelButtonText,
   }: NavigationPromptProps) => {
     const { isPromptShown, onCancel, onConfirm } = useNavigationPrompt(when)
 

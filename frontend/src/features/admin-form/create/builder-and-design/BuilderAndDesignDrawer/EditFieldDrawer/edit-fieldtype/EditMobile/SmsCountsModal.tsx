@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import {
   Modal,
@@ -31,6 +32,7 @@ export const SmsCountsModal = ({
   isOpen,
   onClose,
 }: SmsCountsModalProps) => {
+  const { t } = useTranslation()
   const { formId } = useParams()
 
   const modalSize = useBreakpointValue({
@@ -80,7 +82,7 @@ export const SmsCountsModal = ({
                 color="secondary.500"
                 mt="2rem"
               >
-                {formatSmsCounts(freeSmsCount)}
+                {formatSmsCounts(freeSmsCount, t)}
               </Badge>
             </>
           )}

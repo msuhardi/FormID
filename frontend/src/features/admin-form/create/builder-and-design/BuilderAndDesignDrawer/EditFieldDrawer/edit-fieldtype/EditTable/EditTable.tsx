@@ -6,6 +6,7 @@ import {
   UnpackNestedValue,
   useFormState,
 } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { FormControl, Stack } from '@chakra-ui/react'
 import { extend, pick } from 'lodash'
 
@@ -15,15 +16,14 @@ import { REQUIRED_ERROR } from '~constants/validation'
 import { createBaseValidationRules } from '~utils/fieldValidation'
 import FormErrorMessage from '~components/FormControl/FormErrorMessage'
 import FormLabel from '~components/FormControl/FormLabel'
-import Input from '~components/Input'
 import NumberInput from '~components/NumberInput'
-import Textarea from '~components/Textarea'
 import Toggle from '~components/Toggle'
 
 import { isTemporaryColumnId } from '~features/admin-form/create/builder-and-design/utils/columnCreation'
 import { validateNumberInput } from '~features/admin-form/create/builder-and-design/utils/validateNumberInput'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
+import { Description, Question } from '../common/CommonFieldComponents'
 import { FormFieldDrawerActions } from '../common/FormFieldDrawerActions'
 import { EditFieldProps } from '../common/types'
 import { useEditFieldForm } from '../common/useEditFieldForm'
@@ -73,6 +73,7 @@ const transformTableEditFormToField = (
 }
 
 export const EditTable = ({ field }: EditTableProps): JSX.Element => {
+  const { t } = useTranslation()
   const preSubmitTransform = useCallback(
     ({ columns, ...rest }: EditTableInputs, output: TableFieldBase) => {
       // Columns may have temporary ids due to admins adding new columns when editing the field.
@@ -119,23 +120,22 @@ export const EditTable = ({ field }: EditTableProps): JSX.Element => {
 
   return (
     <CreatePageDrawerContentContainer>
-      <FormControl isRequired isReadOnly={isLoading} isInvalid={!!errors.title}>
-        <FormLabel>Question</FormLabel>
-        <Input autoFocus {...register('title', requiredValidationRule)} />
-        <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading} isInvalid={!!errors.description}>
-        <FormLabel>Description</FormLabel>
-        <Textarea {...register('description')} />
-        <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-      </FormControl>
+      <Question
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+        requiredValidationRule={requiredValidationRule}
+      />
+      <Description isLoading={isLoading} errors={errors} register={register} />
       <Stack spacing="2rem">
         <FormControl
           isRequired
           isReadOnly={isLoading}
           isInvalid={!!errors.minimumRows}
         >
-          <FormLabel>Minimum rows</FormLabel>
+          <FormLabel>
+            {t('features.adminFormBuilder.table.minimumRows')}
+          </FormLabel>
           <Controller
             name="minimumRows"
             control={control}
@@ -143,7 +143,7 @@ export const EditTable = ({ field }: EditTableProps): JSX.Element => {
               required: REQUIRED_ERROR,
               min: {
                 value: 1,
-                message: 'Minimum rows must be greater than 0',
+                message: t('features.adminFormBuilder.table.error.minRow'),
               },
               deps: ['maximumRows'],
             }}
@@ -160,7 +160,7 @@ export const EditTable = ({ field }: EditTableProps): JSX.Element => {
         <FormControl isReadOnly={isLoading}>
           <Toggle
             {...register('addMoreRows')}
-            label="Allow respondent to add more rows"
+            label={t('features.adminFormBuilder.table.allowAddMoreRows')}
           />
         </FormControl>
         {getValues('addMoreRows') ? (
@@ -169,20 +169,24 @@ export const EditTable = ({ field }: EditTableProps): JSX.Element => {
             isReadOnly={isLoading}
             isInvalid={!!errors.maximumRows}
           >
-            <FormLabel>Maximum rows allowed</FormLabel>
+            <FormLabel>
+              {t('features.adminFormBuilder.table.maximumRows')}
+            </FormLabel>
             <Controller
               name="maximumRows"
               defaultValue=""
               rules={{
                 min: {
                   value: 1,
-                  message: 'Maximum rows must be greater than 0',
+                  message: t('features.adminFormBuilder.table.error.maxRow'),
                 },
                 // Must be greater than minimum rows
                 validate: (value) =>
                   !value ||
                   value > getValues('minimumRows') ||
-                  'Maximum rows must be greater than minimum rows',
+                  t(
+                    'features.adminFormBuilder.table.error.maxRowGreaterThanMin',
+                  ),
               }}
               control={control}
               render={({ field: { onChange, ...rest } }) => (

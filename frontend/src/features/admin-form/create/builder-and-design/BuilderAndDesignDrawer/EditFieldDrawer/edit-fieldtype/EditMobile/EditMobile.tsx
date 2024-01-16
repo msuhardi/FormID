@@ -1,20 +1,22 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Box, FormControl, useDisclosure } from '@chakra-ui/react'
 import { extend, pick } from 'lodash'
 
 import { MobileFieldBase } from '~shared/types/field'
 
 import { createBaseValidationRules } from '~utils/fieldValidation'
-import FormErrorMessage from '~components/FormControl/FormErrorMessage'
-import FormLabel from '~components/FormControl/FormLabel'
-import Input from '~components/Input'
-import Textarea from '~components/Textarea'
 import Toggle from '~components/Toggle'
 
 import { useFreeSmsQuota } from '~features/admin-form/common/queries'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
 import { useCreateTabForm } from '../../../../useCreateTabForm'
+import {
+  Description,
+  Question,
+  RequiredToggle,
+} from '../common/CommonFieldComponents'
 import { FormFieldDrawerActions } from '../common/FormFieldDrawerActions'
 import { EditFieldProps } from '../common/types'
 import { useEditFieldForm } from '../common/useEditFieldForm'
@@ -36,6 +38,7 @@ type EditMobileProps = EditFieldProps<MobileFieldBase>
 type EditMobileInputs = Pick<MobileFieldBase, typeof EDIT_MOBILE_KEYS[number]>
 
 export const EditMobile = ({ field }: EditMobileProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     register,
     formState: { errors },
@@ -75,31 +78,24 @@ export const EditMobile = ({ field }: EditMobileProps): JSX.Element => {
   return (
     <>
       <CreatePageDrawerContentContainer>
-        <FormControl
-          isRequired
-          isReadOnly={isLoading}
-          isInvalid={!!errors.title}
-        >
-          <FormLabel>Question</FormLabel>
-          <Input autoFocus {...register('title', requiredValidationRule)} />
-          <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl
-          isRequired
-          isReadOnly={isLoading}
-          isInvalid={!!errors.description}
-        >
-          <FormLabel>Description</FormLabel>
-          <Textarea {...register('description')} />
-          <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl isReadOnly={isLoading}>
-          <Toggle {...register('required')} label="Required" />
-        </FormControl>
+        <Question
+          isLoading={isLoading}
+          errors={errors}
+          register={register}
+          requiredValidationRule={requiredValidationRule}
+        />
+        <Description
+          isLoading={isLoading}
+          errors={errors}
+          register={register}
+        />
+        <RequiredToggle isLoading={isLoading} register={register} />
         <FormControl isReadOnly={isLoading}>
           <Toggle
             {...register('allowIntlNumbers')}
-            label="Allow international numbers"
+            label={t(
+              'features.adminFormBuilder.mobileNo.allowInternationalNumber',
+            )}
           />
         </FormControl>
         <Box>
@@ -112,8 +108,12 @@ export const EditMobile = ({ field }: EditMobileProps): JSX.Element => {
                   }
                 },
               })}
-              label="OTP verification"
-              description="Respondents must verify by entering a code sent to them. If you have added Twilio credentials, please test this OTP verification feature to make sure your credentials are accurate."
+              label={t(
+                'features.adminFormBuilder.mobileNo.otpVerification.title',
+              )}
+              description={t(
+                'features.adminFormBuilder.mobileNo.otpVerification.description',
+              )}
             />
           </FormControl>
           <SmsCountMessage

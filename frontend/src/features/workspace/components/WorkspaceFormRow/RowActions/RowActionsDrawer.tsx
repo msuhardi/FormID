@@ -111,7 +111,7 @@ export const RowActionsDrawer = ({
                     {...buttonProps}
                     leftIcon={<BiEditAlt fontSize="1.25rem" />}
                   >
-                    Edit
+                    Ubah
                   </Button>
                   <Button
                     as={ReactLink}

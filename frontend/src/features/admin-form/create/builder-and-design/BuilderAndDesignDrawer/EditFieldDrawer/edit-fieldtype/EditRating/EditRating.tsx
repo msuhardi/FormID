@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Controller } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { FormControl } from '@chakra-ui/react'
 import { extend, pick } from 'lodash'
 
@@ -7,13 +8,14 @@ import { RatingFieldBase, RatingShape } from '~shared/types/field'
 
 import { createBaseValidationRules } from '~utils/fieldValidation'
 import { SingleSelect } from '~components/Dropdown'
-import FormErrorMessage from '~components/FormControl/FormErrorMessage'
 import FormLabel from '~components/FormControl/FormLabel'
-import Input from '~components/Input'
-import Textarea from '~components/Textarea'
-import Toggle from '~components/Toggle'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
+import {
+  Description,
+  Question,
+  RequiredToggle,
+} from '../common/CommonFieldComponents'
 import { FormFieldDrawerActions } from '../common/FormFieldDrawerActions'
 import { EditFieldProps } from '../common/types'
 import { useEditFieldForm } from '../common/useEditFieldForm'
@@ -38,6 +40,7 @@ const EDIT_RATING_OPTIONS = {
 }
 
 export const EditRating = ({ field }: EditRatingProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     register,
     control,
@@ -62,21 +65,23 @@ export const EditRating = ({ field }: EditRatingProps): JSX.Element => {
 
   return (
     <CreatePageDrawerContentContainer>
-      <FormControl isRequired isReadOnly={isLoading} isInvalid={!!errors.title}>
-        <FormLabel>Question</FormLabel>
-        <Input autoFocus {...register('title', requiredValidationRule)} />
-        <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading} isInvalid={!!errors.description}>
-        <FormLabel>Description</FormLabel>
-        <Textarea {...register('description')} />
-        <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading}>
-        <Toggle {...register('required')} label="Required" />
-      </FormControl>
+      <Question
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+        requiredValidationRule={requiredValidationRule}
+      />
+      <Description
+        isRequired={false}
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+      />
+      <RequiredToggle isLoading={isLoading} register={register} />
       <FormControl id="ratingOptions.steps" isReadOnly={isLoading}>
-        <FormLabel isRequired>Number of steps</FormLabel>
+        <FormLabel isRequired>
+          {t('features.adminFormBuilder.rating.numOfSteps')}
+        </FormLabel>
         <Controller
           control={control}
           name="ratingOptions.steps"
@@ -91,14 +96,19 @@ export const EditRating = ({ field }: EditRatingProps): JSX.Element => {
         />
       </FormControl>
       <FormControl id="ratingOptions.shape" isReadOnly={isLoading}>
-        <FormLabel isRequired>Shape</FormLabel>
+        <FormLabel isRequired>
+          {t('features.adminFormBuilder.rating.shape')}
+        </FormLabel>
         <Controller
           control={control}
           name="ratingOptions.shape"
           render={({ field }) => (
             <SingleSelect
               isClearable={false}
-              items={EDIT_RATING_OPTIONS.shapeOptions}
+              items={EDIT_RATING_OPTIONS.shapeOptions.map((shape) => ({
+                value: shape,
+                label: t(`features.adminFormBuilder.rating.shapes.${shape}`),
+              }))}
               {...field}
             />
           )}

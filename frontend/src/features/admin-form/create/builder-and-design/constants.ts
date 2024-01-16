@@ -33,8 +33,6 @@ export const BASIC_FIELDS_ORDERED = [
   BasicField.Attachment,
   BasicField.Number,
   BasicField.Decimal,
-  BasicField.Nric,
-  BasicField.Uen,
 ]
 
 export const MYINFO_FIELDS_ORDERED: MyInfoAttribute[] = [

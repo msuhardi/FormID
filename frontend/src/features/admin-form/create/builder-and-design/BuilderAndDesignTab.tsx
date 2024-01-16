@@ -5,12 +5,10 @@ import {
   DragUpdate,
   DropResult,
 } from 'react-beautiful-dnd'
+import { useTranslation } from 'react-i18next'
 import { useDisclosure } from '@chakra-ui/react'
 
-import {
-  getFieldCreationMeta,
-  getMyInfoFieldCreationMeta,
-} from '~features/admin-form/create/builder-and-design/utils/fieldCreation'
+import { getFieldCreationMeta } from '~features/admin-form/create/builder-and-design/utils/fieldCreation'
 
 import { useReorderFormField } from './mutations/useReorderFormField'
 import {
@@ -23,16 +21,6 @@ import { BuilderAndDesignDrawer } from './BuilderAndDesignDrawer'
 import {
   BASIC_FIELDS_ORDERED,
   CREATE_FIELD_DROP_ID,
-  CREATE_MYINFO_CHILDREN_DROP_ID,
-  CREATE_MYINFO_CHILDREN_FIELDS_ORDERED,
-  CREATE_MYINFO_CONTACT_DROP_ID,
-  CREATE_MYINFO_CONTACT_FIELDS_ORDERED,
-  CREATE_MYINFO_MARRIAGE_DROP_ID,
-  CREATE_MYINFO_MARRIAGE_FIELDS_ORDERED,
-  CREATE_MYINFO_PARTICULARS_DROP_ID,
-  CREATE_MYINFO_PARTICULARS_FIELDS_ORDERED,
-  CREATE_MYINFO_PERSONAL_DROP_ID,
-  CREATE_MYINFO_PERSONAL_FIELDS_ORDERED,
   FIELD_LIST_DROP_ID,
 } from './constants'
 import { DeleteFieldModal } from './DeleteFieldModal'
@@ -47,6 +35,7 @@ import {
 export const BuilderAndDesignTab = (): JSX.Element => {
   const setToCreating = useFieldBuilderStore(updateCreateStateSelector)
   const { data } = useCreateTabForm()
+  const { t } = useTranslation()
 
   const { reorderFieldMutation } = useReorderFormField()
 
@@ -83,52 +72,7 @@ export const BuilderAndDesignTab = (): JSX.Element => {
       switch (source.droppableId) {
         case CREATE_FIELD_DROP_ID: {
           return setToCreating(
-            getFieldCreationMeta(BASIC_FIELDS_ORDERED[source.index]),
-            destination.index,
-          )
-        }
-
-        case CREATE_MYINFO_PERSONAL_DROP_ID: {
-          return setToCreating(
-            getMyInfoFieldCreationMeta(
-              CREATE_MYINFO_PERSONAL_FIELDS_ORDERED[source.index],
-            ),
-            destination.index,
-          )
-        }
-
-        case CREATE_MYINFO_CONTACT_DROP_ID: {
-          return setToCreating(
-            getMyInfoFieldCreationMeta(
-              CREATE_MYINFO_CONTACT_FIELDS_ORDERED[source.index],
-            ),
-            destination.index,
-          )
-        }
-
-        case CREATE_MYINFO_PARTICULARS_DROP_ID: {
-          return setToCreating(
-            getMyInfoFieldCreationMeta(
-              CREATE_MYINFO_PARTICULARS_FIELDS_ORDERED[source.index],
-            ),
-            destination.index,
-          )
-        }
-
-        case CREATE_MYINFO_MARRIAGE_DROP_ID: {
-          return setToCreating(
-            getMyInfoFieldCreationMeta(
-              CREATE_MYINFO_MARRIAGE_FIELDS_ORDERED[source.index],
-            ),
-            destination.index,
-          )
-        }
-
-        case CREATE_MYINFO_CHILDREN_DROP_ID: {
-          return setToCreating(
-            getMyInfoFieldCreationMeta(
-              CREATE_MYINFO_CHILDREN_FIELDS_ORDERED[source.index],
-            ),
+            getFieldCreationMeta(BASIC_FIELDS_ORDERED[source.index], t),
             destination.index,
           )
         }
@@ -145,7 +89,7 @@ export const BuilderAndDesignTab = (): JSX.Element => {
         }
       }
     },
-    [data, reorderFieldMutation, setToCreating, setPlaceholderProps],
+    [data, reorderFieldMutation, setToCreating, setPlaceholderProps, t],
   )
 
   const deleteFieldModalDisclosure = useDisclosure()

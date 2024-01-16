@@ -4,6 +4,7 @@ import {
   ControllerRenderProps,
   UseFormReturn,
 } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { BiTrash } from 'react-icons/bi'
 import {
   Box,
@@ -51,6 +52,7 @@ export const EditConditionBlock = ({
   logicableFields,
   mapIdToField,
 }: EditConditionBlockProps): JSX.Element => {
+  const { t } = useTranslation()
   const name = useMemo(() => `conditions.${index}` as const, [index])
 
   const {
@@ -131,7 +133,7 @@ export const EditConditionBlock = ({
     return Object.entries(subsetLogicableFields).map(([key, value]) => ({
       label: `${value.questionNumber}. ${value.title}`,
       value: key,
-      icon: BASICFIELD_TO_DRAWER_META[value.fieldType].icon,
+      icon: BASICFIELD_TO_DRAWER_META[value.fieldType as BasicField].icon,
     }))
   }, [logicableFields, logicTypeValue, showValueWatch])
 
@@ -148,15 +150,21 @@ export const EditConditionBlock = ({
 
   const conditionValueItems = useMemo(() => {
     if (!ifFieldIdValue || !mapIdToField) return []
-    const mappedField = mapIdToField[ifFieldIdValue]
+    const mappedField: FormFieldWithQuestionNo<any> =
+      mapIdToField[ifFieldIdValue]
     if (!mappedField) return []
     switch (mappedField.fieldType) {
       case BasicField.YesNo:
-        return ['Yes', 'No']
+        return [
+          t('features.adminFormBuilder.yesNo.yes'),
+          t('features.adminFormBuilder.yesNo.no'),
+        ]
       case BasicField.Radio:
         if (mappedField.othersRadioButton) {
           // 'Others' does not show up in fieldOptions
-          return mappedField.fieldOptions.concat('Others')
+          return mappedField.fieldOptions.concat(
+            t('features.adminFormBuilder.radio.others'),
+          )
         }
         return mappedField.fieldOptions
       case BasicField.Dropdown:
@@ -166,7 +174,7 @@ export const EditConditionBlock = ({
       default:
         return []
     }
-  }, [ifFieldIdValue, mapIdToField])
+  }, [ifFieldIdValue, mapIdToField, t])
 
   const logicTypeWrapperWidth = useMemo(() => {
     if (!currentSelectedField) return '9rem'

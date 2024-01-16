@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 
@@ -127,6 +128,7 @@ export const useDuplicateFormMutations = () => {
 }
 
 export const useDeleteFormMutation = () => {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const toast = useToast({ status: 'danger', isClosable: true })
 
@@ -137,10 +139,10 @@ export const useDeleteFormMutation = () => {
       queryClient.invalidateQueries(workspaceKeys.workspaces)
       toast({
         status: 'success',
-        description: 'The form has been successfully deleted.',
+        description: t('features.toast.delete.success'),
       })
     },
-    [queryClient, toast],
+    [queryClient, toast, t],
   )
 
   const handleError = useCallback(
