@@ -4,26 +4,21 @@ import {
   DraggableProvided,
   DraggableStateSnapshot,
 } from 'react-beautiful-dnd'
+import { useTranslation } from 'react-i18next'
 import { Box, BoxProps, forwardRef, Icon, Stack, Text } from '@chakra-ui/react'
 
-import { BasicField, MyInfoAttribute } from '~shared/types/field'
+import { BasicField } from '~shared/types/field'
 
 import { useIsMobile } from '~hooks/useIsMobile'
 
-import {
-  BASICFIELD_TO_DRAWER_META,
-  MYINFO_FIELD_TO_DRAWER_META,
-} from '~features/admin-form/create/constants'
+import { BASICFIELD_TO_DRAWER_META } from '~features/admin-form/create/constants'
 
 import { useCreateTabForm } from '../../useCreateTabForm'
 import {
   updateCreateStateSelector,
   useFieldBuilderStore,
 } from '../../useFieldBuilderStore'
-import {
-  getFieldCreationMeta,
-  getMyInfoFieldCreationMeta,
-} from '../../utils/fieldCreation'
+import { getFieldCreationMeta } from '../../utils/fieldCreation'
 
 const getDraggableAnimationProps = (
   provided: DraggableProvided,
@@ -49,20 +44,10 @@ interface BasicFieldOptionProps extends FieldOptionProps {
   fieldType: BasicField
 }
 
-interface MyInfoFieldOptionProps extends FieldOptionProps {
-  fieldType: MyInfoAttribute
-}
-
 interface DraggableBasicFieldOptionProps
   extends Omit<FieldOptionProps, 'isActive'> {
   index: number
   fieldType: BasicField
-}
-
-interface DraggableMyInfoFieldOptionProps
-  extends Omit<FieldOptionProps, 'isActive'> {
-  index: number
-  fieldType: MyInfoAttribute
 }
 
 export const DraggableBasicFieldListOption = ({
@@ -108,47 +93,9 @@ export const DraggableBasicFieldListOption = ({
   )
 }
 
-export const DraggableMyInfoFieldListOption = ({
-  fieldType,
-  index,
-  children,
-  isDisabled,
-  ...props
-}: DraggableMyInfoFieldOptionProps): JSX.Element => (
-  <Draggable
-    index={index}
-    isDragDisabled={isDisabled}
-    disableInteractiveElementBlocking
-    draggableId={fieldType}
-  >
-    {(provided, snapshot) => {
-      return (
-        <>
-          <MyInfoFieldOption
-            fieldType={fieldType}
-            isDisabled={isDisabled}
-            {...props}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            style={getDraggableAnimationProps(provided, snapshot)}
-            ref={provided.innerRef}
-          />
-          {snapshot.isDragging && (
-            <MyInfoFieldOption
-              fieldType={fieldType}
-              isActive={snapshot.isDragging}
-              style={{ transform: 'none !important' }}
-              opacity={0.5}
-            />
-          )}
-        </>
-      )
-    }}
-  </Draggable>
-)
-
 export const BasicFieldOption = forwardRef<BasicFieldOptionProps, 'button'>(
   ({ fieldType, isDisabled, ...props }, ref) => {
+    const { t } = useTranslation()
     const meta = useMemo(
       () => BASICFIELD_TO_DRAWER_META[fieldType],
       [fieldType],
@@ -157,7 +104,7 @@ export const BasicFieldOption = forwardRef<BasicFieldOptionProps, 'button'>(
     const numFields = useMemo(() => form?.form_fields?.length ?? 0, [form])
 
     const newFieldMeta = useMemo(
-      () => getFieldCreationMeta(fieldType),
+      () => getFieldCreationMeta(fieldType, t),
       [fieldType],
     )
 
@@ -177,41 +124,7 @@ export const BasicFieldOption = forwardRef<BasicFieldOptionProps, 'button'>(
         ref={ref}
       >
         <Icon fontSize="1.5rem" as={meta.icon} />
-        <Text textStyle="body-1">{meta.label}</Text>
-      </FieldListOption>
-    )
-  },
-)
-
-export const MyInfoFieldOption = forwardRef<MyInfoFieldOptionProps, 'button'>(
-  ({ fieldType, isDisabled, ...props }, ref) => {
-    const meta = useMemo(
-      () => MYINFO_FIELD_TO_DRAWER_META[fieldType],
-      [fieldType],
-    )
-    const { data: form } = useCreateTabForm()
-    const numFields = useMemo(() => form?.form_fields?.length ?? 0, [form])
-
-    const newFieldMeta = useMemo(
-      () => getMyInfoFieldCreationMeta(fieldType),
-      [fieldType],
-    )
-
-    const updateCreateState = useFieldBuilderStore(updateCreateStateSelector)
-
-    const handleClick = useCallback(() => {
-      if (!isDisabled) updateCreateState(newFieldMeta, numFields)
-    }, [newFieldMeta, numFields, updateCreateState, isDisabled])
-
-    return (
-      <FieldListOption
-        {...props}
-        isDisabled={isDisabled}
-        onClick={handleClick}
-        ref={ref}
-      >
-        <Icon fontSize="1.5rem" as={meta.icon} />
-        <Text textStyle="body-1">{meta.label}</Text>
+        <Text textStyle="body-1">{t(meta.label)}</Text>
       </FieldListOption>
     )
   },

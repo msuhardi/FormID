@@ -1,5 +1,6 @@
 import { useMemo, useRef } from 'react'
 import { RegisterOptions } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Box, FormControl, useMergeRefs } from '@chakra-ui/react'
 import { extend, pick } from 'lodash'
 
@@ -13,6 +14,12 @@ import FormLabel from '~components/FormControl/FormLabel'
 import Input from '~components/Input'
 import Textarea from '~components/Textarea'
 import Toggle from '~components/Toggle'
+
+import {
+  Description,
+  Question,
+  RequiredToggle,
+} from '~features/admin-form/create/builder-and-design/BuilderAndDesignDrawer/EditFieldDrawer/edit-fieldtype/common/CommonFieldComponents'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
 import { useCreateTabForm } from '../../../../useCreateTabForm'
@@ -65,6 +72,7 @@ const transformEmailEditFormToField = (
 }
 
 export const EditEmail = ({ field }: EditEmailProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     register,
     formState: { errors },
@@ -141,28 +149,21 @@ export const EditEmail = ({ field }: EditEmailProps): JSX.Element => {
 
   return (
     <CreatePageDrawerContentContainer>
-      <FormControl isRequired isReadOnly={isLoading} isInvalid={!!errors.title}>
-        <FormLabel>Question</FormLabel>
-        <Input autoFocus {...register('title', requiredValidationRule)} />
-        <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl
-        isRequired
-        isReadOnly={isLoading}
-        isInvalid={!!errors.description}
-      >
-        <FormLabel>Description</FormLabel>
-        <Textarea {...register('description')} />
-        <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading}>
-        <Toggle {...register('required')} label="Required" />
-      </FormControl>
+      <Question
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+        requiredValidationRule={requiredValidationRule}
+      />
+      <Description isLoading={isLoading} errors={errors} register={register} />
+      <RequiredToggle isLoading={isLoading} register={register} />
       <FormControl isReadOnly={isLoading}>
         <Toggle
           {...register('isVerifiable')}
-          label="OTP verification"
-          description="Respondents must verify by entering a code sent to them"
+          label={t('features.adminFormBuilder.email.otpVerification.title')}
+          description={t(
+            'features.adminFormBuilder.email.otpVerification.description',
+          )}
         />
       </FormControl>
       <Box>
@@ -170,7 +171,9 @@ export const EditEmail = ({ field }: EditEmailProps): JSX.Element => {
           <Toggle
             {...allowedEmailDomainsRegister}
             ref={mergedAllowedEmailDomainsRef}
-            label="Restrict email domains"
+            label={t(
+              'features.adminFormBuilder.email.restrictEmailDomains.title',
+            )}
           />
         </FormControl>
         {watchedHasAllowedEmailDomains && (
@@ -180,11 +183,17 @@ export const EditEmail = ({ field }: EditEmailProps): JSX.Element => {
             isInvalid={!!errors.allowedEmailDomains}
             mt="1.5rem"
           >
-            <FormLabel>Domains allowed</FormLabel>
+            <FormLabel>
+              {t(
+                'features.adminFormBuilder.email.restrictEmailDomains.inputLabel',
+              )}
+            </FormLabel>
             <Textarea
               autoFocus
               {...register('allowedEmailDomains', emailDomainsValidation)}
-              placeholder={'@data.gov.sg\n@agency.gov.sg'}
+              placeholder={t(
+                'features.adminFormBuilder.email.restrictEmailDomains.placeholder',
+              )}
             />
             <FormErrorMessage>
               {errors?.allowedEmailDomains?.message}
@@ -196,38 +205,60 @@ export const EditEmail = ({ field }: EditEmailProps): JSX.Element => {
         <FormControl isReadOnly={isLoading}>
           <Toggle
             {...register('autoReplyOptions.hasAutoReply')}
-            description="Customise an email acknowledgement to respondents"
-            label="Email confirmation"
+            description={t(
+              'features.adminFormBuilder.email.emailConfirmation.description',
+            )}
+            label={t('features.adminFormBuilder.email.emailConfirmation.title')}
           />
         </FormControl>
         {watchedHasAutoReply && (
           <>
             <FormControl isRequired isReadOnly={isLoading} mt="1.5rem">
-              <FormLabel>Subject</FormLabel>
+              <FormLabel>
+                {t(
+                  'features.adminFormBuilder.email.emailConfirmation.subject.title',
+                )}
+              </FormLabel>
               <Input
                 autoFocus
-                placeholder="Default email subject"
+                placeholder={t(
+                  'features.adminFormBuilder.email.emailConfirmation.subject.placeholder',
+                )}
                 {...register('autoReplyOptions.autoReplySubject')}
               />
             </FormControl>
             <FormControl isRequired isReadOnly={isLoading} mt="1.5rem">
-              <FormLabel>Sender name</FormLabel>
+              <FormLabel>
+                {t(
+                  'features.adminFormBuilder.email.emailConfirmation.senderName.title',
+                )}
+              </FormLabel>
               <Input
-                placeholder="Default sender name is your agency name"
+                placeholder={t(
+                  'features.adminFormBuilder.email.emailConfirmation.senderName.placeholder',
+                )}
                 {...register('autoReplyOptions.autoReplySender')}
               />
             </FormControl>
             <FormControl isReadOnly={isLoading} isRequired mt="1.5rem">
-              <FormLabel>Content</FormLabel>
+              <FormLabel>
+                {t(
+                  'features.adminFormBuilder.email.emailConfirmation.content.title',
+                )}
+              </FormLabel>
               <Textarea
-                placeholder="Default email body"
+                placeholder={t(
+                  'features.adminFormBuilder.email.emailConfirmation.content.placeholder',
+                )}
                 {...register('autoReplyOptions.autoReplyMessage')}
               />
             </FormControl>
             <FormControl isReadOnly={isLoading} mt="1.5rem">
               <Toggle
                 {...register('autoReplyOptions.includeFormSummary')}
-                label="Include PDF response"
+                label={t(
+                  'features.adminFormBuilder.email.emailConfirmation.includePdfResponse',
+                )}
                 description={pdfResponseToggleDescription}
                 isDisabled={!isPdfResponseEnabled}
               />

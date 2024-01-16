@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { BiCog, BiDuplicate, BiGridHorizontal, BiTrash } from 'react-icons/bi'
 import { useIsMutating } from 'react-query'
 import {
@@ -14,7 +15,11 @@ import {
 } from '@chakra-ui/react'
 import { isEqual, times } from 'lodash'
 
-import { FormColorTheme } from '~shared/types'
+import {
+  AttachmentFieldBase,
+  FormColorTheme,
+  TableFieldBase,
+} from '~shared/types'
 import { BasicField, FormFieldDto } from '~shared/types/field'
 
 import { useIsMobile } from '~hooks/useIsMobile'
@@ -41,7 +46,7 @@ import {
   RatingField,
   ShortTextField,
   TableField,
-  UenField,
+  TableFieldSchema,
   YesNoField,
 } from '~templates/Field'
 import { EmailFieldInput } from '~templates/Field/Email'
@@ -122,7 +127,9 @@ const FieldRowContainer = ({
   const defaultFieldValues = useMemo(() => {
     if (field.fieldType === BasicField.Table) {
       return {
-        [field._id]: times(field.minimumRows || 0, () => createTableRow(field)),
+        [field._id]: times((field as TableFieldBase).minimumRows || 0, () =>
+          createTableRow(field as TableFieldSchema),
+        ),
       }
     }
 
@@ -332,6 +339,7 @@ const FieldButtonGroup = ({
   isMobile,
   handleBuilderClick,
 }: FieldButtonGroupProps) => {
+  const { t } = useTranslation()
   const setToInactive = useFieldBuilderStore(setToInactiveSelector)
 
   const { data: form } = useCreateTabForm()
@@ -366,12 +374,14 @@ const FieldButtonGroup = ({
           form.form_fields.reduce(
             (sum, ff) =>
               ff.fieldType === BasicField.Attachment
-                ? sum + Number(ff.attachmentSize)
+                ? sum + Number((ff as AttachmentFieldBase).attachmentSize)
                 : sum,
             0,
           )
         : 0
-      const thisAttachmentSize = Number(field.attachmentSize)
+      const thisAttachmentSize = Number(
+        (field as AttachmentFieldBase).attachmentSize,
+      )
       if (thisAttachmentSize > availableAttachmentSize) {
         toast({
           useMarkdown: true,
@@ -411,9 +421,9 @@ const FieldButtonGroup = ({
         {
           // Fields which are not yet created cannot be duplicated
           fieldBuilderState !== FieldBuilderState.CreatingField && (
-            <Tooltip label="Duplicate field">
+            <Tooltip label={t('features.common.tooltip.duplicateField')}>
               <IconButton
-                aria-label="Duplicate field"
+                aria-label={t('features.common.tooltip.duplicateField')}
                 isDisabled={isAnyMutationLoading}
                 onClick={handleDuplicateClick}
                 isLoading={duplicateFieldMutation.isLoading}
@@ -422,10 +432,10 @@ const FieldButtonGroup = ({
             </Tooltip>
           )
         }
-        <Tooltip label="Delete field">
+        <Tooltip label={t('features.common.tooltip.deleteField')}>
           <IconButton
             colorScheme="danger"
-            aria-label="Delete field"
+            aria-label={t('features.common.tooltip.deleteField')}
             icon={<BiTrash fontSize="1.25rem" />}
             onClick={handleDeleteClick}
             isLoading={deleteFieldMutation.isLoading}
@@ -438,7 +448,7 @@ const FieldButtonGroup = ({
 }
 
 type FieldRowProps = {
-  field: FormFieldDto
+  field: FormFieldDto<any>
   colorTheme?: FormColorTheme
   showMyInfoBadge?: boolean
 }
@@ -493,13 +503,13 @@ const FieldRow = ({ field, ...rest }: FieldRowProps) => {
       return <RadioField schema={field} {...rest} />
     case BasicField.Rating:
       return <RatingField schema={field} {...rest} />
-    case BasicField.Uen:
-      return <UenField schema={field} {...rest} />
     case BasicField.YesNo:
       return <YesNoField schema={field} {...rest} />
     case BasicField.Table:
       return <TableField schema={field} {...rest} />
     case BasicField.Children:
       return <ChildrenCompoundField schema={field} {...rest} />
+    default:
+      return null
   }
 }

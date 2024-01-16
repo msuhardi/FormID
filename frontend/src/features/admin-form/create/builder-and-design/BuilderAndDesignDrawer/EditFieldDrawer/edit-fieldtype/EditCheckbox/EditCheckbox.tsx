@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { Controller, RegisterOptions } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Box, FormControl, SimpleGrid } from '@chakra-ui/react'
 import { extend, isEmpty, pick } from 'lodash'
 
@@ -8,11 +9,15 @@ import { CheckboxFieldBase } from '~shared/types/field'
 import { createBaseValidationRules } from '~utils/fieldValidation'
 import FormErrorMessage from '~components/FormControl/FormErrorMessage'
 import FormLabel from '~components/FormControl/FormLabel'
-import Input from '~components/Input'
 import NumberInput from '~components/NumberInput'
 import Textarea from '~components/Textarea'
 import Toggle from '~components/Toggle'
 
+import {
+  Description,
+  Question,
+  RequiredToggle,
+} from '~features/admin-form/create/builder-and-design/BuilderAndDesignDrawer/EditFieldDrawer/edit-fieldtype/common/CommonFieldComponents'
 import { validateNumberInput } from '~features/admin-form/create/builder-and-design/utils/validateNumberInput'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
@@ -79,6 +84,7 @@ const transformCheckboxEditFormToField = (
 }
 
 export const EditCheckbox = ({ field }: EditCheckboxProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     register,
     formState: { errors },
@@ -210,30 +216,35 @@ export const EditCheckbox = ({ field }: EditCheckboxProps): JSX.Element => {
 
   return (
     <CreatePageDrawerContentContainer>
-      <FormControl isRequired isReadOnly={isLoading} isInvalid={!!errors.title}>
-        <FormLabel>Question</FormLabel>
-        <Input autoFocus {...register('title', requiredValidationRule)} />
-        <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading} isInvalid={!!errors.description}>
-        <FormLabel>Description</FormLabel>
-        <Textarea {...register('description')} />
-        <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-      </FormControl>
+      <Question
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+        requiredValidationRule={requiredValidationRule}
+      />
+      <Description
+        isLoading={isLoading}
+        isRequired={false}
+        errors={errors}
+        register={register}
+      />
+      <RequiredToggle isLoading={isLoading} register={register} />
       <FormControl isReadOnly={isLoading}>
-        <Toggle {...register('required')} label="Required" />
-      </FormControl>
-      <FormControl isReadOnly={isLoading}>
-        <Toggle {...register('othersRadioButton')} label="Others" />
+        <Toggle
+          {...register('othersRadioButton')}
+          label={t('features.adminFormBuilder.radio.others')}
+        />
       </FormControl>
       <FormControl
         isRequired
         isReadOnly={isLoading}
         isInvalid={!!errors.fieldOptions}
       >
-        <FormLabel>Options</FormLabel>
+        <FormLabel>
+          {t('features.adminFormBuilder.radio.options.title')}
+        </FormLabel>
         <Textarea
-          placeholder="Enter one option per line"
+          placeholder={t('features.adminFormBuilder.radio.options.placeholder')}
           {...register('fieldOptions', {
             validate: optionsValidation,
           })}
@@ -243,8 +254,10 @@ export const EditCheckbox = ({ field }: EditCheckboxProps): JSX.Element => {
       <Box>
         <Toggle
           {...register('validateByValue')}
-          label="Selection limits"
-          description="Customise the number of options that users are allowed to select"
+          label={t('features.adminFormBuilder.checkbox.selectionLimit.label')}
+          description={t(
+            'features.adminFormBuilder.checkbox.selectionLimit.description',
+          )}
         />
         <FormControl
           isDisabled={!watchedInputs.validateByValue}
@@ -268,7 +281,9 @@ export const EditCheckbox = ({ field }: EditCheckboxProps): JSX.Element => {
                   showSteppers={false}
                   onChange={validateNumberInput(onChange)}
                   {...rest}
-                  placeholder="Minimum"
+                  placeholder={t(
+                    'features.adminFormBuilder.checkbox.selectionLimit.minimum',
+                  )}
                 />
               )}
             />
@@ -284,7 +299,9 @@ export const EditCheckbox = ({ field }: EditCheckboxProps): JSX.Element => {
                   showSteppers={false}
                   onChange={validateNumberInput(onChange)}
                   {...rest}
-                  placeholder="Maximum"
+                  placeholder={t(
+                    'features.adminFormBuilder.checkbox.selectionLimit.maximum',
+                  )}
                 />
               )}
             />

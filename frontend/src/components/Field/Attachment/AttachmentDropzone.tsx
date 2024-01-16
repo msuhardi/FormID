@@ -1,4 +1,5 @@
 import { DropzoneInputProps, DropzoneState } from 'react-dropzone'
+import { useTranslation } from 'react-i18next'
 import { chakra, Icon, Text, useStyles, VisuallyHidden } from '@chakra-ui/react'
 
 import { BxsCloudUpload } from '~assets/icons/BxsCloudUpload'
@@ -17,24 +18,32 @@ export const AttachmentDropzone = ({
   readableMaxSize,
   question,
 }: AttachmentDropzoneProps): JSX.Element => {
+  const { t } = useTranslation()
   const styles = useStyles()
 
   return (
     <>
-      <VisuallyHidden>
-        {question} Click to upload file, maximum file size of {readableMaxSize}
-      </VisuallyHidden>
-      <chakra.input {...inputProps} data-testid={inputProps.name} />
-      <Icon aria-hidden as={BxsCloudUpload} __css={styles.icon} />
+      <>
+        <VisuallyHidden>
+          {question} Click to upload file, maximum file size of{' '}
+          {readableMaxSize}
+        </VisuallyHidden>
+        <chakra.input {...inputProps} data-testid={inputProps.name} />
+        <Icon aria-hidden as={BxsCloudUpload} __css={styles.icon} />
 
-      {isDragActive ? (
-        <Text aria-hidden>Drop the file here...</Text>
-      ) : (
-        <Text aria-hidden>
-          <Link isDisabled={inputProps.disabled}>Choose file</Link> or drag and
-          drop here
-        </Text>
-      )}
+        {isDragActive ? (
+          <Text aria-hidden>
+            {t('features.adminFormBuilder.imageAttachment.dragActive')}
+          </Text>
+        ) : (
+          <Text aria-hidden>
+            <Link isDisabled={inputProps.disabled}>
+              {t('features.adminFormBuilder.imageAttachment.fileUploaderLink')}
+            </Link>
+            {t('features.adminFormBuilder.imageAttachment.dragAndDrop')}
+          </Text>
+        )}
+      </>
     </>
   )
 }

@@ -18,7 +18,7 @@ const RowDropdownButtonSkeleton = () => {
   return (
     <ButtonGroup isAttached variant="outline" colorScheme="secondary">
       <Button px="1.5rem" mr="-1px" isDisabled>
-        Edit
+        Ubah
       </Button>
       <IconButton isDisabled aria-label="Loading" icon={<BxsChevronDown />} />
     </ButtonGroup>

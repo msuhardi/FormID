@@ -143,10 +143,10 @@ export const SaveSecretKeyScreen = ({
               </Text>
             </Stack>
             <Text textStyle="body-1" color="secondary.500" mb="2.5rem">
-              Kode berikut dibutuhkan tiap kali Anda mengakses hasil tanggapan
-              formulir ini. Apabila hilang,{' '}
+              Kode berikut dibutuhkan tiap kali Anda mengakses respons formulir
+              ini. Apabila hilang,{' '}
               <Text color="danger.500" textStyle="subhead-1" as="span">
-                semua hasil tanggapan akan hilang
+                semua respons akan hilang
               </Text>
               . Anda juga bisa{' '}
               <Link variant="inline" href={mailToHref}>
@@ -199,13 +199,13 @@ export const SaveSecretKeyScreen = ({
           {hasDownloaded && (
             <Box mt="1rem">
               <Checkbox
-                aria-label="Syarat penyimpanan hasil tanggapan"
+                aria-label="Syarat penyimpanan respons"
                 {...register('storageAck', {
                   required: true,
                 })}
               >
-                Saya mengerti semua hasil tanggapan formulir akan hilang apabila
-                saya kehilangan kode ini.
+                Saya mengerti semua respons formulir akan hilang apabila saya
+                kehilangan kode ini.
               </Checkbox>
             </Box>
           )}

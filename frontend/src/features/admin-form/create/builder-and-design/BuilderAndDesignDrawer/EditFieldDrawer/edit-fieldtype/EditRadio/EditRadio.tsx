@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FormControl } from '@chakra-ui/react'
 import { extend, pick } from 'lodash'
 
@@ -7,11 +8,15 @@ import { RadioFieldBase } from '~shared/types/field'
 import { createBaseValidationRules } from '~utils/fieldValidation'
 import FormErrorMessage from '~components/FormControl/FormErrorMessage'
 import FormLabel from '~components/FormControl/FormLabel'
-import Input from '~components/Input'
 import Textarea from '~components/Textarea'
 import Toggle from '~components/Toggle'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
+import {
+  Description,
+  Question,
+  RequiredToggle,
+} from '../common/CommonFieldComponents'
 import {
   DUPLICATE_OTHERS_VALIDATION,
   SPLIT_TEXTAREA_TRANSFORM,
@@ -55,6 +60,7 @@ const transformRadioEditFormToField = (
 }
 
 export const EditRadio = ({ field }: EditRadioProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     register,
     formState: { errors },
@@ -90,30 +96,35 @@ export const EditRadio = ({ field }: EditRadioProps): JSX.Element => {
 
   return (
     <CreatePageDrawerContentContainer>
-      <FormControl isRequired isReadOnly={isLoading} isInvalid={!!errors.title}>
-        <FormLabel>Question</FormLabel>
-        <Input autoFocus {...register('title', requiredValidationRule)} />
-        <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading} isInvalid={!!errors.description}>
-        <FormLabel>Description</FormLabel>
-        <Textarea {...register('description')} />
-        <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-      </FormControl>
+      <Question
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+        requiredValidationRule={requiredValidationRule}
+      />
+      <Description
+        isLoading={isLoading}
+        isRequired={false}
+        errors={errors}
+        register={register}
+      />
+      <RequiredToggle isLoading={isLoading} register={register} />
       <FormControl isReadOnly={isLoading}>
-        <Toggle {...register('required')} label="Required" />
-      </FormControl>
-      <FormControl isReadOnly={isLoading}>
-        <Toggle {...register('othersRadioButton')} label="Others" />
+        <Toggle
+          {...register('othersRadioButton')}
+          label={t('features.adminFormBuilder.radio.others')}
+        />
       </FormControl>
       <FormControl
         isRequired
         isReadOnly={isLoading}
         isInvalid={!!errors.fieldOptionsString}
       >
-        <FormLabel>Options</FormLabel>
+        <FormLabel>
+          {t('features.adminFormBuilder.radio.options.title')}
+        </FormLabel>
         <Textarea
-          placeholder="Enter one option per line"
+          placeholder={t('features.adminFormBuilder.radio.options.placeholder')}
           {...register('fieldOptionsString', {
             validate: optionsValidation,
           })}

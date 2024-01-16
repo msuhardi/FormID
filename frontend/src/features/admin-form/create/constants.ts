@@ -5,7 +5,6 @@ import {
   BiBookContent,
   BiBookHeart,
   BiBriefcase,
-  BiBuilding,
   BiCalculator,
   BiCalendar,
   BiCalendarAlt,
@@ -60,133 +59,127 @@ export const BASICFIELD_TO_DRAWER_META: {
   [key in BasicField]: BuilderSidebarFieldMeta
 } = {
   [BasicField.Image]: {
-    label: 'Image',
+    label: 'features.adminFormBuilder.builder.image',
     icon: BiImage,
     isSubmitted: false,
   },
 
   [BasicField.Statement]: {
-    label: 'Paragraph',
+    label: 'features.adminFormBuilder.builder.statement',
     icon: BiText,
     isSubmitted: false,
   },
 
   [BasicField.Section]: {
-    label: 'Heading',
+    label: 'features.adminFormBuilder.builder.section',
     icon: BiHeading,
     isSubmitted: false,
   },
 
   [BasicField.Attachment]: {
-    label: 'Attachment',
+    label: 'features.adminFormBuilder.builder.attachment',
     icon: BiCloudUpload,
     isSubmitted: true,
   },
 
   [BasicField.Checkbox]: {
-    label: 'Checkbox',
+    label: 'features.adminFormBuilder.builder.checkbox',
     icon: BiSelectMultiple,
     isSubmitted: true,
   },
 
   [BasicField.Date]: {
-    label: 'Date',
+    label: 'features.adminFormBuilder.builder.date',
     icon: BiCalendarEvent,
     isSubmitted: true,
   },
 
   [BasicField.Decimal]: {
-    label: 'Decimal',
+    label: 'features.adminFormBuilder.builder.decimal',
     icon: BiCalculator,
     isSubmitted: true,
   },
 
   [BasicField.Dropdown]: {
-    label: 'Dropdown',
+    label: 'features.adminFormBuilder.builder.dropdown',
     icon: BiCaretDownSquare,
     isSubmitted: true,
   },
 
   [BasicField.CountryRegion]: {
-    label: 'Country/Region',
+    label: 'features.adminFormBuilder.builder.countryRegion',
     icon: BiFlag,
     isSubmitted: true,
   },
 
   [BasicField.Email]: {
-    label: 'Email',
+    label: 'features.adminFormBuilder.builder.email',
     icon: BiMailSend,
     isSubmitted: true,
   },
 
   [BasicField.HomeNo]: {
-    label: 'Home number',
+    label: 'features.adminFormBuilder.builder.homeNumber',
     icon: BiPhone,
     isSubmitted: true,
   },
 
   [BasicField.LongText]: {
-    label: 'Long answer',
+    label: 'features.adminFormBuilder.builder.longText',
     icon: BiAlignLeft,
     isSubmitted: true,
   },
 
   [BasicField.Mobile]: {
-    label: 'Mobile number',
+    label: 'features.adminFormBuilder.builder.mobileNumber',
     icon: BiMobile,
     isSubmitted: true,
   },
 
   [BasicField.Nric]: {
-    label: 'NRIC/FIN',
+    label: 'features.adminFormBuilder.builder.nric',
     icon: BiUser,
     isSubmitted: true,
   },
 
   [BasicField.Number]: {
-    label: 'Number',
+    label: 'features.adminFormBuilder.builder.number',
     icon: BiHash,
     isSubmitted: true,
   },
 
   [BasicField.Radio]: {
-    label: 'Radio',
+    label: 'features.adminFormBuilder.builder.radio',
     icon: BiRadioCircleMarked,
     isSubmitted: true,
   },
 
   [BasicField.Rating]: {
-    label: 'Rating',
+    label: 'features.adminFormBuilder.builder.rating',
     icon: BiStar,
     isSubmitted: true,
   },
 
   [BasicField.ShortText]: {
-    label: 'Short answer',
+    label: 'features.adminFormBuilder.builder.shortAnswer',
     icon: BiRename,
     isSubmitted: true,
   },
 
   [BasicField.Table]: {
-    label: 'Table',
+    label: 'features.adminFormBuilder.builder.table',
     icon: BiTable,
     isSubmitted: true,
   },
 
-  [BasicField.Uen]: {
-    label: 'UEN',
-    icon: BiBuilding,
-    isSubmitted: true,
-  },
-
   [BasicField.YesNo]: {
-    label: 'Yes/No',
+    label: 'features.adminFormBuilder.builder.yesNo',
     icon: BiToggleLeft,
     isSubmitted: true,
   },
 
   [BasicField.Children]: {
-    label: 'Children',
+    label: 'features.adminFormBuilder.builder.children',
     icon: BiGroup,
     isSubmitted: true,
   },

@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link as ReactLink, useParams } from 'react-router-dom'
 import { Flex, Icon, Skeleton, Text } from '@chakra-ui/react'
 
@@ -14,10 +15,13 @@ type TwilioCredentialsMessageProps = {
 }
 
 const TwilioCredentialsSuccess = (): JSX.Element => {
+  const { t } = useTranslation()
   return (
     <Flex alignItems="flex-start" mt="0.75rem" color="secondary.500">
       <Icon as={BxsCheckCircle} mr="0.5rem" color="success.500" />
-      <Text textStyle="caption-1">Twilio credentials added</Text>
+      <Text textStyle="caption-1">
+        {t('features.adminFormBuilder.mobileNo.twilioCredentials.success')}
+      </Text>
     </Flex>
   )
 }
@@ -26,6 +30,7 @@ export const TwilioCredentialsMessage = ({
   hasTwilioCredentials,
   freeSmsCount,
 }: TwilioCredentialsMessageProps): JSX.Element => {
+  const { t } = useTranslation()
   const { formId } = useParams()
   const hasExceededQuota = useMemo(() => {
     return freeSmsCount && freeSmsCount.freeSmsCounts >= freeSmsCount.quota
@@ -44,15 +49,17 @@ export const TwilioCredentialsMessage = ({
       <Icon as={BxsXCircle} mr="0.5rem" />
       <Skeleton isLoaded={!!freeSmsCount}>
         <Text textStyle="caption-1">
-          {hasExceededQuota
-            ? 'You have reached the free tier limit for SMS verification.'
-            : 'Twilio credentials not added.'}{' '}
+          {t(
+            `features.adminFormBuilder.mobileNo.twilioCredentials.${
+              hasExceededQuota ? 'exceedQuota' : 'noCredentials'
+            }`,
+          )}{' '}
           <Link
             as={ReactLink}
             to={`${ADMINFORM_ROUTE}/${formId}/${ADMINFORM_SETTINGS_SUBROUTE}`}
             textStyle="caption-1"
           >
-            Add credentials now
+            {t('features.adminFormBuilder.mobileNo.twilioCredentials.cta')}
           </Link>
         </Text>
       </Skeleton>

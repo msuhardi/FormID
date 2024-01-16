@@ -70,9 +70,7 @@ export const CreateFormDetailsScreen = (): JSX.Element => {
             ) : null}
           </FormControl>
           <FormControl isRequired isInvalid={!!errors.responseMode} mb="2.5rem">
-            <FormLabel>
-              Bagaimana Anda mau menerima hasil tanggapan formulir?
-            </FormLabel>
+            <FormLabel>Bagaimana Anda mau menerima respons formulir?</FormLabel>
             <Skeleton isLoaded={!isFetching}>
               <Controller
                 name="responseMode"

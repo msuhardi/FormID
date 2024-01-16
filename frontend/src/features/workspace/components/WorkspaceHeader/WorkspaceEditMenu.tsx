@@ -81,8 +81,8 @@ const WorkspaceEditDropdown = ({
             ml="0.25rem"
           />
           <Menu.List>
-            <Menu.Item onClick={renameModal.onOpen}>Rename folder</Menu.Item>
-            <Menu.Item onClick={deleteModal.onOpen}>Delete folder</Menu.Item>
+            <Menu.Item onClick={renameModal.onOpen}>Ubah nama folder</Menu.Item>
+            <Menu.Item onClick={deleteModal.onOpen}>Hapus folder</Menu.Item>
           </Menu.List>
         </>
       )}
@@ -129,10 +129,10 @@ const WorkspaceEditDrawer = ({
               colorScheme="secondary"
             >
               <Button onClick={renameModal.onOpen} {...buttonProps}>
-                Rename folder
+                Ubah nama folder
               </Button>
               <Button onClick={deleteModal.onOpen} {...buttonProps}>
-                Delete folder
+                Hapus folder
               </Button>
             </ButtonGroup>
           </DrawerBody>

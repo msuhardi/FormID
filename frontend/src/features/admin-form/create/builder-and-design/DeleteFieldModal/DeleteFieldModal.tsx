@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   ButtonGroup,
   Icon,
@@ -12,6 +13,8 @@ import {
   Text,
   UnorderedList,
 } from '@chakra-ui/react'
+
+import { BasicField } from '~shared/types'
 
 import Button from '~components/Button'
 import { ModalCloseButton } from '~components/Modal'
@@ -27,6 +30,7 @@ import {
 } from '../useFieldBuilderStore'
 
 export const DeleteFieldModal = (): JSX.Element => {
+  const { t } = useTranslation()
   const stateData = useFieldBuilderStore(stateDataSelector)
   const {
     deleteFieldModalDisclosure: { onClose },
@@ -39,7 +43,8 @@ export const DeleteFieldModal = (): JSX.Element => {
     const fieldTitle = stateData.field.title
     return {
       fieldIsInLogic: logicedFieldIdsSet?.has(stateData.field._id),
-      fieldIcon: BASICFIELD_TO_DRAWER_META[stateData.field.fieldType].icon,
+      fieldIcon:
+        BASICFIELD_TO_DRAWER_META[stateData.field.fieldType as BasicField].icon,
       fieldLabel: questionNumber
         ? `${questionNumber}. ${fieldTitle}`
         : fieldTitle,
@@ -61,15 +66,14 @@ export const DeleteFieldModal = (): JSX.Element => {
       <ModalOverlay />
       <ModalContent>
         <ModalCloseButton />
-        <ModalHeader>Delete field</ModalHeader>
+        <ModalHeader>{t('features.modal.deleteField.title')}</ModalHeader>
         <ModalBody>
           <Text color="secondary.500">
-            {fieldIsInLogic
-              ? `This field is used in your form logic, so deleting it may cause
-                your logic to stop working correctly. Are you sure you want to 
-                delete this field?`
-              : `Are you sure you want to delete this field? This action
-                cannot be undone.`}
+            {t(
+              `features.modal.deleteField.${
+                fieldIsInLogic ? 'logicDescription' : 'description'
+              }`,
+            )}
           </Text>
           <UnorderedList
             spacing="0.5rem"
@@ -96,14 +100,14 @@ export const DeleteFieldModal = (): JSX.Element => {
         <ModalFooter>
           <ButtonGroup>
             <Button variant="clear" colorScheme="secondary" onClick={onClose}>
-              Cancel
+              {t('features.common.cancel')}
             </Button>
             <Button
               colorScheme="danger"
               onClick={handleDeleteConfirmation}
               isLoading={deleteFieldMutation.isLoading}
             >
-              Yes, delete field
+              {t('features.modal.deleteField.confirmButton')}
             </Button>
           </ButtonGroup>
         </ModalFooter>

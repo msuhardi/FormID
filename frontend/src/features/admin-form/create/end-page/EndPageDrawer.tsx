@@ -6,6 +6,7 @@ import {
   useForm,
   useWatch,
 } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useDebounce } from 'react-use'
 import { Box, Divider, Flex, FormControl, Stack, Text } from '@chakra-ui/react'
 import { cloneDeep } from 'lodash'
@@ -61,6 +62,7 @@ export const EndPageInput = ({
 }): JSX.Element => {
   const isMobile = useIsMobile()
   const { endPageMutation } = useMutateFormPage()
+  const { t } = useTranslation()
 
   const setIsDirty = useDirtyFieldStore(setIsDirtySelector)
 
@@ -77,13 +79,6 @@ export const EndPageInput = ({
 
   const { handleClose } = useCreatePageSidebar()
 
-  const paymentDefaults = {
-    title: 'Your payment has been made successfully.',
-    paragraph: 'Your form has been submitted and payment has been made.',
-    buttonLink: 'Default proof of payment link',
-    buttonText: 'Save proof of payment',
-  }
-
   const {
     register,
     formState: { errors, dirtyFields },
@@ -91,7 +86,7 @@ export const EndPageInput = ({
     handleSubmit,
   } = useForm<FormEndPage>({
     mode: 'onBlur',
-    defaultValues: isPayment ? paymentDefaults : endPageData,
+    defaultValues: endPageData,
   })
 
   // Update dirty state of builder so confirmation modal can be shown
@@ -142,7 +137,7 @@ export const EndPageInput = ({
           isInvalid={!!errors.title}
           isDisabled={isPayment}
         >
-          <FormLabel isRequired>Title</FormLabel>
+          <FormLabel isRequired>{t('features.common.title')}</FormLabel>
           <Input
             autoFocus
             {...register('title', { required: REQUIRED_ERROR })}
@@ -154,7 +149,9 @@ export const EndPageInput = ({
           isInvalid={!!errors.paragraph}
           isDisabled={isPayment}
         >
-          <FormLabel isRequired>Follow-up instructions</FormLabel>
+          <FormLabel isRequired>
+            {t('features.adminFormBuilder.thankYouPage.followUpInstruction')}
+          </FormLabel>
           <Textarea {...register('paragraph')} />
           <FormErrorMessage>{errors.paragraph?.message}</FormErrorMessage>
         </FormControl>
@@ -164,9 +161,13 @@ export const EndPageInput = ({
             isInvalid={!!errors.buttonText}
             isDisabled={isPayment}
           >
-            <FormLabel isRequired>Button text</FormLabel>
+            <FormLabel isRequired>
+              {t('features.adminFormBuilder.thankYouPage.buttonText')}
+            </FormLabel>
             <Input
-              placeholder="Submit another response"
+              placeholder={t(
+                'features.adminFormBuilder.thankYouPage.defaultButtonText',
+              )}
               {...register('buttonText')}
             />
             <FormErrorMessage>{errors.buttonText?.message}</FormErrorMessage>
@@ -176,9 +177,13 @@ export const EndPageInput = ({
             isInvalid={!!errors.buttonLink}
             isDisabled={isPayment}
           >
-            <FormLabel isRequired>Button redirect link</FormLabel>
+            <FormLabel isRequired>
+              {t('features.adminFormBuilder.thankYouPage.redirectLink')}
+            </FormLabel>
             <Input
-              placeholder="Default form link"
+              placeholder={t(
+                'features.adminFormBuilder.thankYouPage.defaultRedirectLink',
+              )}
               {...register('buttonLink', buttonLinkRules)}
             />
             <FormErrorMessage>{errors.buttonLink?.message}</FormErrorMessage>
@@ -196,7 +201,7 @@ export const EndPageInput = ({
           onClick={handleUpdateEndPage}
           isLoading={endPageMutation.isLoading}
         >
-          Save page
+          {t('features.common.save')}
         </Button>
         <Button
           isFullWidth={isMobile}
@@ -205,7 +210,7 @@ export const EndPageInput = ({
           isDisabled={endPageMutation.isLoading}
           onClick={() => handleCloseDrawer()}
         >
-          Cancel
+          {t('features.common.cancel')}
         </Button>
       </Stack>
     </CreatePageDrawerContentContainer>
@@ -224,6 +229,7 @@ export const EndPageDrawer = (): JSX.Element | null => {
       [],
     ),
   )
+  const { t } = useTranslation()
 
   const isPaymentEnabled =
     form?.responseMode === FormResponseMode.Encrypt &&
@@ -243,7 +249,7 @@ export const EndPageDrawer = (): JSX.Element | null => {
           <Box pt="1rem" px="1.5rem" bg="white">
             <Flex justify="space-between">
               <Text textStyle="subhead-3" color="secondary.500" mb="1rem">
-                Edit thank you page
+                {t('features.adminFormBuilder.thankYouPage.title')}
               </Text>
               <CreatePageDrawerCloseButton />
             </Flex>

@@ -6,20 +6,15 @@ import { Box, chakra, Flex, GridItem, GridProps, Text } from '@chakra-ui/react'
 import { AppFooter } from '~/app/AppFooter'
 
 import { ReactComponent as BrandLogoSvg } from '~assets/svgs/brand/brand-hort-colour.svg'
-import { LANDING_PAYMENTS_ROUTE, LANDING_ROUTE } from '~constants/routes'
+import { LANDING_ROUTE } from '~constants/routes'
 import { getBannerProps } from '~utils/getBannerProps'
 import { Banner } from '~components/Banner'
-import { FeatureBanner } from '~components/FeatureBanner/FeatureBanner'
 import Link from '~components/Link'
 import { AppGrid } from '~templates/AppGrid'
 
 import { useEnv } from '~features/env/queries'
 
 import { LoginImageSvgr } from './components/LoginImageSvgr'
-
-export type LoginOtpData = {
-  email: string
-}
 
 export const BrandLogo = chakra(BrandLogoSvg, {
   baseStyle: {

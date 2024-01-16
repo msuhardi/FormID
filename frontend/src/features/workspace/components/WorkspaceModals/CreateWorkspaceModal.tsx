@@ -61,10 +61,10 @@ export const CreateWorkspaceModal = ({
     <Modal isOpen={isOpen} onClose={onClose} size={modalSize}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create folder</ModalHeader>
+        <ModalHeader>Buat folder</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text textStyle="subhead-1">Folder name</Text>
+          <Text textStyle="subhead-1">Nama name</Text>
           <FormControl isRequired isInvalid={!!errors.title}>
             <Input
               mt="0.75rem"
@@ -93,7 +93,7 @@ export const CreateWorkspaceModal = ({
               Cancel
             </Button>
             <Button onClick={handleCreateWorkspace} isFullWidth={isMobile}>
-              Create folder
+              Buat folder
             </Button>
           </Stack>
         </ModalFooter>

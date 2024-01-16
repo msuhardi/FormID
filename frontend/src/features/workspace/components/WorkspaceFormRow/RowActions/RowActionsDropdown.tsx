@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   BiChevronLeft,
   BiChevronRight,
@@ -41,6 +42,7 @@ const MoveWorkspaceDropdown = ({
   setIsMoveWorkspace: Dispatch<SetStateAction<boolean>>
   formMeta: AdminDashboardFormMetaDto
 }) => {
+  const { t } = useTranslation()
   const { handleMoveForm, handleRemoveFormFromWorkspaces } =
     useRowAction(formMeta)
   const { workspaces, getFormWorkspace } = useWorkspaceContext()
@@ -70,7 +72,7 @@ const MoveWorkspaceDropdown = ({
         onClick={() => setIsMoveWorkspace(false)}
         icon={<BiChevronLeft fontSize="1.25rem" />}
       >
-        Back
+        {t('features.common.back')}
       </Menu.Item>
       <Menu.Divider aria-hidden borderColor="neutral.300"></Menu.Divider>
       {workspaces.map((workspace) => (
@@ -100,6 +102,7 @@ export const RowActionsDropdown = ({
   isDisabled,
   formMeta,
 }: RowActionsProps): JSX.Element => {
+  const { t } = useTranslation()
   const [isMoveWorkspace, setIsMoveWorkspace] = useState(false)
   const {
     adminFormLink,
@@ -114,6 +117,8 @@ export const RowActionsDropdown = ({
   const handleMoveWorkspace = () => {
     setIsMoveWorkspace(true)
   }
+
+  const translate = (key: string) => t(`features.common.actionsDropdown.${key}`)
 
   return (
     <Menu
@@ -137,7 +142,7 @@ export const RowActionsDropdown = ({
               mr="-1px"
               borderEndRadius={0}
             >
-              Edit
+              {t('features.common.edit')}
             </Button>
             <MenuButton
               as={IconButton}
@@ -145,7 +150,7 @@ export const RowActionsDropdown = ({
               isDisabled={isDisabled}
               _active={{ bg: 'secondary.100' }}
               isActive={isOpen}
-              aria-label="More actions"
+              aria-label={translate('ariaLabel')}
               icon={isOpen ? <BxsChevronUp /> : <BxsChevronDown />}
             />
           </ButtonGroup>
@@ -162,32 +167,32 @@ export const RowActionsDropdown = ({
                 target="_blank"
                 icon={<BiShow fontSize="1.25rem" />}
               >
-                Preview
+                {translate('preview')}
               </Menu.Item>
               <Menu.Item
                 onClick={handleDuplicateForm}
                 icon={<BiDuplicate fontSize="1.25rem" />}
               >
-                Duplicate
+                {translate('duplicate')}
               </Menu.Item>
               <Menu.Item
                 onClick={handleShareForm}
                 icon={<BiShareAlt fontSize="1.25rem" />}
               >
-                Share form
+                {translate('share')}
               </Menu.Item>
               <Menu.Item
                 onClick={handleCollaborators}
                 icon={<BiUserPlus fontSize="1.25rem" />}
               >
-                Manage form admins
+                {translate('manageAdmins')}
               </Menu.Item>
               <Menu.Item
                 closeOnSelect={false}
                 onClick={handleMoveWorkspace}
                 icon={<BiFolder fontSize="1.25rem" />}
               >
-                Move to Folder
+                {translate('moveToFolder')}
                 <Icon
                   ml="2.5rem"
                   as={BiChevronRight}
@@ -203,7 +208,7 @@ export const RowActionsDropdown = ({
                     color="danger.500"
                     icon={<BiTrash fontSize="1.25rem" />}
                   >
-                    Delete
+                    {t('features.common.delete')}
                   </Menu.Item>
                 </>
               )}

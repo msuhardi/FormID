@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { Droppable } from 'react-beautiful-dnd'
+import { useTranslation } from 'react-i18next'
 import { Box, Flex, FlexProps, Skeleton, Stack } from '@chakra-ui/react'
 
 import Button from '~components/Button'
@@ -44,6 +45,7 @@ export const FormBuilder = ({
   placeholderProps,
   ...props
 }: FormBuilderProps): JSX.Element => {
+  const { t } = useTranslation()
   const { builderFields, isLoading } = useBuilderFields()
   const { formLogics } = useAdminFormLogic()
   const { handleBuilderClick, handleEndpageClick } = useCreatePageSidebar()
@@ -180,7 +182,7 @@ export const FormBuilder = ({
               onClick={handleEditEndPageClick}
               textStyle="subhead-2"
             >
-              Ubah halaman Terima Kasih
+              {t('features.adminFormBuilder.thankYouPage.title')}
             </Button>
           </Skeleton>
         </Flex>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { Controller, RegisterOptions } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { FormControl, SimpleGrid } from '@chakra-ui/react'
 import { extend, isEmpty, pick } from 'lodash'
 
@@ -13,14 +14,16 @@ import { createBaseValidationRules } from '~utils/fieldValidation'
 import { SingleSelect } from '~components/Dropdown'
 import FormErrorMessage from '~components/FormControl/FormErrorMessage'
 import FormLabel from '~components/FormControl/FormLabel'
-import Input from '~components/Input'
 import NumberInput from '~components/NumberInput'
-import Textarea from '~components/Textarea'
-import Toggle from '~components/Toggle'
 
 import { validateNumberInput } from '~features/admin-form/create/builder-and-design/utils/validateNumberInput'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
+import {
+  Description,
+  Question,
+  RequiredToggle,
+} from '../common/CommonFieldComponents'
 import { FormFieldDrawerActions } from '../common/FormFieldDrawerActions'
 import { EditFieldProps } from '../common/types'
 import { useEditFieldForm } from '../common/useEditFieldForm'
@@ -140,6 +143,7 @@ const transformNumberEditFormToField = (
 }
 
 export const EditNumber = ({ field }: EditNumberProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     register,
     formState: { errors },
@@ -180,10 +184,10 @@ export const EditNumber = ({ field }: EditNumberProps): JSX.Element => {
     () => ({
       required: {
         value: true,
-        message: 'Please select a validation type',
+        message: t('features.adminFormBuilder.number.error.validationType'),
       },
     }),
-    [],
+    [t],
   )
 
   const customValLengthValidationOptions: RegisterOptions<
@@ -200,20 +204,20 @@ export const EditNumber = ({ field }: EditNumberProps): JSX.Element => {
           return (
             selectedLengthValidation === '' ||
             customVal !== '' ||
-            'Please enter number of characters'
+            t('features.adminFormBuilder.number.error.numOfCharacter')
           )
         },
       },
       min: {
         value: 1,
-        message: 'Cannot be less than 1',
+        message: t('features.adminFormBuilder.number.error.min'),
       },
       max: {
         value: 10000,
-        message: 'Cannot be more than 10000',
+        message: t('features.adminFormBuilder.number.error.max'),
       },
     }),
-    [getValues],
+    [getValues, t],
   )
 
   // We use the customMin field to perform cross-field validation for
@@ -230,7 +234,9 @@ export const EditNumber = ({ field }: EditNumberProps): JSX.Element => {
             'ValidationOptions.RangeValidationOptions.customMax',
           )
           return (
-            customMax !== '' || customMin !== '' || 'Please enter range values'
+            customMax !== '' ||
+            customMin !== '' ||
+            t('features.adminFormBuilder.number.error.rangeValue')
           )
         },
         hasValidRange: (customMin) => {
@@ -242,16 +248,16 @@ export const EditNumber = ({ field }: EditNumberProps): JSX.Element => {
             customMax === '' ||
             customMin === '' ||
             customMin < customMax ||
-            'Minimum must be less than maximum'
+            t('features.adminFormBuilder.number.maxValueGreaterThanMin')
           )
         },
       },
       min: {
         value: 1,
-        message: 'Minimum cannot be 0',
+        message: t('features.adminFormBuilder.number.error.minRangeValue'),
       },
     }),
-    [getValues],
+    [getValues, t],
   )
 
   const customMaxRangeValidationOptions: RegisterOptions<
@@ -261,10 +267,10 @@ export const EditNumber = ({ field }: EditNumberProps): JSX.Element => {
     () => ({
       min: {
         value: 1,
-        message: 'Maximum cannot be 0',
+        message: t('features.adminFormBuilder.number.error.maxRangeValue'),
       },
     }),
-    [],
+    [t],
   )
 
   useEffect(() => {
@@ -284,36 +290,35 @@ export const EditNumber = ({ field }: EditNumberProps): JSX.Element => {
 
   return (
     <CreatePageDrawerContentContainer>
-      <FormControl isRequired isReadOnly={isLoading} isInvalid={!!errors.title}>
-        <FormLabel>Question</FormLabel>
-        <Input autoFocus {...register('title', requiredValidationRule)} />
-        <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl
-        isRequired
-        isReadOnly={isLoading}
-        isInvalid={!!errors.description}
-      >
-        <FormLabel>Description</FormLabel>
-        <Textarea {...register('description')} />
-        <FormErrorMessage>{errors?.description?.message}</FormErrorMessage>
-      </FormControl>
-      <FormControl isReadOnly={isLoading}>
-        <Toggle {...register('required')} label="Required" />
-      </FormControl>
+      <Question
+        isLoading={isLoading}
+        errors={errors}
+        register={register}
+        requiredValidationRule={requiredValidationRule}
+      />
+      <Description isLoading={isLoading} errors={errors} register={register} />
+      <RequiredToggle isLoading={isLoading} register={register} />
       <FormControl
         isReadOnly={isLoading}
         isInvalid={!isEmpty(errors.ValidationOptions)}
       >
         <FormLabel id={'ValidationOptions.selectedValidation-label'} isRequired>
-          Field restriction
+          {t('features.adminFormBuilder.number.fieldRestriction.title')}
         </FormLabel>
         <Controller
           name="ValidationOptions.selectedValidation"
           control={control}
           render={({ field }) => (
             <SingleSelect
-              items={Object.values(NumberSelectedValidationInputs)}
+              items={Object.keys(NumberSelectedValidationInputs).map((key) => ({
+                label: t(
+                  `features.adminFormBuilder.number.fieldRestriction.${key}`,
+                ),
+                value:
+                  NumberSelectedValidationInputs[
+                    key as keyof typeof NumberSelectedValidationInputs
+                  ],
+              }))}
               {...field}
             />
           )}
@@ -332,8 +337,18 @@ export const EditNumber = ({ field }: EditNumberProps): JSX.Element => {
                 rules={selectedLengthValidationOptions}
                 render={({ field }) => (
                   <SingleSelect
-                    items={Object.values(NumberSelectedLengthValidation)}
-                    placeholder={'Length restriction'}
+                    items={Object.keys(NumberSelectedLengthValidation).map(
+                      (key) => ({
+                        label: t(`features.common.${key.toLowerCase()}`),
+                        value:
+                          NumberSelectedLengthValidation[
+                            key as keyof typeof NumberSelectedLengthValidation
+                          ],
+                      }),
+                    )}
+                    placeholder={t(
+                      'features.adminFormBuilder.number.fieldRestriction.lengthRestriction',
+                    )}
                     isClearable={false}
                     {...field}
                   />
@@ -348,7 +363,9 @@ export const EditNumber = ({ field }: EditNumberProps): JSX.Element => {
                     flex={1}
                     inputMode="numeric"
                     showSteppers={false}
-                    placeholder="Number of characters"
+                    placeholder={t(
+                      'features.adminFormBuilder.commonFieldComponents.charactersAllowedPlaceholder',
+                    )}
                     isDisabled={!watchedSelectedLengthValidation}
                     onChange={validateNumberInput(onChange)}
                     {...rest}
@@ -379,7 +396,7 @@ export const EditNumber = ({ field }: EditNumberProps): JSX.Element => {
                   <NumberInput
                     inputMode="numeric"
                     showSteppers={false}
-                    placeholder="Minimum value"
+                    placeholder={t('features.adminFormBuilder.number.minValue')}
                     onChange={validateNumberInput(onChange)}
                     {...rest}
                   />
@@ -393,7 +410,7 @@ export const EditNumber = ({ field }: EditNumberProps): JSX.Element => {
                   <NumberInput
                     inputMode="numeric"
                     showSteppers={false}
-                    placeholder="Maximum value"
+                    placeholder={t('features.adminFormBuilder.number.maxValue')}
                     onChange={validateNumberInput(onChange)}
                     {...rest}
                   />

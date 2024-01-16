@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import {
   Button,
   Modal,
@@ -36,12 +37,13 @@ export const UnsavedChangesModal = ({
   isOpen,
   onClose,
   returnFocusOnClose = false,
-  title = 'You have unsaved changes',
-  description = 'Are you sure you want to leave? Your changes will be lost.',
-  confirmButtonText = 'Yes, discard changes',
-  cancelButtonText = 'No, stay on page',
+  title,
+  description,
+  confirmButtonText,
+  cancelButtonText,
   ...modalProps
 }: UnsavedChangesModalProps): JSX.Element => {
+  const { t } = useTranslation()
   const modalSize = useBreakpointValue({
     base: 'mobile',
     xs: 'mobile',
@@ -61,10 +63,10 @@ export const UnsavedChangesModal = ({
       <ModalContent>
         <ModalCloseButton />
         <ModalHeader color="secondary.700" pr="4rem">
-          {title}
+          {title ?? t('features.modal.unsavedChanges.title')}
         </ModalHeader>
         <ModalBody color="secondary.500" textStyle="body-2">
-          {description}
+          {description ?? t('features.modal.unsavedChanges.description')}
         </ModalBody>
         <ModalFooter>
           <Stack
@@ -78,7 +80,8 @@ export const UnsavedChangesModal = ({
               onClick={onConfirm}
               autoFocus
             >
-              {confirmButtonText}
+              {confirmButtonText ??
+                t('features.modal.unsavedChanges.confirmButton')}
             </Button>
             <Button
               colorScheme="secondary"
@@ -86,7 +89,8 @@ export const UnsavedChangesModal = ({
               isFullWidth={isMobile}
               onClick={onCancel}
             >
-              {cancelButtonText}
+              {cancelButtonText ??
+                t('features.modal.unsavedChanges.cancelButton')}
             </Button>
           </Stack>
         </ModalFooter>

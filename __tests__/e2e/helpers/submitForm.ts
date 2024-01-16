@@ -211,7 +211,6 @@ const fillFields = async (
       case BasicField.ShortText:
       case BasicField.LongText:
       case BasicField.Nric:
-      case BasicField.Uen:
       case BasicField.Number:
       case BasicField.Decimal:
       case BasicField.HomeNo:

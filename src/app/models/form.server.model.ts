@@ -427,13 +427,13 @@ const compileFormModel = (db: Mongoose): IFormModel => {
       endPage: {
         title: {
           type: String,
-          default: 'Thank you for filling out the form.',
+          default: 'Terima kasih telah mengisi formulir ini.',
         },
         paragraph: String,
         buttonLink: String,
         buttonText: {
           type: String,
-          default: 'Submit another response',
+          default: 'Isi formulir lagi',
         },
       },
 

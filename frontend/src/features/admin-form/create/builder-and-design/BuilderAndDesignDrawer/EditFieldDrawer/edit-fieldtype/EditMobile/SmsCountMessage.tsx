@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiMessage } from 'react-icons/bi'
 import { Flex, Icon, Skeleton, Text } from '@chakra-ui/react'
 
@@ -15,6 +16,7 @@ export const SmsCountMessage = ({
   hasTwilioCredentials,
   freeSmsCount,
 }: SmsCountMessageProps): JSX.Element => {
+  const { t } = useTranslation()
   const textColor = useMemo(() => {
     if (hasTwilioCredentials) return 'secondary.500'
     return freeSmsCount && freeSmsCount.freeSmsCounts >= freeSmsCount.quota
@@ -30,7 +32,7 @@ export const SmsCountMessage = ({
           textDecorationLine={hasTwilioCredentials ? 'line-through' : undefined}
           textStyle="caption-1"
         >
-          {formatSmsCounts(freeSmsCount)}
+          {formatSmsCounts(freeSmsCount, t)}
         </Text>
       </Skeleton>
     </Flex>
