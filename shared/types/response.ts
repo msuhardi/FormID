@@ -127,11 +127,6 @@ export const TableResponse = ResponseBase.extend({
 })
 export type TableResponse = z.infer<typeof TableResponse>
 
-export const UenResponse = SingleAnswerResponse.extend({
-  fieldType: z.literal(BasicField.Uen),
-})
-export type UenResponse = z.infer<typeof UenResponse>
-
 export const ChildBirthRecordsResponse = ResponseBase.merge(
   MyInfoResponseBase,
 ).extend({
@@ -173,6 +168,5 @@ export type FieldResponse =
   | RatingResponse
   | NricResponse
   | TableResponse
-  | UenResponse
   | ChildBirthRecordsResponse
   | SingleChildSubRecordResponse

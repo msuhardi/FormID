@@ -191,10 +191,10 @@ describe('Email field validation', () => {
       isVisible: true,
       answer: 'volunteer-testing@TeSt.GoV.Sg', // mixed case domain
       signature: 'some signature',
-    } as ISingleAnswerResponse
+    } as SingleAnswerFieldResponse
     const validateResult = validateField(
       'formId',
-      formField as unknown as IFieldSchema,
+      formField,
       response as ProcessedFieldResponse,
     )
     expect(validateResult.isOk()).toBe(true)

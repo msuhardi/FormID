@@ -24,7 +24,6 @@ import {
   SectionField,
   ShortTextField,
   TableField,
-  UenField,
   YesNoField,
 } from '~templates/Field'
 
@@ -75,8 +74,6 @@ export const FieldFactory = memo(
         return <CountryRegionField schema={field} {...rest} />
       case BasicField.Date:
         return <DateField schema={field} {...rest} />
-      case BasicField.Uen:
-        return <UenField schema={field} {...rest} />
       case BasicField.Attachment:
         return <AttachmentField schema={field} {...rest} />
       case BasicField.HomeNo:

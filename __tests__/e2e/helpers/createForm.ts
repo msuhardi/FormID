@@ -49,7 +49,7 @@ type CreateFormReturn = {
 /**
  * Navigates to the dashboard and creates a new form with all the associated form settings.
  * @param {Page} page Playwright page
- * @param {IFormMode} Form the Form database model
+ * @param {IFormModel} Form the Form database model
  * @param {FormResponseMode} responseMode the type of form to be created - Email or Encrypt
  * @param {E2eForm} e2eForm the form details to be created
  * @returns {CreateFormReturn} the created form as found in the db along with the secret key, if it is a storage form
@@ -315,14 +315,6 @@ const addAuthSettings = async (
   await expectToast(page, /form authentication successfully updated/i)
 
   switch (formSettings.authType) {
-    case FormAuthType.SP:
-    case FormAuthType.CP:
-    case FormAuthType.MyInfo:
-      if (!formSettings.esrvcId) throw new Error('No esrvcid provided!')
-      await page.locator(`id=esrvcId`).fill(formSettings.esrvcId)
-      await page.keyboard.press('Enter')
-      await expectToast(page, /e-service id successfully updated/i)
-      break
     default:
       break
   }

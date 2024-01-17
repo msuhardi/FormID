@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { Box, Flex, Skeleton, Spacer, Text } from '@chakra-ui/react'
+import { Box, Flex, Skeleton, Text } from '@chakra-ui/react'
 
 import { FormAuthType, FormSettings, FormStatus } from '~shared/types/form'
 
@@ -14,10 +14,6 @@ import { GUIDE_SPCP_ESRVCID } from '~constants/links'
 import InlineMessage from '~components/InlineMessage'
 import Link from '~components/Link'
 import Radio from '~components/Radio'
-import { Tag } from '~components/Tag'
-
-import { useAdminForm } from '~features/admin-form/common/queries'
-import { isMyInfo } from '~features/myinfo/utils'
 
 import { useMutateFormSettings } from '../../mutations'
 
@@ -26,10 +22,6 @@ import { EsrvcIdBox } from './EsrvcIdBox'
 
 const esrvcidRequired = (authType: FormAuthType) => {
   switch (authType) {
-    case FormAuthType.SP:
-    case FormAuthType.MyInfo:
-    case FormAuthType.CP:
-      return true
     default:
       return false
   }
@@ -55,12 +47,6 @@ export const AuthSettingsSection = ({
   settings,
 }: AuthSettingsSectionProps): JSX.Element => {
   const { mutateFormAuthType } = useMutateFormSettings()
-  const { data: form } = useAdminForm()
-
-  const containsMyInfoFields = useMemo(
-    () => form?.form_fields.some(isMyInfo) ?? false,
-    [form?.form_fields],
-  )
 
   const [focusedValue, setFocusedValue] = useState<FormAuthType>()
 
@@ -70,9 +56,8 @@ export const AuthSettingsSection = ({
   )
 
   const isDisabled = useCallback(
-    (authType: FormAuthType) =>
-      isFormPublic || containsMyInfoFields || mutateFormAuthType.isLoading,
-    [isFormPublic, containsMyInfoFields, mutateFormAuthType.isLoading],
+    () => isFormPublic || mutateFormAuthType.isLoading,
+    [isFormPublic, mutateFormAuthType.isLoading],
   )
 
   const isEsrvcIdBoxDisabled = useMemo(
@@ -85,7 +70,7 @@ export const AuthSettingsSection = ({
       if (
         (e.key === 'Enter' || e.key === ' ') &&
         focusedValue &&
-        !isDisabled(focusedValue) &&
+        !isDisabled() &&
         focusedValue !== settings.authType
       ) {
         return mutateFormAuthType.mutate(focusedValue)
@@ -98,7 +83,7 @@ export const AuthSettingsSection = ({
     (authType: FormAuthType): MouseEventHandler =>
       (e) => {
         if (
-          !isDisabled(authType) &&
+          !isDisabled() &&
           e.type === 'click' &&
           // Required so only real clicks get registered.
           // Typical radio behaviour is that the 'click' event is triggered on change.
@@ -141,11 +126,6 @@ export const AuthSettingsSection = ({
         <InlineMessage marginBottom="16px">
           To change authentication method, close your form to new responses.
         </InlineMessage>
-      ) : containsMyInfoFields ? (
-        <InlineMessage marginBottom="16px">
-          To change authentication method, remove existing Myinfo fields on your
-          form. You can still update your e-service ID.
-        </InlineMessage>
       ) : null}
       <Radio.RadioGroup
         value={settings.authType}
@@ -155,19 +135,8 @@ export const AuthSettingsSection = ({
         {radioOptions.map(([authType, text]) => (
           <Fragment key={authType}>
             <Box onClick={handleOptionClick(authType)}>
-              <Radio value={authType} isDisabled={isDisabled(authType)}>
-                <Flex>
-                  {text}
-                  {authType === FormAuthType.SGID ||
-                  authType === FormAuthType.SGID_MyInfo ? (
-                    <>
-                      <Spacer w="16px" />
-                      <Tag size="sm" variant="subtle">
-                        Free
-                      </Tag>
-                    </>
-                  ) : null}
-                </Flex>
+              <Radio value={authType} isDisabled={isDisabled()}>
+                <Flex>{text}</Flex>
               </Radio>
             </Box>
             {esrvcidRequired(authType) && authType === settings.authType ? (

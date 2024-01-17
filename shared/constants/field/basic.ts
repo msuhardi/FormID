@@ -1,4 +1,4 @@
-import { BasicField } from '../../types/field'
+import { BasicField } from '../../types'
 
 type BasicFieldBlock = {
   /** Type of field */
@@ -123,12 +123,6 @@ export const types: BasicFieldBlock[] = [
   {
     name: BasicField.Nric,
     value: 'NRIC',
-    submitted: true,
-    answerArray: false,
-  },
-  {
-    name: BasicField.Uen,
-    value: 'UEN',
     submitted: true,
     answerArray: false,
   },

@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Box,
   ButtonProps,
@@ -8,6 +9,7 @@ import {
   Icon,
   Text,
 } from '@chakra-ui/react'
+import parse from 'html-react-parser'
 
 import { BxsWidget } from '~assets/icons/BxsWidget'
 import { useIsMobile } from '~hooks/useIsMobile'
@@ -21,16 +23,21 @@ export const EmptyFormPlaceholder = forwardRef<
   EmptyFormPlaceholderProps,
   'button'
 >(({ isDraggingOver, onClick, ...props }, ref): JSX.Element => {
+  const { t } = useTranslation()
   const isMobile = useIsMobile()
 
   const placeholderText = useMemo(() => {
     if (isDraggingOver) {
       return 'Drop your field here'
     }
-    return isMobile
-      ? 'Klik di sini untuk tambah pertanyaan'
-      : 'Drag a field from the Builder on the left to start'
-  }, [isDraggingOver, isMobile])
+    return parse(
+      t(
+        `features.form.emptyForm.placeholder.${
+          isMobile ? 'mobile' : 'desktop'
+        }`,
+      ),
+    )
+  }, [isDraggingOver, isMobile, t])
 
   return (
     <Box h="13.75rem" m={{ base: 0, lg: '1.625rem' }}>

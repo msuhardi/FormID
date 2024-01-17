@@ -17,7 +17,6 @@ import {
   processFetchResponse,
 } from '~services/ApiService'
 
-import { augmentWithMyInfoDisplayValue } from '~features/myinfo/utils'
 import {
   SubmitEmailFormArgs,
   SubmitStorageFormArgs,
@@ -65,11 +64,6 @@ export const previewForm = async (
         data.spcpSession = { userName: PREVIEW_MOCK_UINFIN }
       }
 
-      // Inject MyInfo preview values into form fields (if they are MyInfo fields).
-      data.form.form_fields = data.form.form_fields.map(
-        augmentWithMyInfoDisplayValue,
-      )
-
       return data
     })
     .then(transformAllIsoStringsToDate)
@@ -93,11 +87,6 @@ export const viewFormTemplate = async (
       if (data.form.authType !== FormAuthType.NIL && !data.spcpSession) {
         data.spcpSession = { userName: PREVIEW_MOCK_UINFIN }
       }
-
-      // Inject MyInfo preview values into form fields (if they are MyInfo fields).
-      data.form.form_fields = data.form.form_fields.map(
-        augmentWithMyInfoDisplayValue,
-      )
 
       return data
     })
