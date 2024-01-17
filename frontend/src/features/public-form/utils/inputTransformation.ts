@@ -64,16 +64,6 @@ const transformToVerifiableOutput = <
   }
 }
 
-const transformToSingleAnswerOutput = <F extends FormFieldDto>(
-  schema: F,
-  input?: string,
-): SingleAnswerOutput<F> => {
-  return {
-    ...pickBaseOutputFromSchema(schema),
-    answer: input?.trim() ?? '',
-  }
-}
-
 const transformToDateOutput = (
   schema: DateFieldSchema,
   input?: string,
@@ -260,11 +250,6 @@ export const transformInputsToOutputs = (
     case BasicField.CountryRegion:
     case BasicField.Rating:
     case BasicField.Nric:
-    case BasicField.Uen:
-      return transformToSingleAnswerOutput(
-        field,
-        input as FormFieldValue<typeof field.fieldType>,
-      )
     case BasicField.Statement:
     case BasicField.Image:
       // No output needed.

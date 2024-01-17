@@ -21,7 +21,6 @@ import type { ISectionFieldSchema } from './sectionField'
 import type { IShortTextFieldSchema } from './shortTextField'
 import type { IStatementFieldSchema } from './statementField'
 import type { ITableFieldSchema } from './tableField'
-import type { IUenFieldSchema } from './uenField'
 import type { IYesNoFieldSchema } from './yesNoField'
 
 export * from './attachmentField'
@@ -45,7 +44,6 @@ export * from './sectionField'
 export * from './shortTextField'
 export * from './statementField'
 export * from './tableField'
-export * from './uenField'
 export * from './yesNoField'
 export * from './childrenCompoundField'
 
@@ -79,7 +77,6 @@ export type FormFieldSchema =
   | IShortTextFieldSchema
   | IStatementFieldSchema
   | ITableFieldSchema
-  | IUenFieldSchema
   | IYesNoFieldSchema
   | IChildrenCompoundFieldSchema
 
@@ -121,6 +118,5 @@ export type FieldValidationSchema =
   | OmitUnusedValidatorProps<IShortTextFieldSchema>
   | OmitUnusedValidatorProps<IStatementFieldSchema>
   | OmitUnusedValidatorProps<ITableFieldSchema>
-  | OmitUnusedValidatorProps<IUenFieldSchema>
   | OmitUnusedValidatorProps<IYesNoFieldSchema>
   | OmitUnusedValidatorProps<IChildrenCompoundFieldSchema>

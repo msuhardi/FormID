@@ -28,7 +28,6 @@ import { constructRatingValidator } from './validators/ratingValidator'
 import { constructSectionValidator } from './validators/sectionValidator'
 import { constructTableValidator } from './validators/tableValidator'
 import constructTextValidator from './validators/textValidator'
-import { constructUenValidator } from './validators/uenValidator'
 import { constructYesNoValidator } from './validators/yesNoValidator'
 
 /**
@@ -66,8 +65,6 @@ export const constructSingleAnswerValidator = (
       return constructCountryRegionValidator()
     case BasicField.Email:
       return constructEmailValidator(formField)
-    case BasicField.Uen:
-      return constructUenValidator()
     case BasicField.YesNo:
       return constructYesNoValidator()
     default:

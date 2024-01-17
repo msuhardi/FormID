@@ -15,14 +15,12 @@ import { types as basicTypes } from '../../../../../../shared/constants/field/ba
 import {
   BasicField,
   FormAuthType,
-  MyInfoAttribute,
   TableRow,
 } from '../../../../../../shared/types'
-import { SingleAnswerFieldResponse, SPCPFieldTitle } from '../../../../../types'
+import { SingleAnswerFieldResponse } from '../../../../../types'
 import { ProcessedFieldResponse } from '../../submission.types'
 import {
   ATTACHMENT_PREFIX,
-  MYINFO_PREFIX,
   TABLE_PREFIX,
   VERIFIED_PREFIX,
 } from '../email-submission.constants'
@@ -70,21 +68,15 @@ describe('email-submission.util', () => {
     response1.isVisible = true
     response2.isVisible = false
 
-    const hashedFields = new Set([
-      new ObjectId().toHexString(),
-      new ObjectId().toHexString(),
-    ])
     const authType = FormAuthType.NIL
     const submissionEmailObj = new SubmissionEmailObj(
       [response1, response2],
-      hashedFields,
       authType,
     )
 
     it('should return email data correctly for all single answer field types', () => {
       const emailData = new SubmissionEmailObj(
         ALL_SINGLE_SUBMITTED_RESPONSES,
-        new Set(),
         FormAuthType.NIL,
       )
       const expectedAutoReplyData = ALL_SINGLE_SUBMITTED_RESPONSES.map(
@@ -104,11 +96,7 @@ describe('email-submission.util', () => {
     it('should exclude section fields from JSON data', () => {
       const response = generateNewSingleAnswerResponse(BasicField.Section)
 
-      const emailData = new SubmissionEmailObj(
-        [response],
-        new Set(),
-        FormAuthType.NIL,
-      )
+      const emailData = new SubmissionEmailObj([response], FormAuthType.NIL)
       expect(emailData.dataCollationData).toEqual([])
       expect(emailData.autoReplyData).toEqual([
         generateSingleAnswerAutoreply(response),
@@ -123,11 +111,7 @@ describe('email-submission.util', () => {
         isVisible: false,
       })
 
-      const emailData = new SubmissionEmailObj(
-        [response],
-        new Set(),
-        FormAuthType.NIL,
-      )
+      const emailData = new SubmissionEmailObj([response], FormAuthType.NIL)
 
       expect(emailData.dataCollationData).toEqual([
         generateSingleAnswerJson(response),
@@ -141,11 +125,7 @@ describe('email-submission.util', () => {
     it('should generate table answers with [table] prefix in form and JSON data', () => {
       const response = generateNewTableResponse()
 
-      const emailData = new SubmissionEmailObj(
-        [response],
-        new Set(),
-        FormAuthType.NIL,
-      )
+      const emailData = new SubmissionEmailObj([response], FormAuthType.NIL)
 
       const question = response.question
       const firstRow = response.answerArray[0].join(',')
@@ -184,11 +164,7 @@ describe('email-submission.util', () => {
     it('should generate checkbox answers correctly', () => {
       const response = generateNewCheckboxResponse()
 
-      const emailData = new SubmissionEmailObj(
-        [response],
-        new Set(),
-        FormAuthType.NIL,
-      )
+      const emailData = new SubmissionEmailObj([response], FormAuthType.NIL)
 
       const question = response.question
       const answer = response.answerArray.join(', ')
@@ -212,11 +188,7 @@ describe('email-submission.util', () => {
     it('should generate attachment answers with [attachment] prefix in form and JSON data', () => {
       const response = generateNewAttachmentResponse()
 
-      const emailData = new SubmissionEmailObj(
-        [response],
-        new Set(),
-        FormAuthType.NIL,
-      )
+      const emailData = new SubmissionEmailObj([response], FormAuthType.NIL)
 
       const question = response.question
       const answer = response.answer
@@ -245,11 +217,7 @@ describe('email-submission.util', () => {
         answer,
       })
 
-      const emailData = new SubmissionEmailObj(
-        [response],
-        new Set(),
-        FormAuthType.NIL,
-      )
+      const emailData = new SubmissionEmailObj([response], FormAuthType.NIL)
 
       const question = response.question
 
@@ -277,11 +245,7 @@ describe('email-submission.util', () => {
       ] as TableRow[]
       const response = generateNewTableResponse({ answerArray })
 
-      const emailData = new SubmissionEmailObj(
-        [response],
-        new Set(),
-        FormAuthType.NIL,
-      )
+      const emailData = new SubmissionEmailObj([response], FormAuthType.NIL)
 
       const question = response.question
       const answer = answerArray[0].join(',')
@@ -310,11 +274,7 @@ describe('email-submission.util', () => {
       const answerArray = ['firstLine\nsecondLine', 'thirdLine\nfourtLine']
       const response = generateNewCheckboxResponse({ answerArray })
 
-      const emailData = new SubmissionEmailObj(
-        [response],
-        new Set(),
-        FormAuthType.NIL,
-      )
+      const emailData = new SubmissionEmailObj([response], FormAuthType.NIL)
 
       const question = response.question
       const answer = answerArray.join(', ')
@@ -342,11 +302,7 @@ describe('email-submission.util', () => {
         isUserVerified: true,
       })
 
-      const emailData = new SubmissionEmailObj(
-        [response],
-        new Set(),
-        FormAuthType.NIL,
-      )
+      const emailData = new SubmissionEmailObj([response], FormAuthType.NIL)
 
       const question = response.question
       const answer = response.answer
@@ -359,70 +315,6 @@ describe('email-submission.util', () => {
           answer,
           answerTemplate: [answer],
           fieldType: BasicField.Email,
-        },
-      ]
-
-      expect(emailData.dataCollationData).toEqual(expectedDataCollationData)
-      expect(emailData.autoReplyData).toEqual(expectedAutoReplyData)
-      expect(emailData.formData).toEqual(expectedFormData)
-    })
-
-    it('should prefix MyInfo-verified fields with [MyInfo] only in form data', () => {
-      // MyInfo-verified
-      const nameResponse = generateNewSingleAnswerResponse(
-        BasicField.ShortText,
-        {
-          myInfo: { attr: MyInfoAttribute.Name },
-          answer: 'name',
-        },
-      )
-
-      // MyInfo field but not MyInfo-verified
-      const vehicleResponse = generateNewSingleAnswerResponse(
-        BasicField.ShortText,
-        {
-          myInfo: { attr: MyInfoAttribute.VehicleNo },
-          answer: 'vehiclenumber',
-        },
-      )
-
-      const emailData = new SubmissionEmailObj(
-        [nameResponse, vehicleResponse],
-        new Set([nameResponse._id]),
-        FormAuthType.MyInfo,
-      )
-
-      const expectedDataCollationData = [
-        { question: nameResponse.question, answer: nameResponse.answer },
-        {
-          question: vehicleResponse.question,
-          answer: vehicleResponse.answer,
-        },
-      ]
-      const expectedAutoReplyData = [
-        {
-          question: nameResponse.question,
-          answerTemplate: [nameResponse.answer],
-        },
-        {
-          question: vehicleResponse.question,
-          answerTemplate: [vehicleResponse.answer],
-        },
-      ]
-      const expectedFormData = [
-        {
-          // Prefixed because its ID was in the Set
-          question: `${MYINFO_PREFIX}${nameResponse.question}`,
-          answer: nameResponse.answer,
-          answerTemplate: [nameResponse.answer],
-          fieldType: BasicField.ShortText,
-        },
-        {
-          // Not prefixed because ID not in Set
-          question: vehicleResponse.question,
-          answer: vehicleResponse.answer,
-          answerTemplate: [vehicleResponse.answer],
-          fieldType: BasicField.ShortText,
         },
       ]
 
@@ -454,7 +346,6 @@ describe('email-submission.util', () => {
         {
           question: getFormDataPrefixedQuestion(
             response1 as ResponseFormattedForEmail,
-            hashedFields,
           ),
           answerTemplate: (response1 as ResponseFormattedForEmail).answer.split(
             '\n',
@@ -465,7 +356,6 @@ describe('email-submission.util', () => {
         {
           question: getFormDataPrefixedQuestion(
             response2 as ResponseFormattedForEmail,
-            hashedFields,
           ),
           answerTemplate: (response2 as ResponseFormattedForEmail).answer.split(
             '\n',
@@ -488,36 +378,6 @@ describe('email-submission.util', () => {
         // Note that response2 is not shown in Email Confirmation as isVisible is false
       ]
       expect(submissionEmailObj.autoReplyData).toEqual(correctConfirmation)
-    })
-
-    it('should mask corppass UID if FormAuthType is Corppass and autoReplyData() method is called', () => {
-      const responseCPUID = getResponse(
-        String(new ObjectId()),
-        'S1234567A',
-      ) as ProcessedFieldResponse
-
-      responseCPUID.question = SPCPFieldTitle.CpUid
-      responseCPUID.isVisible = true
-
-      const submissionEmailObjCP = new SubmissionEmailObj(
-        [response1, response2, responseCPUID],
-        hashedFields,
-        FormAuthType.CP,
-      )
-      const correctConfirmation = [
-        {
-          question: response1.question,
-          answerTemplate: (response1 as ResponseFormattedForEmail).answer.split(
-            '\n',
-          ),
-        },
-        // Note that response2 is not shown in Email Confirmation as isVisible is false
-        {
-          question: responseCPUID.question,
-          answerTemplate: ['*****567A'],
-        },
-      ]
-      expect(submissionEmailObjCP.autoReplyData).toEqual(correctConfirmation)
     })
   })
 })

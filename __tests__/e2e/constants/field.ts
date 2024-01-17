@@ -26,7 +26,6 @@ import {
   ShortTextFieldBase,
   StatementFieldBase,
   TableFieldBase,
-  UenFieldBase,
   YesNoFieldBase,
 } from 'shared/types'
 
@@ -140,9 +139,6 @@ export type E2eFieldMetadata =
       'minimumRows' | 'addMoreRows' | 'columns' | 'maximumRows'
     > &
       E2eFieldTableValue &
-      E2eFieldHidden)
-  | (E2ePickFieldMetadata<UenFieldBase, never> &
-      E2eFieldSingleValue &
       E2eFieldHidden)
   | (E2ePickFieldMetadata<YesNoFieldBase, never> &
       E2eFieldSingleValue &
@@ -351,11 +347,6 @@ export const ALL_FIELDS: E2eFieldMetadata[] = [
       ['John', 'Father'],
       ['Lisa', 'Mother'],
     ],
-  },
-  {
-    title: 'Some UEN here please',
-    fieldType: BasicField.Uen,
-    val: 'T09SS0050A',
   },
   {
     title: 'Yes or No?',

@@ -12,12 +12,7 @@ import {
   RatingShape,
   TableFieldDto,
 } from '~shared/types/field'
-import {
-  FormLogic,
-  LogicConditionState,
-  LogicIfValue,
-  LogicType,
-} from '~shared/types/form'
+import { FormLogic } from '~shared/types/form'
 import {
   AdminFormDto,
   AdminFormViewDto,
@@ -32,23 +27,6 @@ import { DateString } from '~shared/types/generic'
 import { StorageModeSubmissionMetadataList } from '~shared/types/submission'
 import { UserDto } from '~shared/types/user'
 import { insertAt, reorder } from '~shared/utils/immutable-array-fns'
-
-import { getMyInfoFieldCreationMeta } from '~/features/admin-form/create/builder-and-design/utils/fieldCreation'
-
-import {
-  CREATE_MYINFO_CONTACT_FIELDS_ORDERED,
-  CREATE_MYINFO_MARRIAGE_FIELDS_ORDERED,
-  CREATE_MYINFO_PARTICULARS_FIELDS_ORDERED,
-  CREATE_MYINFO_PERSONAL_FIELDS_ORDERED,
-} from '~features/admin-form/create/builder-and-design/constants'
-import { augmentWithMyInfoDisplayValue } from '~features/myinfo/utils'
-
-export const MOCK_MYINFO_IMPLEMENTED_TYPES = [
-  ...CREATE_MYINFO_PERSONAL_FIELDS_ORDERED,
-  ...CREATE_MYINFO_CONTACT_FIELDS_ORDERED,
-  ...CREATE_MYINFO_PARTICULARS_FIELDS_ORDERED,
-  ...CREATE_MYINFO_MARRIAGE_FIELDS_ORDERED,
-]
 
 export const MOCK_FORM_FIELDS: FormFieldDto[] = [
   {
@@ -251,15 +229,6 @@ export const MOCK_FORM_FIELDS: FormFieldDto[] = [
     fieldType: BasicField.Nric,
     _id: '5da04ec43738d1001260773b',
     globalId: '0KHU4aNnFVS5y8CLqkXWf9A0RknGIqzNoVfOUlqNRDl',
-  },
-  {
-    title: 'UEN',
-    description: '',
-    required: true,
-    disabled: false,
-    fieldType: BasicField.Uen,
-    _id: '624a7c487da1c9ace14fa4ef',
-    globalId: 'TKhuZk5X4rFgSbrbnjpJ205J6uhsdu18YwFdMVB7y70',
   },
   {
     addMoreRows: false,
@@ -537,46 +506,7 @@ const DEFAULT_STORAGE_METADATA = [
   [],
 ]
 
-export const MOCK_MYINFO_FIELDS = MOCK_MYINFO_IMPLEMENTED_TYPES.map(
-  (myInfoAttr, idx) => ({
-    _id: idx.toString(),
-    globalId: idx.toString(),
-    ...getMyInfoFieldCreationMeta(myInfoAttr),
-  }),
-)
-
-// NOTE: This should be used in public forms, whereas the above should be used in
-// admin form preview.
-// This is done to ensure that
-// 1. Admin form preview previews the myInfo fields correctly (with mock values)
-// 2. Public form has correct display of the myInfo fields with prefilled value
-export const MOCK_PREFILLED_MYINFO_FIELDS = MOCK_MYINFO_FIELDS.map(
-  augmentWithMyInfoDisplayValue,
-)
-
-export const MOCK_FORM_FIELDS_WITH_MYINFO = [
-  ...MOCK_FORM_FIELDS,
-  ...MOCK_MYINFO_FIELDS,
-]
-
-export const MOCK_FORM_LOGICS = [
-  // Note: this logic is actually invalid since the if field cannot be a show
-  // field at the same time. But it's fine just for the purposes of displaying
-  // the hidden view.
-  {
-    show: MOCK_FORM_FIELDS_WITH_MYINFO.map((f) => f._id),
-    _id: '620115f74ad4f00012900a8c',
-    logicType: LogicType.ShowFields as const,
-    conditions: [
-      {
-        ifValueType: LogicIfValue.SingleSelect,
-        field: '5da04eb5e397fc0013f63c7e',
-        state: LogicConditionState.Equal,
-        value: 'Yes',
-      },
-    ],
-  },
-]
+export const MOCK_FORM_LOGICS = []
 
 export const createMockForm = (
   props: Partial<AdminFormDto> = {},

@@ -29,7 +29,6 @@ import {
   ShortTextFieldBase,
   StatementFieldBase,
   TableFieldBase,
-  UenFieldBase,
   YesNoFieldBase,
 } from '~shared/types/field'
 import { ChildrenCompoundFieldBase } from '~shared/types/field/childrenCompoundField'
@@ -80,7 +79,6 @@ export type FormFieldValue<F extends BasicField = BasicField> = F extends
   | BasicField.Dropdown
   | BasicField.Rating
   | BasicField.Nric
-  | BasicField.Uen
   | BasicField.Date
   ? SingleAnswerValue
   : F extends BasicField.YesNo
@@ -101,7 +99,6 @@ export type FormFieldValue<F extends BasicField = BasicField> = F extends
 
 // Input values, what each field contains
 export type SingleAnswerValue = string
-export type MultiAnswerValue = string[]
 export type YesNoFieldValue = 'Yes' | 'No'
 export type VerifiableFieldValues = {
   signature?: string
@@ -163,7 +160,6 @@ export type RadioFieldSchema = FormFieldWithQuestionNo<RadioFieldBase>
 export type RatingFieldSchema = FormFieldWithQuestionNo<RatingFieldBase>
 export type ShortTextFieldSchema = FormFieldWithQuestionNo<ShortTextFieldBase>
 export type TableFieldSchema = FormFieldWithQuestionNo<TableFieldBase>
-export type UenFieldSchema = FormFieldWithQuestionNo<UenFieldBase>
 export type YesNoFieldSchema = FormFieldWithQuestionNo<YesNoFieldBase>
 export type ChildrenCompoundFieldSchema =
   FormFieldWithQuestionNo<ChildrenCompoundFieldBase>

@@ -31,7 +31,6 @@ import {
   RatingFieldBase,
   ShortTextFieldBase,
   TextSelectedValidation,
-  UenFieldBase,
 } from '~shared/types/field'
 import { isDateAnInvalidDay } from '~shared/utils/date-validation'
 import { isMFinSeriesValid, isNricValid } from '~shared/utils/nric-validation'
@@ -39,7 +38,6 @@ import {
   isHomePhoneNumber,
   isMobilePhoneNumber,
 } from '~shared/utils/phone-num-validation'
-import { isUenValid } from '~shared/utils/uen-validation'
 
 import {
   INVALID_COUNTRY_REGION_OPTION_ERROR,
@@ -353,20 +351,6 @@ export const createTextValidationRules: ValidationRuleFn<
               simplur`Please enter at most ${customVal} character[|s] (${currLen}/${customVal})`
             )
         }
-      },
-    },
-  }
-}
-
-export const createUenValidationRules: ValidationRuleFn<UenFieldBase> = (
-  schema,
-): RegisterOptions => {
-  return {
-    validate: {
-      required: requiredSingleAnswerValidationFn(schema),
-      validUen: (val?: string) => {
-        if (!val) return true
-        return isUenValid(val) || 'Please enter a valid UEN'
       },
     },
   }

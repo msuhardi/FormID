@@ -19,7 +19,6 @@ import {
   RatingResponse,
   ShortTextResponse,
   TableResponse,
-  UenResponse,
   YesNoResponse,
 } from '~shared/types'
 
@@ -81,8 +80,6 @@ export const validateResponses = (responses: unknown): FieldResponse[] => {
         return ShortTextResponse.parse(response)
       case BasicField.Table:
         return TableResponse.parse(response)
-      case BasicField.Uen:
-        return UenResponse.parse(response)
       case BasicField.Number:
         return NumberResponse.parse(response)
       case BasicField.YesNo:

@@ -13,7 +13,6 @@ import { ADMIN_FEEDBACK_SESSION_KEY } from '~constants/sessionStorage'
 import { useSessionStorage } from '~hooks/useSessionStorage'
 
 import { useEnv } from '~features/env/queries'
-import { augmentWithMyInfo } from '~features/myinfo/utils/augmentWithMyInfo'
 
 import { PENDING_CREATE_FIELD_ID } from '../constants'
 import { useCreateTabForm } from '../useCreateTabForm'
@@ -89,7 +88,7 @@ export const useBuilderFields = () => {
       existingFields = getFormFieldsWhileCreating(existingFields, stateData)
     }
 
-    return existingFields.map(augmentWithMyInfo)
+    return existingFields
   }, [
     formData?.form_fields,
     isLoading,

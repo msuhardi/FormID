@@ -4,21 +4,21 @@ import { err, ok, Result } from 'neverthrow'
 import { FIELDS_TO_REJECT } from '../../../../shared/constants/field/basic'
 import { BasicField } from '../../../../shared/types'
 import {
+  FieldValidationSchema,
+  ITableFieldSchema,
+  OmitUnusedValidatorProps,
+} from '../../../types'
+import { ResponseValidator } from '../../../types/field/utils/validation'
+import { createLoggerWithLabel } from '../../config/logger'
+import { ValidateFieldError } from '../../modules/submission/submission.errors'
+import {
   ProcessedAttachmentResponse,
   ProcessedCheckboxResponse,
   ProcessedChildrenResponse,
   ProcessedFieldResponse,
   ProcessedSingleAnswerResponse,
   ProcessedTableResponse,
-} from '../../../app/modules/submission/submission.types'
-import {
-  FieldValidationSchema,
-  ITableFieldSchema,
-  OmitUnusedValidatorProps,
-} from '../../../types/field'
-import { ResponseValidator } from '../../../types/field/utils/validation'
-import { createLoggerWithLabel } from '../../config/logger'
-import { ValidateFieldError } from '../../modules/submission/submission.errors'
+} from '../../modules/submission/submission.types'
 
 import {
   constructAttachmentFieldValidator,
@@ -42,7 +42,7 @@ const logger = createLoggerWithLabel(module)
  * @param response The submitted response
  */
 const isValidResponseFieldType = (response: ProcessedFieldResponse): boolean =>
-  FIELDS_TO_REJECT.includes(response.fieldType) ? false : true
+  !FIELDS_TO_REJECT.includes(response.fieldType)
 
 /**
  * Compares the response field type to the form field type

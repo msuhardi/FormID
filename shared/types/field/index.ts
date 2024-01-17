@@ -18,7 +18,6 @@ import type { SectionFieldBase } from './sectionField'
 import type { ShortTextFieldBase } from './shortTextField'
 import type { StatementFieldBase } from './statementField'
 import type { TableFieldBase, TableFieldDto } from './tableField'
-import type { UenFieldBase } from './uenField'
 import type { YesNoFieldBase } from './yesNoField'
 import type { SetRequired } from 'type-fest'
 
@@ -43,7 +42,6 @@ export * from './sectionField'
 export * from './shortTextField'
 export * from './statementField'
 export * from './tableField'
-export * from './uenField'
 export * from './utils'
 export * from './yesNoField'
 export * from './childrenCompoundField'
@@ -68,7 +66,6 @@ export type FormField =
   | ShortTextFieldBase
   | StatementFieldBase
   | TableFieldBase
-  | UenFieldBase
   | YesNoFieldBase
   | ChildrenCompoundFieldBase
 

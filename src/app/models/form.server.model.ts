@@ -62,10 +62,11 @@ import {
   IFormSchema,
   ILogicSchema,
   IPopulatedForm,
+  IPopulatedUser,
+  IUserSchema,
   PickDuplicateForm,
   PublicForm,
 } from '../../types'
-import { IPopulatedUser, IUserSchema } from '../../types/user'
 import { OverrideProps } from '../modules/form/admin-form/admin-form.types'
 import { getFormFieldById, transformEmails } from '../modules/form/form.utils'
 import { validateWebhookUrl } from '../modules/webhook/webhook.validation'
@@ -93,7 +94,6 @@ import {
   createShortTextFieldSchema,
   createStatementFieldSchema,
   createTableFieldSchema,
-  createUenFieldSchema,
   createYesNoFieldSchema,
 } from './field'
 import LogicSchema, {
@@ -572,7 +572,6 @@ const compileFormModel = (db: Mongoose): IFormModel => {
   FormFieldPath.discriminator(BasicField.Image, createImageFieldSchema())
   FormFieldPath.discriminator(BasicField.Date, createDateFieldSchema())
   FormFieldPath.discriminator(BasicField.Nric, createNricFieldSchema())
-  FormFieldPath.discriminator(BasicField.Uen, createUenFieldSchema())
   FormFieldPath.discriminator(BasicField.YesNo, createYesNoFieldSchema())
   FormFieldPath.discriminator(
     BasicField.Statement,

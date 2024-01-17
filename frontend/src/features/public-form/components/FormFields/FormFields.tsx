@@ -4,24 +4,17 @@ import { useSearchParams } from 'react-router-dom'
 import { Box, Stack } from '@chakra-ui/react'
 import { isEmpty, times } from 'lodash'
 
-import { PAYMENT_VARIABLE_INPUT_AMOUNT_FIELD_ID } from '~shared/constants'
 import { BasicField, FormFieldDto } from '~shared/types/field'
 import { FormColorTheme, FormResponseMode, LogicDto } from '~shared/types/form'
-import { centsToDollars } from '~shared/utils/payments'
 
 import InlineMessage from '~components/InlineMessage'
 import { FormFieldValues } from '~templates/Field'
+import { PaymentPreview } from '~templates/Field/PaymentPreview/PaymentPreview'
 import { createTableRow } from '~templates/Field/Table/utils/createRow'
 
-import {
-  augmentWithMyInfo,
-  extractPreviewValue,
-  hasExistingFieldValue,
-} from '~features/myinfo/utils'
 import { useFetchPrefillQuery } from '~features/public-form/hooks/useFetchPrefillQuery'
 import { usePublicFormContext } from '~features/public-form/PublicFormContext'
 
-import { PaymentPreview } from '../../../../templates/Field/PaymentPreview/PaymentPreview'
 import { PublicFormPaymentResumeModal } from '../FormPaymentPage/FormPaymentResumeModal'
 
 import { PublicFormSubmitButton } from './PublicFormSubmitButton'
@@ -67,19 +60,8 @@ export const FormFields = ({
     }, {} as PrefillMap)
   }, [formFields, searchParams])
 
-  const augmentedFormFields = useMemo(
-    () => formFields.map(augmentWithMyInfo),
-    [formFields],
-  )
-
   const defaultFormValues = useMemo(() => {
-    return augmentedFormFields.reduce<FormFieldValues>((acc, field) => {
-      // If server returns field with default value, use that.
-      if (hasExistingFieldValue(field)) {
-        acc[field._id] = extractPreviewValue(field)
-        return acc
-      }
-
+    return formFields.reduce<FormFieldValues>((acc, field) => {
       // Use prefill value if exists.
       if (fieldPrefillMap[field._id]) {
         acc[field._id] = fieldPrefillMap[field._id].prefillValue
@@ -97,19 +79,7 @@ export const FormFields = ({
       }
       return acc
     }, {})
-  }, [augmentedFormFields, fieldPrefillMap])
-
-  // payment prefills - only for variable payments
-  if (searchParams.has(PAYMENT_VARIABLE_INPUT_AMOUNT_FIELD_ID)) {
-    const paymentParamValue = Number.parseInt(
-      searchParams.get(PAYMENT_VARIABLE_INPUT_AMOUNT_FIELD_ID) ?? '',
-      10,
-    )
-    if (Number.isInteger(paymentParamValue) && paymentParamValue > 0) {
-      const paymentAmount = centsToDollars(Number(paymentParamValue))
-      defaultFormValues[PAYMENT_VARIABLE_INPUT_AMOUNT_FIELD_ID] = paymentAmount
-    }
-  }
+  }, [formFields, fieldPrefillMap])
 
   const formMethods = useForm<FormFieldValues>({
     defaultValues: defaultFormValues,
@@ -170,7 +140,7 @@ export const FormFields = ({
               <VisibleFormFields
                 colorTheme={colorTheme}
                 control={formMethods.control}
-                formFields={augmentedFormFields}
+                formFields={formFields}
                 formLogics={formLogics}
                 fieldPrefillMap={fieldPrefillMap}
               />
@@ -194,7 +164,7 @@ export const FormFields = ({
         <PublicFormPaymentResumeModal />
         <PublicFormSubmitButton
           onSubmit={onSubmit ? formMethods.handleSubmit(onSubmit) : undefined}
-          formFields={augmentedFormFields}
+          formFields={formFields}
           formLogics={formLogics}
           colorTheme={colorTheme}
           trigger={trigger}

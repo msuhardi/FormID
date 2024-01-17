@@ -18,7 +18,6 @@ import RatingField from './Rating'
 import SectionField from './Section'
 import ShortTextField from './ShortText'
 import TableField from './Table'
-import UenField from './Uen'
 import YesNoField from './YesNo'
 
 export * from './types'
@@ -44,6 +43,5 @@ export {
   SectionField,
   ShortTextField,
   TableField,
-  UenField,
   YesNoField,
 }

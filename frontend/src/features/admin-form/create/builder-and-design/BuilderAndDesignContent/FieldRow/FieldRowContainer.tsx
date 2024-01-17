@@ -55,12 +55,6 @@ import { createTableRow } from '~templates/Field/Table/utils/createRow'
 
 import { adminFormKeys } from '~features/admin-form/common/queries'
 import { CreatePageSidebarContextProps } from '~features/admin-form/create/common'
-import {
-  augmentWithMyInfoDisplayValue,
-  extractPreviewValue,
-  hasExistingFieldValue,
-  isMyInfo,
-} from '~features/myinfo/utils'
 
 import { useBuilderAndDesignContext } from '../../BuilderAndDesignContext'
 import {
@@ -118,8 +112,6 @@ const FieldRowContainer = ({
     setPaymentToInactiveSelector,
   )
 
-  const isMyInfoField = useMemo(() => isMyInfo(field), [field])
-
   // Explicitly defining isActive here to prevent constant checks to undefined
   // due to falsy nature of FieldBuilderState.CreatingField = 0
   const isActive = fieldBuilderState !== undefined
@@ -130,14 +122,6 @@ const FieldRowContainer = ({
         [field._id]: times((field as TableFieldBase).minimumRows || 0, () =>
           createTableRow(field as TableFieldSchema),
         ),
-      }
-    }
-
-    const augmentedField = augmentWithMyInfoDisplayValue(field)
-
-    if (hasExistingFieldValue(augmentedField)) {
-      return {
-        [field._id]: extractPreviewValue(augmentedField),
       }
     }
   }, [field])
@@ -297,11 +281,7 @@ const FieldRowContainer = ({
                 opacity={isActive || !isHiddenByLogic ? '100%' : '30%'}
               >
                 <FormProvider {...formMethods}>
-                  <FieldRow
-                    field={field}
-                    colorTheme={colorTheme}
-                    showMyInfoBadge={isMyInfoField}
-                  />
+                  <FieldRow field={field} colorTheme={colorTheme} />
                 </FormProvider>
               </Box>
               <Collapse in={isActive} style={{ width: '100%' }}>
