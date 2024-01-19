@@ -1,13 +1,10 @@
 import { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Flex, Skeleton, Stack, Text, useDisclosure } from '@chakra-ui/react'
+import parse from 'html-react-parser'
 
-import {
-  FormAuthType,
-  FormResponseMode,
-  FormStatus,
-} from '~shared/types/form/form'
+import { FormResponseMode, FormStatus } from '~shared/types/form/form'
 
-import InlineMessage from '~components/InlineMessage'
 import { Switch } from '~components/Toggle/Switch'
 
 import { useMutateFormSettings } from '../mutations'
@@ -16,28 +13,16 @@ import { useAdminFormSettings } from '../queries'
 import { SecretKeyActivationModal } from './SecretKeyActivationModal'
 
 export const FormStatusToggle = (): JSX.Element => {
+  const { t } = useTranslation()
   const { data: formSettings, isLoading: isLoadingSettings } =
     useAdminFormSettings()
 
-  const { status, responseMode, authType, esrvcId } = formSettings ?? {}
+  const { status, responseMode } = formSettings ?? {}
 
   const storageModalProps = useDisclosure()
   const { onOpen: onOpenActivationModal } = storageModalProps
 
   const isFormPublic = useMemo(() => status === FormStatus.Public, [status])
-  const isPreventActivation = useMemo(
-    () =>
-      // Prevent switch from being activated if form has authType but no esrvcId.
-      // But only if form is not already public
-      // (so admin can toggle to private mode when that happens somehow).
-      status === FormStatus.Private &&
-      authType &&
-      [FormAuthType.CP, FormAuthType.SP, FormAuthType.MyInfo].includes(
-        authType,
-      ) &&
-      !esrvcId,
-    [authType, esrvcId, status],
-  )
 
   const { mutateFormStatus } = useMutateFormSettings()
 
@@ -79,24 +64,24 @@ export const FormStatusToggle = (): JSX.Element => {
           justify="space-between"
         >
           <Text textStyle="subhead-1" id="form-status">
-            Your form is <b>{isFormPublic ? 'OPEN' : 'CLOSED'}</b> to new
-            responses
+            {parse(
+              t('features.settings.general.formStatus.description', {
+                status: t(
+                  `features.settings.general.formStatus.${
+                    isFormPublic ? 'open' : 'closed'
+                  }`,
+                ).toUpperCase(),
+              }),
+            )}
           </Text>
           <Switch
-            isDisabled={isPreventActivation}
-            aria-label="Toggle form status"
+            aria-label={t('features.settings.general.formStatus.ariaLabel')}
             aria-describedby="form-status"
             isLoading={mutateFormStatus.isLoading}
             isChecked={isFormPublic}
             onChange={handleToggleStatus}
           />
         </Flex>
-        {isPreventActivation ? (
-          <InlineMessage variant="warning">
-            This form cannot be activated until a valid e-service ID is entered
-            in the Singpass section
-          </InlineMessage>
-        ) : null}
       </Stack>
     </Skeleton>
   )

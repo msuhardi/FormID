@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FormControl, Skeleton } from '@chakra-ui/react'
 
 import FormErrorMessage from '~components/FormControl/FormErrorMessage'
@@ -27,6 +28,7 @@ const FormLimitBlock = ({
   initialLimit,
   currentResponseCount,
 }: FormLimitBlockProps): JSX.Element => {
+  const { t } = useTranslation()
   const [value, setValue] = useState(initialLimit)
   const [error, setError] = useState<string>()
 
@@ -40,13 +42,15 @@ const FormLimitBlock = ({
       setValue(nextVal)
       if (parseInt(nextVal, 10) <= currentResponseCount) {
         setError(
-          `Submission limit must be greater than current submission count (${currentResponseCount})`,
+          t('features.settings.general.formLimit.error', {
+            currentResponseCount,
+          }),
         )
       } else if (error) {
         setError(undefined)
       }
     },
-    [currentResponseCount, error],
+    [currentResponseCount, error, t],
   )
 
   const handleBlur = useCallback(() => {
@@ -80,10 +84,9 @@ const FormLimitBlock = ({
     <FormControl mt="2rem" isInvalid={!!error}>
       <FormLabel
         isRequired
-        description="Your form will automatically close once it reaches the set limit. Enable
-        reCAPTCHA to prevent spam submissions from triggering this limit."
+        description={t('features.settings.general.formLimit.inputDescription')}
       >
-        Maximum number of responses allowed
+        {t('features.settings.general.formLimit.inputTitle')}
       </FormLabel>
       <NumberInput
         maxW="16rem"
@@ -103,6 +106,7 @@ const FormLimitBlock = ({
 }
 
 export const FormLimitToggle = (): JSX.Element => {
+  const { t } = useTranslation()
   const { data: settings, isLoading: isLoadingSettings } =
     useAdminFormSettings()
 
@@ -151,7 +155,7 @@ export const FormLimitToggle = (): JSX.Element => {
       <Toggle
         isLoading={mutateFormLimit.isLoading}
         isChecked={isLimit}
-        label="Set a response limit"
+        label={t('features.settings.general.formLimit.title')}
         onChange={() => handleToggleLimit()}
       />
       {settings && settings?.submissionLimit !== null && (

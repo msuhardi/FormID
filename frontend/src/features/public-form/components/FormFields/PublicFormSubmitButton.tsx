@@ -1,25 +1,20 @@
-import { MouseEventHandler, useMemo, useState } from 'react'
+import { MouseEventHandler, useMemo } from 'react'
 import { useFormState, UseFormTrigger, useWatch } from 'react-hook-form'
-import { Stack, useDisclosure, VisuallyHidden } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
+import { Stack, VisuallyHidden } from '@chakra-ui/react'
 
-import { PAYMENT_CONTACT_FIELD_ID } from '~shared/constants'
-import { FormField, LogicDto, MyInfoFormField } from '~shared/types'
+import { LogicDto, MyInfoFormField } from '~shared/types'
 
 import { ThemeColorScheme } from '~theme/foundations/colours'
 import { useIsMobile } from '~hooks/useIsMobile'
 import Button from '~components/Button'
 import InlineMessage from '~components/InlineMessage'
-import { FormFieldValues, VerifiableFieldValues } from '~templates/Field'
+import { FormFieldValues } from '~templates/Field'
 
 import { getLogicUnitPreventingSubmit } from '~features/logic/utils'
 
-import { usePublicFormContext } from '../../PublicFormContext'
-import { DuplicatePaymentModal } from '../DuplicatePaymentModal/DuplicatePaymentModal'
-import { FormPaymentModal } from '../FormPaymentModal/FormPaymentModal'
-import { getPreviousPaymentId } from '../FormPaymentPage/FormPaymentService'
-
 interface PublicFormSubmitButtonProps {
-  formFields: MyInfoFormField<FormField>[]
+  formFields: MyInfoFormField[]
   formLogics: LogicDto[]
   colorTheme: string
   onSubmit: MouseEventHandler<HTMLButtonElement> | undefined
@@ -35,18 +30,12 @@ export const PublicFormSubmitButton = ({
   formLogics,
   colorTheme,
   onSubmit,
-  trigger,
 }: PublicFormSubmitButtonProps): JSX.Element => {
-  const [prevPaymentId, setPrevPaymentId] = useState('')
+  const { t } = useTranslation()
 
   const isMobile = useIsMobile()
   const { isSubmitting } = useFormState()
   const formInputs = useWatch<FormFieldValues>({}) as FormFieldValues
-  const { formId, isPaymentEnabled, isPreview } = usePublicFormContext()
-
-  const paymentEmailField = formInputs[
-    PAYMENT_CONTACT_FIELD_ID
-  ] as VerifiableFieldValues
 
   const preventSubmissionLogic = useMemo(() => {
     return getLogicUnitPreventingSubmit({
@@ -56,46 +45,8 @@ export const PublicFormSubmitButton = ({
     })
   }, [formInputs, formFields, formLogics])
 
-  // For payments submit and pay modal
-  const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false })
-
-  const checkBeforeOpen = async () => {
-    const result = await trigger()
-
-    if (result) {
-      // get previous payment
-      try {
-        const paymentId = await getPreviousPaymentId(
-          paymentEmailField.value,
-          formId,
-        )
-        setPrevPaymentId(paymentId)
-      } catch (err) {
-        setPrevPaymentId('')
-      }
-      onOpen()
-    }
-  }
-
   return (
     <Stack px={{ base: '1rem', md: 0 }} pt="2.5rem" pb="4rem">
-      {isOpen ? (
-        prevPaymentId ? (
-          <DuplicatePaymentModal
-            onSubmit={onSubmit}
-            onClose={onClose}
-            isSubmitting={isSubmitting}
-            formId={formId}
-            paymentId={prevPaymentId}
-          />
-        ) : (
-          <FormPaymentModal
-            onSubmit={onSubmit}
-            onClose={onClose}
-            isSubmitting={isSubmitting}
-          />
-        )
-      ) : null}
       <Button
         isFullWidth={isMobile}
         w="100%"
@@ -104,14 +55,14 @@ export const PublicFormSubmitButton = ({
         isLoading={isSubmitting}
         isDisabled={!!preventSubmissionLogic || !onSubmit}
         loadingText="Submitting"
-        onClick={isPaymentEnabled && !isPreview ? checkBeforeOpen : onSubmit}
+        onClick={onSubmit}
       >
         <VisuallyHidden>End of form.</VisuallyHidden>
-        {preventSubmissionLogic
-          ? 'Submission disabled'
-          : isPaymentEnabled
-          ? 'Proceed to pay'
-          : 'Submit now'}
+        {t(
+          `features.common.formSubmission.${
+            preventSubmissionLogic ? 'disabled' : 'enabled'
+          }`,
+        )}
       </Button>
       {preventSubmissionLogic ? (
         <InlineMessage variant="warning">

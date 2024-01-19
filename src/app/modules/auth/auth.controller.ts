@@ -111,7 +111,7 @@ export const _handleLoginSendOtp: ControllerHandler<
           })
           const { errorMessage, statusCode } = mapRouteError(
             error,
-            /* coreErrorMessage=*/ 'Failed to send login OTP. Please try again later and if the problem persists, contact us.',
+            /* coreErrorMessage=*/ 'Gagal mengirim OTP. Silahkan coba kembali. Apabila masih mengalami masalah, harap kontak kami.',
           )
           return res.status(statusCode).json({ message: errorMessage })
         })

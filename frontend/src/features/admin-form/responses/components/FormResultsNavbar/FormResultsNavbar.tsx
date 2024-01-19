@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import { Flex } from '@chakra-ui/react'
 import { useFeatureValue } from '@growthbook/growthbook-react'
@@ -19,6 +20,7 @@ import { NavigationTab, NavigationTabList } from '~templates/NavigationTabs'
 import { useAdminForm } from '~features/admin-form/common/queries'
 
 export const FormResultsNavbar = (): JSX.Element => {
+  const { t } = useTranslation()
   const { ref, onMouseDown } = useDraggable<HTMLDivElement>()
 
   const { data: form } = useAdminForm()
@@ -64,13 +66,13 @@ export const FormResultsNavbar = (): JSX.Element => {
           to={RESULTS_RESPONSES_SUBROUTE}
           isActive={checkTabActive(RESULTS_RESPONSES_SUBROUTE)}
         >
-          Responses
+          {t('features.common.responses')}
         </NavigationTab>
         <NavigationTab
           to={RESULTS_FEEDBACK_SUBROUTE}
           isActive={checkTabActive(RESULTS_FEEDBACK_SUBROUTE)}
         >
-          Feedback
+          {t('features.common.feedback')}
         </NavigationTab>
         {shouldShowCharts ? (
           <NavigationTab

@@ -9,6 +9,9 @@ export const common = {
   delete: 'Delete',
   back: 'Back',
   edit: 'Edit',
+  loading: 'Loading',
+  responses: 'Responses',
+  feedback: 'Feedback',
   actionsDropdown: {
     ariaLabel: 'More actions',
     preview: 'Preview',
@@ -35,5 +38,25 @@ export const common = {
     Fridays: 'Friday',
     Saturdays: 'Saturday',
     Sundays: 'Sunday',
+  },
+  today: 'today',
+  tomorrow: 'tomorrow',
+  yesterday: 'yesterday',
+  formStatus: {
+    closed: 'Closed',
+    open: 'Open',
+  },
+  responseMode: {
+    email: 'Email mode',
+    storage: 'Storage mode',
+  },
+  formName: 'Form name',
+  editForm: {
+    text: 'Edit form',
+    ariaLabel: 'Click to edit form',
+  },
+  formSubmission: {
+    disabled: 'Submission disabled',
+    enabled: 'Submit now',
   },
 }

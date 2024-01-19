@@ -1,7 +1,9 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link as ReactLink } from 'react-router-dom'
 import { Box, ButtonProps, chakra, Flex, Text } from '@chakra-ui/react'
 import dayjs from 'dayjs'
+import { TFunction } from 'i18next'
 
 import { AdminDashboardFormMetaDto, FormStatus } from '~shared/types/form/form'
 
@@ -14,21 +16,24 @@ export interface WorkspaceFormRowProps extends ButtonProps {
   formMeta: AdminDashboardFormMetaDto
 }
 
-const RELATIVE_DATE_FORMAT = {
-  sameDay: '[today,] D MMM h:mma', // today, 16 Jun 9:30am
-  nextDay: '[tomorrow,] D MMM h:mma', // tomorrow, 16 Jun 9:30am
-  lastDay: '[yesterday,] D MMM h:mma', // yesterday, 16 Jun 9:30am
-  nextWeek: 'ddd, D MMM YYYY h:mma', // Tue, 17 Oct 2021 9:30pm
-  lastWeek: 'ddd, D MMM YYYY h:mma', // Tue, 17 Oct 2021 9:30pm
-  sameElse: 'D MMM YYYY h:mma', // 6 Oct 2021 9:30pm
+const getRelativeDateFormat = (t: TFunction) => {
+  return {
+    sameDay: `[${t('features.common.today')},] D MMM h:mma`, // today, 16 Jun 9:30am
+    nextDay: `[${t('features.common.tomorrow')},] D MMM h:mma`, // tomorrow, 16 Jun 9:30am
+    lastDay: `[${t('features.common.yesterday')},] D MMM h:mma`, // yesterday, 16 Jun 9:30am
+    nextWeek: 'ddd, D MMM YYYY h:mma', // Tue, 17 Oct 2021 9:30pm
+    lastWeek: 'ddd, D MMM YYYY h:mma', // Tue, 17 Oct 2021 9:30pm
+    sameElse: 'D MMM YYYY h:mma', // 6 Oct 2021 9:30pm
+  }
 }
 
 export const WorkspaceFormRow = ({
   formMeta,
   ...buttonProps
 }: WorkspaceFormRowProps): JSX.Element => {
+  const { t } = useTranslation()
   const prettyLastModified = useMemo(() => {
-    return dayjs(formMeta.lastModified).calendar(null, RELATIVE_DATE_FORMAT)
+    return dayjs(formMeta.lastModified).calendar(null, getRelativeDateFormat(t))
   }, [formMeta.lastModified])
 
   return (
@@ -80,7 +85,7 @@ export const WorkspaceFormRow = ({
             {formMeta.title}
           </Text>
           <Text textStyle="body-2" color="secondary.400">
-            Edited {prettyLastModified}
+            {t('features.formRow.edited', { date: prettyLastModified })}
           </Text>
         </Flex>
         <Box gridArea="status" alignSelf="center">

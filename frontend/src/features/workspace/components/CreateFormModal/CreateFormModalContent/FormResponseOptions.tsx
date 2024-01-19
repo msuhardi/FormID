@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { BiLockAlt, BiMailSend } from 'react-icons/bi'
 import { forwardRef, Stack, UnorderedList } from '@chakra-ui/react'
 import parse from 'html-react-parser'
@@ -30,6 +31,8 @@ export const FormResponseOptions = forwardRef<
   FormResponseOptionsProps,
   'button'
 >(({ value, onChange }, ref) => {
+  const { t } = useTranslation()
+
   return (
     <Stack spacing="1rem" w="100%" direction={{ base: 'column', md: 'row' }}>
       <Tile
@@ -41,7 +44,7 @@ export const FormResponseOptions = forwardRef<
         isFullWidth
         flex={1}
       >
-        <Tile.Title>Disimpan di FormSG</Tile.Title>
+        <Tile.Title>{t('features.common.responseMode.storage')}</Tile.Title>
         <Tile.Subtitle>Lihat / unduh respons formulir di FormSG</Tile.Subtitle>
         <OptionDescription
           listItems={[
@@ -59,7 +62,7 @@ export const FormResponseOptions = forwardRef<
         isFullWidth
         flex={1}
       >
-        <Tile.Title>Melalui Email</Tile.Title>
+        <Tile.Title>{t('features.common.responseMode.email')}</Tile.Title>
         <Tile.Subtitle>
           Respons formulir akan dikirim ke email Anda
         </Tile.Subtitle>

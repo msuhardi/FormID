@@ -347,7 +347,7 @@ const clickSubmitBtn = async (page: Page): Promise<string> => {
 
   // Verify end page with timeout of 10s.
   await expect(
-    page.getByText(/thank you for filling out the form./i),
+    page.getByText(/Terima kasih atas respon Anda./i),
   ).toBeVisible({ timeout: 10000 })
 
   const responseIdLocator = page.getByText(/response id:/i)

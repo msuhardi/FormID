@@ -485,7 +485,7 @@ const compileFormModel = (db: Mongoose): IFormModel => {
       inactiveMessage: {
         type: String,
         default:
-          'If you think this is a mistake, please contact the agency that gave you the form link.',
+          'Jika menurut Anda ada kesalahan, harap hubungi agensi yang memberi Anda tautan formulir.',
       },
 
       isListed: {

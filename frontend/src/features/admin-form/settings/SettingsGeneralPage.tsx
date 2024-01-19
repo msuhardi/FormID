@@ -1,6 +1,5 @@
 import { Divider } from '@chakra-ui/react'
 
-import { FormCaptchaToggle } from './components/FormCaptchaToggle'
 import { FormCustomisationSection } from './components/FormCustomisationSection'
 import { FormDetailsSection } from './components/FormDetailsSection'
 import { FormIssueNotificationToggle } from './components/FormIssueNotificationToggle'
@@ -15,8 +14,6 @@ export const SettingsGeneralPage = (): JSX.Element => {
       <FormStatusToggle />
       <FormLimitToggle />
       <FormCustomisationSection />
-      <Divider my="2.5rem" />
-      <FormCaptchaToggle />
       <Divider my="2.5rem" />
       <FormIssueNotificationToggle />
       <Divider my="2.5rem" />

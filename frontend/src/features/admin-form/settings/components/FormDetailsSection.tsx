@@ -1,5 +1,6 @@
 import { KeyboardEventHandler, useCallback } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { FormControl, Skeleton, Stack } from '@chakra-ui/react'
 import { get, isEmpty } from 'lodash'
 
@@ -35,6 +36,7 @@ interface FormTitleInputProps {
   initialTitle: string
 }
 const FormTitleInput = ({ initialTitle }: FormTitleInputProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     control,
     handleSubmit,
@@ -75,7 +77,7 @@ const FormTitleInput = ({ initialTitle }: FormTitleInputProps): JSX.Element => {
 
   return (
     <FormControl isInvalid={!isEmpty(errors)}>
-      <FormLabel isRequired>Form name</FormLabel>
+      <FormLabel isRequired>{t('features.common.formName')}</FormLabel>
 
       <Controller
         control={control}

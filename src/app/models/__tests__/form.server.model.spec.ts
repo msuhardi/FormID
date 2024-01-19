@@ -10,7 +10,6 @@ import {
 } from 'shared/constants/form'
 import {
   BasicField,
-  FormAuthType,
   FormColorTheme,
   FormEndPage,
   FormField,
@@ -65,7 +64,7 @@ const MOCK_EMAIL_FORM_PARAMS = {
 const FORM_DEFAULTS = {
   authType: 'NIL',
   inactiveMessage:
-    'If you think this is a mistake, please contact the agency that gave you the form link.',
+    'Jika menurut Anda ada kesalahan, harap hubungi agensi yang memberi Anda tautan formulir.',
   isListed: true,
   startPage: {
     colorTheme: 'blue',
@@ -74,8 +73,8 @@ const FORM_DEFAULTS = {
     },
   },
   endPage: {
-    title: 'Thank you for filling out the form.',
-    buttonText: 'Submit another response',
+    title: 'Terima kasih atas respon Anda.',
+    buttonText: 'Isi formulir lagi',
   },
   hasCaptcha: true,
   hasIssueNotification: true,
@@ -693,48 +692,6 @@ describe('Form Model', () => {
         await expect(invalidForm.save()).rejects.toThrow(
           mongoose.Error.ValidationError,
         )
-      })
-
-      // Ensure that encrypted sgID forms can be created since they could not before
-      it('should set authType to SGID when given authType is SGID', async () => {
-        // Arrange
-        const encryptFormParams = merge({}, MOCK_ENCRYPTED_FORM_PARAMS, {
-          authType: FormAuthType.SGID,
-        })
-
-        // Act
-        const sgidForm = await EncryptedForm.create(encryptFormParams)
-
-        // Assert
-        await expect(sgidForm.authType).toBe(FormAuthType.SGID)
-      })
-
-      // Ensure that encrypted MyInfo forms can be created since they could not before
-      it('should set authType to MyInfo when given authType is MyInfo', async () => {
-        // Arrange
-        const encryptFormParams = merge({}, MOCK_ENCRYPTED_FORM_PARAMS, {
-          authType: FormAuthType.MyInfo,
-        })
-
-        // Act
-        const myInfoForm = await EncryptedForm.create(encryptFormParams)
-
-        // Assert
-        await expect(myInfoForm.authType).toBe(FormAuthType.MyInfo)
-      })
-
-      // Ensure that encrypted SGID MyInfo forms can be created since they could not before
-      it('should set authType to SGID MyInfo when given authType is SGID MyInfo', async () => {
-        // Arrange
-        const encryptFormParams = merge({}, MOCK_ENCRYPTED_FORM_PARAMS, {
-          authType: FormAuthType.SGID_MyInfo,
-        })
-
-        // Act
-        const sgidMyInfoForm = await EncryptedForm.create(encryptFormParams)
-
-        // Assert
-        await expect(sgidMyInfoForm.authType).toBe(FormAuthType.SGID_MyInfo)
       })
 
       it('should save with default payments settings', async () => {
@@ -1766,8 +1723,8 @@ describe('Form Model', () => {
           endPage: {
             ...updatedEndPage,
             // Defaults should be populated and returned
-            buttonText: 'Submit another response',
-            title: 'Thank you for filling out the form.',
+            buttonText: 'Isi formulir lagi',
+            title: 'Terima kasih atas respon Anda.',
           },
         })
       })

@@ -1,4 +1,5 @@
 import { Controller } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { BiRightArrowAlt } from 'react-icons/bi'
 import {
   Container,
@@ -28,6 +29,7 @@ import { FormResponseOptions } from './FormResponseOptions'
 const FORM_TITLE_LENGTH_WARNING = 65
 
 export const CreateFormDetailsScreen = (): JSX.Element => {
+  const { t } = useTranslation()
   const {
     formMethods,
     handleDetailsSubmit,
@@ -55,7 +57,9 @@ export const CreateFormDetailsScreen = (): JSX.Element => {
       <ModalBody whiteSpace="pre-wrap">
         <Container maxW="42.5rem" p={0}>
           <FormControl isRequired isInvalid={!!errors.title} mb="2.25rem">
-            <FormLabel useMarkdownForDescription>Nama formulir</FormLabel>
+            <FormLabel useMarkdownForDescription>
+              {t('features.common.formName')}
+            </FormLabel>
             <Skeleton isLoaded={!isFetching}>
               <Input
                 autoFocus
