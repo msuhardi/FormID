@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { BiCodeBlock, BiCog, BiDollar, BiKey, BiMessage } from 'react-icons/bi'
+import { useTranslation } from 'react-i18next'
+import { BiCodeBlock, BiCog, BiMessage } from 'react-icons/bi'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   Box,
@@ -22,15 +23,14 @@ import { useUser } from '~features/user/queries'
 import { useAdminFormCollaborators } from '../common/queries'
 
 import { SettingsTab } from './components/SettingsTab'
-import { SettingsAuthPage } from './SettingsAuthPage'
 import { SettingsGeneralPage } from './SettingsGeneralPage'
-import { SettingsPaymentsPage } from './SettingsPaymentsPage'
 import { SettingsTwilioPage } from './SettingsTwilioPage'
 import { SettingsWebhooksPage } from './SettingsWebhooksPage'
 
-const settingsTabsOrder = ['general', 'singpass', 'twilio', 'webhooks']
+const settingsTabsOrder = ['general', 'twilio', 'webhooks']
 
 export const SettingsPage = (): JSX.Element => {
+  const { t } = useTranslation()
   const { formId, settingsTab } = useParams()
   const { user } = useUser()
   const { data: flags } = useFeatureFlags()
@@ -113,13 +113,18 @@ export const SettingsPage = (): JSX.Element => {
             mr={{ base: '1.5rem', md: '4rem', lg: '2rem' }}
             mb="calc(0.5rem - 2px)"
           >
-            <SettingsTab label="General" icon={BiCog} />
-            <SettingsTab label="Singpass" icon={BiKey} />
-            <SettingsTab label="Twilio credentials" icon={BiMessage} />
-            <SettingsTab label="Webhooks" icon={BiCodeBlock} />
-            {displayPayments && (
-              <SettingsTab label="Payments" icon={BiDollar} />
-            )}
+            <SettingsTab
+              label={t('features.settings.tabs.general')}
+              icon={BiCog}
+            />
+            <SettingsTab
+              label={t('features.settings.tabs.twilioCredentials')}
+              icon={BiMessage}
+            />
+            <SettingsTab
+              label={t('features.settings.tabs.webhooks')}
+              icon={BiCodeBlock}
+            />
           </TabList>
         </Flex>
         <TabPanels
@@ -131,19 +136,11 @@ export const SettingsPage = (): JSX.Element => {
             <SettingsGeneralPage />
           </TabPanel>
           <TabPanel>
-            <SettingsAuthPage />
-          </TabPanel>
-          <TabPanel>
             <SettingsTwilioPage />
           </TabPanel>
           <TabPanel>
             <SettingsWebhooksPage />
           </TabPanel>
-          {displayPayments && (
-            <TabPanel>
-              <SettingsPaymentsPage />
-            </TabPanel>
-          )}
         </TabPanels>
         <Spacer />
       </Tabs>

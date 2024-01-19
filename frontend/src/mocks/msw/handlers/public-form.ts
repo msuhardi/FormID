@@ -74,7 +74,7 @@ export const BASE_FORM = {
   },
   authType: 'NIL',
   endPage: {
-    title: 'Thank you for filling out the form.',
+    title: 'Terima kasih atas respon Anda.',
     buttonText: 'Submit another form',
   },
   form_fields: [
@@ -394,7 +394,7 @@ export const BASE_FORM_WITHOUT_SECTIONS = {
   },
   authType: 'NIL',
   endPage: {
-    title: 'Thank you for filling out the form.',
+    title: 'Terima kasih atas respon Anda.',
     buttonText: 'Submit another form',
   },
   form_fields: [
@@ -489,7 +489,7 @@ export const getPublicFormWithoutSectionsResponse = ({
 export const getPublicFormErrorResponse = ({
   delay = 0,
   status = 404,
-  message = 'If you think this is a mistake, please contact the agency that gave you the form link.',
+  message = 'Jika menurut Anda ada kesalahan, harap hubungi agensi yang memberi Anda tautan formulir.',
 }: {
   delay?: number | 'infinite'
   status?: number

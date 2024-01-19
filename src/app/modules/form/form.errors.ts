@@ -26,7 +26,7 @@ export class PrivateFormError extends ApplicationError {
    * @param formTitle Extra meta for form title
    */
   constructor(
-    message = 'If you think this is a mistake, please contact the agency that gave you the form link.',
+    message = 'Jika menurut Anda ada kesalahan, harap hubungi agensi yang memberi Anda tautan formulir.',
     formTitle: string,
   ) {
     super(message)

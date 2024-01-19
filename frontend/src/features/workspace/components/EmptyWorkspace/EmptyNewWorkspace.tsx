@@ -1,9 +1,15 @@
+import { useTranslation } from 'react-i18next'
+
 import { EmptyWorkspace, EmptyWorkspacePage } from './EmptyWorkspace'
 
-export const EmptyNewWorkspace = ({ isLoading }: EmptyWorkspacePage) => (
-  <EmptyWorkspace
-    isLoading={isLoading}
-    title="Anda belum mempunyai formulir di folder ini"
-    subText="Kelola formulir Anda dengan mengkategorikan mereka ke dalam folder"
-  />
-)
+export const EmptyNewWorkspace = ({ isLoading }: EmptyWorkspacePage) => {
+  const { t } = useTranslation()
+
+  return (
+    <EmptyWorkspace
+      isLoading={isLoading}
+      title={t('features.emptyPlaceholder.emptyFolder.title')}
+      subText={t('features.emptyPlaceholder.emptyFolder.helper')}
+    />
+  )
+}

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Skeleton, Text } from '@chakra-ui/react'
 
 import { GUIDE_TWILIO } from '~constants/links'
@@ -9,24 +10,25 @@ import { useFreeSmsQuota } from '~features/admin-form/common/queries'
 import { TwilioDetailsInputs } from './TwilioDetailsInputs'
 
 export const TwilioSettingsSection = (): JSX.Element => {
+  const { t } = useTranslation()
   const { data: freeSmsQuota } = useFreeSmsQuota()
 
   return (
     <>
       <Text mb="1rem">
-        Add your Twilio credentials to pay for Verified SMSes beyond the free
-        tier of&nbsp;
-        <Skeleton as="span" isLoaded={!!freeSmsQuota}>
-          {freeSmsQuota?.quota.toLocaleString() ?? '10,000'}
-        </Skeleton>
-        &nbsp;SMSes.&nbsp;
+        {t('features.settings.twilioCredentials.description', {
+          quota: (
+            <Skeleton as="span" isLoaded={!!freeSmsQuota}>
+              {freeSmsQuota?.quota.toLocaleString() ?? '10,000'}
+            </Skeleton>
+          ),
+        })}
         <Link href={GUIDE_TWILIO} isExternal>
-          How to find your credentials
+          {t('features.settings.twilioCredentials.link')}
         </Link>
       </Text>
       <InlineMessage mb="1rem">
-        Please test SMS verification in your form to verify that your
-        credentials work
+        {t('features.settings.twilioCredentials.info')}
       </InlineMessage>
       <TwilioDetailsInputs />
     </>

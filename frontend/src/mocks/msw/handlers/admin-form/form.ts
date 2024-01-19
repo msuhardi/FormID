@@ -521,7 +521,7 @@ export const createMockForm = (
           logo: { state: FormLogoState.Default },
         },
         endPage: {
-          title: 'Thank you for filling out the form.',
+          title: 'Terima kasih atas respon Anda.',
           buttonText: 'Submit another form',
         },
         webhook: { url: '', isRetryEnabled: false },

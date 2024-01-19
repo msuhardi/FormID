@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Circle, Flex, Text } from '@chakra-ui/layout'
 
 import { FormStatus } from '~shared/types/form/form'
@@ -10,12 +11,20 @@ export interface FormStatusLabelProps {
 export const FormStatusLabel = ({
   status,
 }: FormStatusLabelProps): JSX.Element => {
+  const { t } = useTranslation()
+
   const renderMeta = useMemo(() => {
     switch (status) {
       case FormStatus.Private:
-        return { label: 'Closed', circleColor: 'neutral.500' }
+        return {
+          label: t('features.common.formStatus.closed'),
+          circleColor: 'neutral.500',
+        }
       case FormStatus.Public:
-        return { label: 'Open', circleColor: 'success.500' }
+        return {
+          label: t('features.common.formStatus.open'),
+          circleColor: 'success.500',
+        }
       default:
         throw new Error('Should never happen')
     }

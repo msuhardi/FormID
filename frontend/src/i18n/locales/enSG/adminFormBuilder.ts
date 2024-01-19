@@ -2,7 +2,7 @@ export const adminFormBuilder = {
   thankYouPage: {
     title: 'Edit Thank You page',
     buttonText: 'Button text',
-    defaultButtonText: 'Submit another response',
+    defaultButtonText: 'Isi formulir lagi',
     followUpInstruction: 'Follow-up instruction',
     redirectLink: 'Button redirect link',
     defaultRedirectLink: 'Default form link',

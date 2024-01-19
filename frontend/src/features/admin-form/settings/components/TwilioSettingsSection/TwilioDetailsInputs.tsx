@@ -4,6 +4,7 @@ import {
   useForm,
   UseFormRegisterReturn,
 } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { BiHide, BiShow } from 'react-icons/bi'
 import {
   FormControl,
@@ -63,6 +64,7 @@ const TWILIO_INPUT_RULES: Record<keyof TwilioCredentials, RegisterOptions> = {
 }
 
 export const TwilioDetailsInputs = (): JSX.Element => {
+  const { t } = useTranslation()
   const { data: form, isLoading } = useAdminForm()
 
   const [isApiSecretShown, toggleIsApiSecretShown] = useToggle(false)
@@ -107,7 +109,10 @@ export const TwilioDetailsInputs = (): JSX.Element => {
         }
       }
 
-      return register(name, TWILIO_INPUT_RULES[name])
+      return register(name, {
+        ...TWILIO_INPUT_RULES[name],
+        required: t('features.common.errors.required'),
+      })
     },
     [hasExistingTwilioCreds, register],
   )
@@ -199,7 +204,7 @@ export const TwilioDetailsInputs = (): JSX.Element => {
             isLoading={mutateFormTwilioDetails.isLoading}
             onClick={handleUpdateTwilioDetails}
           >
-            Save credentials
+            {t('features.settings.twilioCredentials.saveCTA')}
           </Button>
         )}
       </Skeleton>

@@ -5,6 +5,7 @@ import {
   useForm,
   useFormContext,
 } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { FormControl } from '@chakra-ui/react'
 import { get, isEmpty, isEqual } from 'lodash'
 import isEmail from 'validator/lib/isEmail'
@@ -24,6 +25,7 @@ interface EmailFormSectionProps {
 export const EmailFormSection = ({
   emails: initialEmails,
 }: EmailFormSectionProps): JSX.Element => {
+  const { t } = useTranslation()
   const initialEmailSet = useMemo(() => new Set(initialEmails), [initialEmails])
   const formMethods = useForm({
     mode: 'onChange',
@@ -53,9 +55,11 @@ export const EmailFormSection = ({
         <FormLabel
           isRequired
           useMarkdownForDescription
-          description={`Add at least **2 recipients** to prevent loss of response. Learn more on [how to guard against email bounces](${GUIDE_PREVENT_EMAIL_BOUNCE}).`}
+          description={t('features.settings.general.formResponse.description', {
+            guideLink: GUIDE_PREVENT_EMAIL_BOUNCE,
+          })}
         >
-          Emails where responses will be sent
+          {t('features.settings.general.formResponse.inputLabel')}
         </FormLabel>
         <AdminEmailRecipientsInput onSubmit={handleSubmitEmails} />
         <FormErrorMessage>{get(errors, 'emails.message')}</FormErrorMessage>
@@ -71,6 +75,7 @@ interface AdminEmailRecipientsInputProps {
 const AdminEmailRecipientsInput = ({
   onSubmit,
 }: AdminEmailRecipientsInputProps): JSX.Element => {
+  const { t } = useTranslation()
   const { getValues, setValue, control, handleSubmit } =
     useFormContext<{ emails: string[] }>()
 
@@ -92,7 +97,7 @@ const AdminEmailRecipientsInput = ({
       rules={ADMIN_EMAIL_VALIDATION_RULES}
       render={({ field }) => (
         <TagInput
-          placeholder="Separate emails with a comma"
+          placeholder={t('features.settings.general.formResponse.placeholder')}
           {...field}
           tagValidation={tagValidation}
           onBlur={handleBlur}

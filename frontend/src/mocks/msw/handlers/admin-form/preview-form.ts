@@ -41,7 +41,7 @@ export const getPreviewFormResponse = ({
 export const getPreviewFormErrorResponse = ({
   delay = 0,
   status = 404,
-  message = 'If you think this is a mistake, please contact the agency that gave you the form link.',
+  message = 'Jika menurut Anda ada kesalahan, harap hubungi agensi yang memberi Anda tautan formulir.',
 }: {
   delay?: number | 'infinite'
   status?: number

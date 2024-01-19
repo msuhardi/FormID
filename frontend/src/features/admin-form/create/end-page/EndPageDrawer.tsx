@@ -149,7 +149,7 @@ export const EndPageInput = ({
           isInvalid={!!errors.paragraph}
           isDisabled={isPayment}
         >
-          <FormLabel isRequired>
+          <FormLabel>
             {t('features.adminFormBuilder.thankYouPage.followUpInstruction')}
           </FormLabel>
           <Textarea {...register('paragraph')} />

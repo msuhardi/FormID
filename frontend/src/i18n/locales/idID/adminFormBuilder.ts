@@ -106,7 +106,7 @@ export const adminFormBuilder = {
         'Responden harus verifikasi dengan memasukan kode OTP. Apabila Anda sudah memiliki kredensial Twilio, silahkan uji coba fitur ini untuk memastikan kredensial yang dimasukkan benar.',
     },
     allowInternationalNumber: 'Bolehkan nomor internasional',
-    smsCounts: 'SMS digunakan',
+    smsCounts: 'kuota SMS gratis terpakai',
     twilioCredentials: {
       success: 'Kredensial Twilio berhasil ditambahkan',
       exceedQuota:

@@ -9,6 +9,9 @@ export const common = {
   delete: 'Hapus',
   back: 'Kembali',
   edit: 'Ubah',
+  loading: 'Loading',
+  responses: 'Respons',
+  feedback: 'Masukan',
   actionsDropdown: {
     ariaLabel: 'Opsi lainnya',
     preview: 'Lihat formulir',
@@ -18,7 +21,7 @@ export const common = {
     moveToFolder: 'Pindahkan ke folder',
   },
   errors: {
-    required: 'Wajib diisi',
+    required: 'Input wajib diisi',
   },
   tooltip: {
     deleteField: 'Hapus pertanyaan',
@@ -35,5 +38,25 @@ export const common = {
     Fridays: 'Jumat',
     Saturdays: 'Sabtu',
     Sundays: 'Minggu',
+  },
+  today: 'hari ini',
+  tomorrow: 'besok',
+  yesterday: 'kemarin',
+  formStatus: {
+    closed: 'Ditutup',
+    open: 'Dibuka',
+  },
+  responseMode: {
+    email: 'Mode email',
+    storage: 'Mode disimpan',
+  },
+  formName: 'Nama formulir',
+  editForm: {
+    text: 'Edit formulir',
+    ariaLabel: 'Klik untuk edit formulir',
+  },
+  formSubmission: {
+    disabled: 'Submisi dinonaktifkan',
+    enabled: 'Kirim respons',
   },
 }

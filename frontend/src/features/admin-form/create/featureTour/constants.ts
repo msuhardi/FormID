@@ -12,7 +12,7 @@ export const FEATURE_TOUR: FeatureTourStepAttributes[] = [
     id: 'feature_tour_first_step',
     title: 'Tambah pertanyaan',
     content:
-      'Tambahkan pertanyaan ke formulir Anda dengan cara menarik dan menjatuhkannya (<i>drag and drop</i>).',
+      'Tambahkan pertanyaan ke formulir Anda dengan cara menyeret dan melepas (<i>drag and drop</i>).',
   },
   {
     id: 'feature_tour_second_step',

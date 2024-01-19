@@ -228,7 +228,7 @@ describe('auth.routes', () => {
       expect(response.status).toEqual(500)
       expect(response.body).toEqual({
         message:
-          'Failed to send login OTP. Please try again later and if the problem persists, contact us.',
+          'Gagal mengirim OTP. Silahkan coba kembali. Apabila masih mengalami masalah, harap kontak kami.',
       })
     })
 
