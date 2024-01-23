@@ -114,7 +114,7 @@ export const RatingResponse = SingleAnswerResponse.extend({
 export type RatingResponse = z.infer<typeof RatingResponse>
 
 export const NricResponse = SingleAnswerResponse.extend({
-  fieldType: z.literal(BasicField.Nric),
+  fieldType: z.literal(BasicField.Nik),
 })
 export type NricResponse = z.infer<typeof NricResponse>
 

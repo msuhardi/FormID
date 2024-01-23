@@ -34,7 +34,7 @@ export const WorkspaceFormRow = ({
   const { t } = useTranslation()
   const prettyLastModified = useMemo(() => {
     return dayjs(formMeta.lastModified).calendar(null, getRelativeDateFormat(t))
-  }, [formMeta.lastModified])
+  }, [formMeta.lastModified, t])
 
   return (
     <Box pos="relative">

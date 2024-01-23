@@ -23,7 +23,7 @@ export const GeneralTabHeader = (): JSX.Element => {
         return t('features.common.responseMode.storage')
     }
     return t('features.common.loading')
-  }, [settings?.responseMode])
+  }, [settings?.responseMode, t])
   return (
     <Wrap
       shouldWrapChildren

@@ -571,7 +571,7 @@ const compileFormModel = (db: Mongoose): IFormModel => {
   FormFieldPath.discriminator(BasicField.Decimal, createDecimalFieldSchema())
   FormFieldPath.discriminator(BasicField.Image, createImageFieldSchema())
   FormFieldPath.discriminator(BasicField.Date, createDateFieldSchema())
-  FormFieldPath.discriminator(BasicField.Nric, createNricFieldSchema())
+  FormFieldPath.discriminator(BasicField.Nik, createNricFieldSchema())
   FormFieldPath.discriminator(BasicField.YesNo, createYesNoFieldSchema())
   FormFieldPath.discriminator(
     BasicField.Statement,
