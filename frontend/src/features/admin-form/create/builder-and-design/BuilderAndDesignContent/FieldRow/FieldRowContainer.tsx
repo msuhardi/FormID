@@ -463,7 +463,7 @@ const FieldRow = ({ field, ...rest }: FieldRowProps) => {
       ) : (
         <EmailField schema={field} {...rest} />
       )
-    case BasicField.Nric:
+    case BasicField.Nik:
       return <NricField schema={field} {...rest} />
     case BasicField.Number:
       return <NumberField schema={field} {...rest} />

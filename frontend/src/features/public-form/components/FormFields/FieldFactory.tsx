@@ -56,7 +56,7 @@ export const FieldFactory = memo(
         return <CheckboxField schema={field} {...rest} />
       case BasicField.Radio:
         return <RadioField schema={field} {...rest} />
-      case BasicField.Nric:
+      case BasicField.Nik:
         return <NricField schema={field} {...rest} />
       case BasicField.Number:
         return <NumberField schema={field} {...rest} />

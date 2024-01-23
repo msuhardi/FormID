@@ -78,7 +78,7 @@ export type FormFieldValue<F extends BasicField = BasicField> = F extends
   | BasicField.HomeNo
   | BasicField.Dropdown
   | BasicField.Rating
-  | BasicField.Nric
+  | BasicField.Nik
   | BasicField.Date
   ? SingleAnswerValue
   : F extends BasicField.YesNo
@@ -154,7 +154,7 @@ export type EmailFieldSchema = FormFieldWithQuestionNo<EmailFieldBase>
 export type HomeNoFieldSchema = FormFieldWithQuestionNo<HomenoFieldBase>
 export type LongTextFieldSchema = FormFieldWithQuestionNo<LongTextFieldBase>
 export type MobileFieldSchema = FormFieldWithQuestionNo<MobileFieldBase>
-export type NricFieldSchema = FormFieldWithQuestionNo<NricFieldBase>
+export type NikFieldSchema = FormFieldWithQuestionNo<NricFieldBase>
 export type NumberFieldSchema = FormFieldWithQuestionNo<NumberFieldBase>
 export type RadioFieldSchema = FormFieldWithQuestionNo<RadioFieldBase>
 export type RatingFieldSchema = FormFieldWithQuestionNo<RatingFieldBase>

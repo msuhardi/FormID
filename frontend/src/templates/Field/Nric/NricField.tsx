@@ -4,19 +4,20 @@
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { createNricValidationRules } from '~utils/fieldValidation'
+import { createNikValidationRules } from '~utils/fieldValidation'
 import Input from '~components/Input'
 
 import { BaseFieldProps, FieldContainer } from '../FieldContainer'
-import { NricFieldSchema, SingleAnswerFieldInput } from '../types'
+import { NikFieldSchema, SingleAnswerFieldInput } from '../types'
 
-export interface NricFieldProps extends BaseFieldProps {
-  schema: NricFieldSchema
+export interface NikFieldProps extends BaseFieldProps {
+  schema: NikFieldSchema
 }
 
-export const NricField = ({ schema }: NricFieldProps): JSX.Element => {
+// Reusing NRIC field for NIK field
+export const NricField = ({ schema }: NikFieldProps): JSX.Element => {
   const validationRules = useMemo(
-    () => createNricValidationRules(schema),
+    () => createNikValidationRules(schema),
     [schema],
   )
 
@@ -27,6 +28,7 @@ export const NricField = ({ schema }: NricFieldProps): JSX.Element => {
       <Input
         aria-label={`${schema.questionNumber}. ${schema.title}`}
         defaultValue=""
+        type="number"
         preventDefaultOnEnter
         {...register(schema._id, {
           ...validationRules,

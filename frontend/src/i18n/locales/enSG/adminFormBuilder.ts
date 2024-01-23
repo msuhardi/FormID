@@ -23,7 +23,7 @@ export const adminFormBuilder = {
     homeNumber: 'Home number',
     mobileNumber: 'Mobile number',
     longText: 'Long answer',
-    nric: 'NRIC/FIN',
+    nik: 'NIK',
     number: 'Number',
     radio: 'Radio',
     rating: 'Rating',

@@ -22,6 +22,10 @@ export const common = {
   },
   errors: {
     required: 'This field is required',
+    validValue: 'Please enter a valid {fieldName}',
+    image: {
+      notProvided: 'Image not provided',
+    },
   },
   tooltip: {
     deleteField: 'Delete field',

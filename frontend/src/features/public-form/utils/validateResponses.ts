@@ -70,7 +70,7 @@ export const validateResponses = (responses: unknown): FieldResponse[] => {
         return HomeNoResponse.parse(response)
       case BasicField.LongText:
         return LongTextResponse.parse(response)
-      case BasicField.Nric:
+      case BasicField.Nik:
         return NricResponse.parse(response)
       case BasicField.Rating:
         return RatingResponse.parse(response)

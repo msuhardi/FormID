@@ -36,15 +36,15 @@ export type FieldColorScheme = Extract<
 >
 
 const primaryColourPalette = {
-  100: '#F6F7FC',
-  200: '#E4E7F6',
-  300: '#B7C0E6',
-  400: '#8998D6',
-  500: '#4A61C0',
-  600: '#3B4E9A',
-  700: '#2C3A73',
-  800: '#1E274D',
-  900: '#161D3A',
+  100: '#f8f9fc',
+  200: '#d4e7d8',
+  300: '#b0d4b5',
+  400: '#8bc294',
+  500: '#66af72',
+  600: '#3A9D52',
+  700: '#2e7a40',
+  800: '#225a2e',
+  900: '#163c1e',
 }
 
 export const colours: { [k in ThemeColorScheme]: Record<string, string> } = {
@@ -61,15 +61,15 @@ export const colours: { [k in ThemeColorScheme]: Record<string, string> } = {
   },
   primary: primaryColourPalette,
   secondary: {
-    100: '#F5F6F8',
-    200: '#DADCE3',
-    300: '#A2A8B9',
-    400: '#69738E',
-    500: '#445072',
-    600: '#36405B',
-    700: '#293044',
-    800: '#1B202E',
-    900: '#0E1017',
+    100: '#f5f8f6',
+    200: '#dae3dd',
+    300: '#a2b9ac',
+    400: '#698e76',
+    500: '#447256',
+    600: '#365b42',
+    700: '#294434',
+    800: '#1b2e22',
+    900: '#0e1712',
   },
   danger: {
     100: '#FFF8F8',

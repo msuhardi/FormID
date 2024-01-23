@@ -9,7 +9,7 @@ import {
   EMAIL_PUBLIC_FORM_FIELDS,
   STORAGE_FORM_SETTINGS_FIELDS,
   STORAGE_PUBLIC_FORM_FIELDS,
-} from '../../constants/form'
+} from '../../constants'
 import { DateString } from '../generic'
 import { FormLogic, LogicDto } from './form_logic'
 import { PaymentChannel, PaymentMethodType, PaymentType } from '../payment'
@@ -301,7 +301,6 @@ export type EndPageUpdateDto = FormEndPage
 export type FormPermissionsDto = FormPermission[]
 export type PermissionsUpdateDto = FormPermission[]
 export type PaymentsUpdateDto = FormPaymentsField
-export type BusinessUpdateDto = FormBusinessField
 export type PaymentsProductUpdateDto = ProductsPaymentField['products']
 
 export type SendFormOtpResponseDto = {

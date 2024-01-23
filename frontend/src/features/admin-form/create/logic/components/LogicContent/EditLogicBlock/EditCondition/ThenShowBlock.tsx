@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Controller, UseFormReturn } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { BiShow, BiX } from 'react-icons/bi'
 import { FormControl, Stack, Text } from '@chakra-ui/react'
 import get from 'lodash/get'
@@ -35,6 +36,7 @@ export const ThenShowBlock = ({
   formFields,
   mapIdToField,
 }: ThenShowBlockProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     watch,
     formState: { errors },
@@ -49,17 +51,17 @@ export const ThenShowBlock = ({
   const logicTypeItems = useMemo(() => {
     return [
       {
-        label: 'Show field(s)',
+        label: t('features.logicPage.actionTypes.showFields'),
         value: LogicType.ShowFields,
         icon: BiShow,
       },
       {
-        label: 'Disable submission',
+        label: t('features.logicPage.actionTypes.disableSubmission'),
         value: LogicType.PreventSubmit,
         icon: BiX,
       },
     ]
-  }, [])
+  }, [t])
 
   /**
    * Effect to reset the logic values if the logic type is changed.
@@ -142,7 +144,7 @@ export const ThenShowBlock = ({
         spacing={{ base: 0, md: '0.5rem' }}
       >
         <BlockLabelText id="logicType-label" htmlFor="logicType">
-          Then
+          {t('features.logicPage.logicClause.then').toUpperCase()}
         </BlockLabelText>
         <FormControl
           isReadOnly={isLoading}
@@ -154,13 +156,15 @@ export const ThenShowBlock = ({
             name="logicType"
             control={control}
             rules={{
-              required: 'Please select logic type.',
+              required: t('features.logicPage.errors.missingLogicType'),
             }}
             render={({ field }) => (
               <SingleSelect
                 isDisabled={isLoading}
                 isClearable={false}
-                placeholder="Select a type of result"
+                placeholder={t(
+                  'features.logicPage.logicClause.selectResultType',
+                )}
                 items={logicTypeItems}
                 {...field}
               />
@@ -178,7 +182,7 @@ export const ThenShowBlock = ({
           id={`${currentShowLabel}-label`}
           htmlFor={currentShowLabel}
         >
-          Show
+          {t('features.logicPage.logicClause.show').toUpperCase()}
         </BlockLabelText>
         <ThenLogicInput
           formFields={formFields}
@@ -197,6 +201,7 @@ const ThenLogicInput = ({
   formFields,
   mapIdToField,
 }: ThenShowBlockProps) => {
+  const { t } = useTranslation()
   const {
     watch,
     control,
@@ -240,11 +245,12 @@ const ThenLogicInput = ({
           {...register('preventSubmitMessage', {
             required: {
               value: !!getValues('logicType'),
-              message:
-                'Please enter a message to display when submission is prevented',
+              message: t('features.logicPage.errors.disabledSubmissionMessage'),
             },
           })}
-          placeholder="Custom message to be displayed when submission is prevented"
+          placeholder={t(
+            'features.logicPage.actionTypes.disabledSubmissionMessagePlaceholder',
+          )}
         />
         <FormErrorMessage>
           {errors.preventSubmitMessage?.message}

@@ -22,6 +22,10 @@ export const common = {
   },
   errors: {
     required: 'Input wajib diisi',
+    validValue: 'Harap masukan {fieldName} yang valid',
+    image: {
+      notProvided: 'Gambar tidak disediakan',
+    },
   },
   tooltip: {
     deleteField: 'Hapus pertanyaan',

@@ -107,7 +107,7 @@ export const MemoFieldDrawerContent = memo<MemoFieldDrawerContentProps>(
         return <EditHomeno {...props} field={field} />
       case BasicField.Email:
         return <EditEmail {...props} field={field} />
-      case BasicField.Nric:
+      case BasicField.Nik:
         return <EditNric {...props} field={field} />
       case BasicField.Number:
         return <EditNumber {...props} field={field} />

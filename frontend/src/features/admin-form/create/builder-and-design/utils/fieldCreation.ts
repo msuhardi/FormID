@@ -1,24 +1,13 @@
 import { TFunction } from 'i18next'
 
-import { MYINFO_ATTRIBUTE_MAP } from '~shared/constants/field/myinfo'
 import {
   AttachmentSize,
   BasicField,
   FieldCreateDto,
-  MyInfoAttribute,
-  MyInfoChildAttributes,
-  MyInfoField,
   RatingShape,
 } from '~shared/types/field'
 
 import { BASICFIELD_TO_DRAWER_META } from '../../constants'
-import {
-  MYINFO_CHILDRENFIELD_META,
-  MYINFO_DATEFIELD_META,
-  MYINFO_DROPDOWNFIELD_META,
-  MYINFO_MOBILEFIELD_META,
-  MYINFO_TEXTFIELD_META,
-} from '../constants'
 
 import { createShortTextColumn } from './columnCreation'
 
@@ -50,7 +39,7 @@ export const getFieldCreationMeta = (
       }
     }
     case BasicField.YesNo:
-    case BasicField.Nric:
+    case BasicField.Nik:
     case BasicField.Section:
     case BasicField.Statement: {
       return {
@@ -217,94 +206,6 @@ export const getFieldCreationMeta = (
         fieldType,
         ...baseMeta,
       }
-    }
-  }
-}
-
-export const getMyInfoFieldCreationMeta = (
-  myInfoAttribute: Exclude<
-    MyInfoAttribute,
-    MyInfoChildAttributes[keyof MyInfoChildAttributes]
-  >,
-): MyInfoField => {
-  const baseMeta: Pick<
-    MyInfoField,
-    'disabled' | 'required' | 'title' | 'description' | 'fieldType' | 'myInfo'
-  > = {
-    disabled: false,
-    required: true,
-    title: MYINFO_ATTRIBUTE_MAP[myInfoAttribute].value,
-    description: '',
-    fieldType: MYINFO_ATTRIBUTE_MAP[myInfoAttribute].fieldType,
-    myInfo: {
-      attr: myInfoAttribute,
-    },
-  }
-
-  switch (myInfoAttribute) {
-    case MyInfoAttribute.Name:
-    case MyInfoAttribute.PassportNumber:
-    case MyInfoAttribute.VehicleNo:
-    case MyInfoAttribute.RegisteredAddress:
-    case MyInfoAttribute.MarriageCertNo:
-    case MyInfoAttribute.Employment: {
-      return {
-        ...baseMeta,
-        fieldType: BasicField.ShortText,
-        ...MYINFO_TEXTFIELD_META,
-      }
-    }
-
-    case MyInfoAttribute.DateOfBirth:
-    case MyInfoAttribute.PassportExpiryDate:
-    case MyInfoAttribute.WorkpassExpiryDate:
-    case MyInfoAttribute.MarriageDate:
-    case MyInfoAttribute.DivorceDate: {
-      return {
-        ...baseMeta,
-        fieldType: BasicField.Date,
-        ...MYINFO_DATEFIELD_META,
-      }
-    }
-
-    case MyInfoAttribute.Sex:
-    case MyInfoAttribute.Race:
-    case MyInfoAttribute.Nationality:
-    case MyInfoAttribute.BirthCountry:
-    case MyInfoAttribute.ResidentialStatus:
-    case MyInfoAttribute.Dialect:
-    case MyInfoAttribute.HousingType:
-    case MyInfoAttribute.HdbType:
-    case MyInfoAttribute.Occupation:
-    case MyInfoAttribute.WorkpassStatus:
-    case MyInfoAttribute.Marital:
-    case MyInfoAttribute.CountryOfMarriage: {
-      return {
-        ...baseMeta,
-        fieldType: BasicField.Dropdown,
-        ...MYINFO_DROPDOWNFIELD_META,
-      }
-    }
-
-    case MyInfoAttribute.MobileNo: {
-      return {
-        ...baseMeta,
-        fieldType: BasicField.Mobile,
-        ...MYINFO_MOBILEFIELD_META,
-      }
-    }
-
-    case MyInfoAttribute.ChildrenBirthRecords: {
-      return {
-        ...baseMeta,
-        fieldType: BasicField.Children,
-        ...MYINFO_CHILDRENFIELD_META,
-      }
-    }
-
-    default: {
-      const exception: never = myInfoAttribute
-      throw new Error(`MyInfo type is not implemented: ${exception}`)
     }
   }
 }

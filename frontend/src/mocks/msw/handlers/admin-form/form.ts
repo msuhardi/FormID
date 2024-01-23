@@ -222,15 +222,6 @@ export const MOCK_FORM_FIELDS: FormFieldDto[] = [
     globalId: '1KjTqMp582fiF9oChFxmw6De7B2U1zQGvJ0TLm5rcZu',
   },
   {
-    title: 'NRIC',
-    description: '',
-    required: true,
-    disabled: false,
-    fieldType: BasicField.Nric,
-    _id: '5da04ec43738d1001260773b',
-    globalId: '0KHU4aNnFVS5y8CLqkXWf9A0RknGIqzNoVfOUlqNRDl',
-  },
-  {
     addMoreRows: false,
     title: 'Table',
     description: '',

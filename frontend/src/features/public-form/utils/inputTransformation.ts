@@ -249,7 +249,7 @@ export const transformInputsToOutputs = (
     case BasicField.Dropdown:
     case BasicField.CountryRegion:
     case BasicField.Rating:
-    case BasicField.Nric:
+    case BasicField.Nik:
     case BasicField.Statement:
     case BasicField.Image:
       // No output needed.

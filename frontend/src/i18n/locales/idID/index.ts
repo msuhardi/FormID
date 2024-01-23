@@ -4,6 +4,7 @@ import { common } from './common'
 import { emptyPlaceholder } from './emptyPlaceholder'
 import { form } from './form'
 import { formRow } from './formRow'
+import { headerAndInstruction } from './headerAndInstruction'
 import { logicPage } from './logicPage'
 import { login } from './login'
 import { modal } from './modal'
@@ -24,6 +25,7 @@ export const idID = {
       emptyPlaceholder,
       formRow,
       logicPage,
+      headerAndInstruction,
     },
   },
 }

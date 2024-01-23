@@ -59,7 +59,7 @@ export const AdminFormLayout = (): JSX.Element => {
       }}
     >
       {bannerProps ? (
-        <Banner useMarkdown variant={bannerProps.variant}>
+        <Banner useMarkdown variant="warn">
           {bannerProps.msg}
         </Banner>
       ) : null}

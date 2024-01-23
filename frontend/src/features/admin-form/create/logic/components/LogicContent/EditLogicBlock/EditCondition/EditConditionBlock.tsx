@@ -142,11 +142,14 @@ export const EditConditionBlock = ({
     return (
       LOGIC_MAP.get(currentSelectedField.fieldType)?.map((v) => ({
         // Remove leading 'is' from the condition name for rendering.
-        label: v.replace(/^is\s/i, ''),
+        label: t(`features.logicPage.logicCondition.${v}`).replace(
+          /^is\s/i,
+          '',
+        ),
         value: v,
       })) ?? []
     )
-  }, [currentSelectedField])
+  }, [currentSelectedField, t])
 
   const conditionValueItems = useMemo(() => {
     if (!ifFieldIdValue || !mapIdToField) return []
@@ -292,7 +295,7 @@ export const EditConditionBlock = ({
           }}
         >
           <BlockLabelText id={`${name}.field-label`} htmlFor={`${name}.field`}>
-            IF
+            {t('features.logicPage.logicClause.if').toUpperCase()}
           </BlockLabelText>
           {handleRemoveCondition ? (
             <IconButton
@@ -326,7 +329,9 @@ export const EditConditionBlock = ({
                 <SingleSelect
                   isDisabled={isLoading}
                   isClearable={false}
-                  placeholder="Select a question"
+                  placeholder={t(
+                    'features.logicPage.logicClause.selectQuestion',
+                  )}
                   items={allowedIfConditionFieldsOptions}
                   {...field}
                 />
@@ -342,7 +347,7 @@ export const EditConditionBlock = ({
           spacing={{ base: 0, md: '0.5rem' }}
         >
           <BlockLabelText id={`${name}.state-label`} htmlFor={`${name}.state`}>
-            IS
+            {t('features.logicPage.logicClause.is').toUpperCase()}
           </BlockLabelText>
           <Flex flexDir="column" flex={1} as="fieldset" minW={0}>
             <VisuallyHidden as="legend">Logic criteria</VisuallyHidden>
@@ -393,7 +398,9 @@ export const EditConditionBlock = ({
                   control={control}
                   name={`${name}.value`}
                   rules={{
-                    required: 'Please enter logic criteria.',
+                    required: t(
+                      'features.logicPage.errors.missingLogicCriteria',
+                    ),
                     validate: validateValueInputComponent,
                   }}
                   render={({ field }) => renderValueInputComponent(field)}

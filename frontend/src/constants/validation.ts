@@ -1,4 +1,6 @@
-export const REQUIRED_ERROR = 'This field is required'
+import i18n from 'i18next'
+
+export const REQUIRED_ERROR = i18n.t('features.common.errors.required')
 
 export const INVALID_EMAIL_ERROR = 'Please enter a valid email'
 export const INVALID_EMAIL_DOMAIN_ERROR =

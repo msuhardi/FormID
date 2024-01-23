@@ -39,6 +39,7 @@ services:
       - WEBHOOK_SQS_URL=http://localhost:4566/000000000000/local-webhooks-sqs-main
       - SENTRY_CONFIG_URL=https://random@sentry.io/123456
       - CSP_REPORT_URI=https://random@sentry.io/123456
+      - SITE_BANNER_CONTENT=warn:this is a test
       # This needs to be removed and replaced with a real tracking ID in a local .env file
       # in order to enable GA in a local environment
       # TODO: remove after React rollout #4786
