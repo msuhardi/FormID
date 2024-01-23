@@ -21,6 +21,7 @@ import {
   FieldResponse,
   FormFieldSchema,
   IAttachmentInfo,
+  IEmailFieldSchema,
   IFormDocument,
 } from '../../../types'
 import {
@@ -128,7 +129,7 @@ export const extractEmailConfirmationData = (
       response.fieldType === BasicField.Email &&
       response.answer
     ) {
-      const options = field.autoReplyOptions
+      const options = (field as IEmailFieldSchema).autoReplyOptions
       if (options.hasAutoReply) {
         acc.push({
           email: response.answer,

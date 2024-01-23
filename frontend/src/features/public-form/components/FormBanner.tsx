@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
 
-import { FormAuthType } from '~shared/types'
-
 import { getBannerProps } from '~utils/getBannerProps'
 import { Banner } from '~components/Banner'
 

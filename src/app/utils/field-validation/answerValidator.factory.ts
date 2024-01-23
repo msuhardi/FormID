@@ -43,7 +43,7 @@ export const constructSingleAnswerValidator = (
     case BasicField.ShortText:
     case BasicField.LongText:
       return constructTextValidator(formField)
-    case BasicField.Nric:
+    case BasicField.Nik:
       return constructNricValidator()
     case BasicField.HomeNo:
       return constructHomeNoValidator(formField)

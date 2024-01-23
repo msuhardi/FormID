@@ -1,8 +1,5 @@
 import { Box, Container, Grid, useDisclosure } from '@chakra-ui/react'
 
-import { GUIDE_PAYMENTS_ENTRY } from '~constants/links'
-import InlineMessage from '~components/InlineMessage'
-
 import CreateFormModal from './components/CreateFormModal'
 import {
   EmptyDefaultWorkspace,

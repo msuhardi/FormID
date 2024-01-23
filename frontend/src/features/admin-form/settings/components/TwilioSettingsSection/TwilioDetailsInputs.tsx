@@ -114,7 +114,7 @@ export const TwilioDetailsInputs = (): JSX.Element => {
         required: t('features.common.errors.required'),
       })
     },
-    [hasExistingTwilioCreds, register],
+    [hasExistingTwilioCreds, register, t],
   )
 
   const onDelete = useCallback(

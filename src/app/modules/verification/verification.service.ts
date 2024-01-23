@@ -10,6 +10,7 @@ import {
 } from '../../../../shared/utils/verification'
 import {
   IFormSchema,
+  IMobileFieldSchema,
   IPopulatedForm,
   IVerificationFieldSchema,
   IVerificationSchema,
@@ -598,7 +599,8 @@ export const shouldGenerateMobileOtp = (
 
   // Check if recipient is within the allowed countries set by the field
   const recipientIsWithinAllowedCountries =
-    startsWithSgPrefix(recipient) || field.allowIntlNumbers
+    startsWithSgPrefix(recipient) ||
+    (field as IMobileFieldSchema).allowIntlNumbers
 
   return field.isVerifiable && recipientIsWithinAllowedCountries
     ? okAsync(true)

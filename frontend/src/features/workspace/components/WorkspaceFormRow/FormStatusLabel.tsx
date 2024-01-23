@@ -28,7 +28,7 @@ export const FormStatusLabel = ({
       default:
         throw new Error('Should never happen')
     }
-  }, [status])
+  }, [status, t])
 
   return (
     <Flex align="center">

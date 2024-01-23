@@ -121,8 +121,8 @@ export const types: BasicFieldBlock[] = [
     answerArray: false,
   },
   {
-    name: BasicField.Nric,
-    value: 'NRIC',
+    name: BasicField.Nik,
+    value: 'NIK',
     submitted: true,
     answerArray: false,
   },

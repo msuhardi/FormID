@@ -81,7 +81,7 @@ export const FormBannerLogo = ({
     if (fallbackType !== 'loaded') {
       return <Skeleton h="4rem" w="4rem" />
     }
-  }, [fallbackType, logoImgSrc])
+  }, [fallbackType, logoImgSrc, t])
 
   if (!hasLogo && !isLoading) return null
 
