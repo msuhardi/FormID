@@ -4,6 +4,7 @@
  */
 import { RegisterOptions } from 'react-hook-form'
 import { isValid, parse } from 'date-fns'
+import i18n from 'i18next'
 import { identity } from 'lodash'
 import simplur from 'simplur'
 import validator from 'validator'
@@ -33,7 +34,6 @@ import {
   TextSelectedValidation,
 } from '~shared/types/field'
 import { isDateAnInvalidDay } from '~shared/utils/date-validation'
-import { isMFinSeriesValid, isNricValid } from '~shared/utils/nric-validation'
 import {
   isHomePhoneNumber,
   isMobilePhoneNumber,
@@ -46,6 +46,7 @@ import {
   INVALID_EMAIL_ERROR,
   REQUIRED_ERROR,
 } from '~constants/validation'
+import { isValidNik } from '~utils/nikValidation'
 import {
   CheckboxFieldValues,
   SingleAnswerValue,
@@ -356,7 +357,7 @@ export const createTextValidationRules: ValidationRuleFn<
   }
 }
 
-export const createNricValidationRules: ValidationRuleFn<NricFieldBase> = (
+export const createNikValidationRules: ValidationRuleFn<NricFieldBase> = (
   schema,
 ): RegisterOptions => {
   return {
@@ -365,9 +366,8 @@ export const createNricValidationRules: ValidationRuleFn<NricFieldBase> = (
       validNric: (val?: string) => {
         if (!val) return true
         return (
-          isNricValid(val) ||
-          isMFinSeriesValid(val) ||
-          'Please enter a valid NRIC/FIN'
+          isValidNik(val) ||
+          i18n.t('features.common.errors.validValue', { fieldName: 'NIK' })
         )
       },
     },

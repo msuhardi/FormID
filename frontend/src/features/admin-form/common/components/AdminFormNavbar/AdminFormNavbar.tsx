@@ -100,7 +100,7 @@ export const AdminFormNavbar = ({
     const lastModified = formInfo ? new Date(formInfo.lastModified) : new Date()
     return (
       <Skeleton isLoaded={!!formInfo}>
-        <Text textStyle="caption-2" color="neutral.700" textAlign="right">
+        <Text textStyle="legal" color="neutral.700" textAlign="right">
           {/* Use spans with nowrap to break the second half of the date as a group */}
           <chakra.span>
             Disimpan terakhir {format(lastModified, 'h:mm a')},{' '}

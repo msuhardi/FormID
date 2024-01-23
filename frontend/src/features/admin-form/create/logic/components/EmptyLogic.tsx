@@ -30,10 +30,9 @@ export const EmptyLogic = (): JSX.Element => {
         {t('features.logicPage.title')}
       </Text>
       <Text textStyle="body-1" mt="1rem">
-        Show or hide fields depending on user input, or disable form submission
-        for invalid answers.{' '}
+        {t('features.logicPage.helperText')}{' '}
         <Link isExternal href={GUIDE_FORM_LOGIC}>
-          Learn to work with logic
+          {t('features.logicPage.helperTextCta')}
         </Link>
       </Text>
       <Button
@@ -41,12 +40,14 @@ export const EmptyLogic = (): JSX.Element => {
         leftIcon={<BiPlus fontSize="1.5rem" />}
         onClick={setToCreating}
       >
-        Add logic
+        {t('features.logicPage.addLogicBtn')}
       </Button>
       <LogicSvgr maxW="292px" />
       <Divider my="2.5rem" />
       <Stack spacing="1.5rem" textAlign="center" maxW="28rem">
-        <Text textStyle="subhead-3">Allowed fields</Text>
+        <Text textStyle="subhead-3">
+          {t('features.logicPage.allowedFields')}
+        </Text>
         <Flex>
           <Grid
             columnGap="3.5rem"
@@ -57,9 +58,17 @@ export const EmptyLogic = (): JSX.Element => {
             }}
           >
             {ALLOWED_FIELDS_META.map(({ icon, label }) => (
-              <Stack key={label} direction="row" align="center">
+              <Stack
+                key={label}
+                direction="row"
+                align="center"
+                w="fit-content"
+                minW="8rem"
+              >
                 <Icon fontSize="1rem" as={icon} />
-                <Text textStyle="body-2">{label}</Text>
+                <Text textStyle="body-2" sx={{ textWrap: 'nowrap' }}>
+                  {t(label)}
+                </Text>
               </Stack>
             ))}
           </Grid>

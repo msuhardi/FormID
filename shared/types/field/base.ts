@@ -17,7 +17,7 @@ export enum BasicField {
   Attachment = 'attachment',
   Date = 'date',
   Rating = 'rating',
-  Nric = 'nric',
+  Nik = 'nik',
   Table = 'table',
   Children = 'children',
 }

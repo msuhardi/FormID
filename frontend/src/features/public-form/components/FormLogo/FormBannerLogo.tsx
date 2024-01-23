@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiImage } from 'react-icons/bi'
 import {
   Box,
@@ -57,6 +58,7 @@ export const FormBannerLogo = ({
   colorTheme,
   isLoading,
 }: FormBannerLogoProps): JSX.Element | null => {
+  const { t } = useTranslation()
   const [fallbackType, setFallbackType] = useState<
     'loading' | 'error' | 'loaded'
   >('loading')
@@ -69,7 +71,9 @@ export const FormBannerLogo = ({
 
   const fallback = useMemo(() => {
     if (!logoImgSrc && fallbackType !== 'loading') {
-      return <InvalidLogo message="Image not provided" />
+      return (
+        <InvalidLogo message={t('features.common.errors.image.notProvided')} />
+      )
     }
     if (fallbackType === 'error') {
       return <InvalidLogo message="Image not found" />

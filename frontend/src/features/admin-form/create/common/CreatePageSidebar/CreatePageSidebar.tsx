@@ -29,6 +29,7 @@ import { FEATURE_TOUR } from '../../featureTour/constants'
 import { DrawerTabIcon } from './DrawerTabIcon'
 
 export const CreatePageSidebar = (): JSX.Element | null => {
+  const { t } = useTranslation()
   const isMobile = useIsMobile()
   const setFieldsToInactive = useFieldBuilderStore(setToInactiveSelector)
   const isDirty = useDirtyFieldStore(isDirtySelector)
@@ -39,7 +40,6 @@ export const CreatePageSidebar = (): JSX.Element | null => {
     handleLogicClick,
     handleEndpageClick,
   } = useCreatePageSidebar()
-  const { t } = useTranslation()
 
   const handleDrawerBuilderClick = useCallback(() => {
     // Always show create field drawer when sidebar icon is tapped on mobile.
@@ -85,7 +85,7 @@ export const CreatePageSidebar = (): JSX.Element | null => {
           id={FEATURE_TOUR[0].id}
         />
         <DrawerTabIcon
-          label="Ubah judul & instruksi formulir"
+          label={t('features.headerAndInstruction.title')}
           icon={<BxsDockTop fontSize="1.5rem" />}
           onClick={handleDrawerDesignClick}
           isActive={activeTab === DrawerTabs.Design}

@@ -49,12 +49,9 @@ import { BasicField, MyInfoAttribute } from '~shared/types/field'
 type BuilderSidebarFieldMeta = {
   label: string
   icon: As
-  // Is this fieldType included in submissions?
   isSubmitted: boolean
 }
 
-// !!! Do not use this to reference field titles for MyInfo fields. !!!
-// !!! Use MYINFO_ATTRIBUTE_MAP in ~/shared/constants/field/myinfo/index.ts instead !!!
 export const BASICFIELD_TO_DRAWER_META: {
   [key in BasicField]: BuilderSidebarFieldMeta
 } = {
@@ -136,8 +133,8 @@ export const BASICFIELD_TO_DRAWER_META: {
     isSubmitted: true,
   },
 
-  [BasicField.Nric]: {
-    label: 'features.adminFormBuilder.builder.nric',
+  [BasicField.Nik]: {
+    label: 'features.adminFormBuilder.builder.nik',
     icon: BiUser,
     isSubmitted: true,
   },

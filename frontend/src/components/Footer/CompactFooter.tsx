@@ -1,13 +1,8 @@
-import { chakra, Divider, Flex, Link, Stack, Wrap } from '@chakra-ui/react'
+import { Flex, Link, Stack, Wrap } from '@chakra-ui/react'
 
-import { ReactComponent as BrandHortSvg } from '~assets/svgs/brand/brand-hort-colour.svg'
-import { ReactComponent as BrandHortLightMonoSvg } from '~assets/svgs/brand/brand-hort-lightmono.svg'
 import { AdaptedText } from '~components/Footer/AdaptedText'
 
 import { FooterContainerProps, FooterVariantProps } from './common/types'
-
-const BrandHortLogo = chakra(BrandHortSvg)
-const BrandHortLightMonoLogo = chakra(BrandHortLightMonoSvg)
 
 interface CompactedFooterProps extends FooterVariantProps {
   compactMonochromeLogos?: boolean
@@ -15,45 +10,11 @@ interface CompactedFooterProps extends FooterVariantProps {
 
 /** Desktop only compact footer variant */
 export const CompactFooter = ({
-  footerIconLink,
-  textColorScheme,
   footerLinks,
-  compactMonochromeLogos,
-  appLink,
   containerProps,
 }: CompactedFooterProps): JSX.Element => {
   return (
-    <CompactFooter.Container {...containerProps}>
-      <Stack direction="row" h="2.25rem" align="center" spacing="2rem">
-        <Link
-          colorScheme={compactMonochromeLogos ? 'white' : textColorScheme}
-          isExternal
-          title="Link to application homepage"
-          href={appLink}
-        >
-          {compactMonochromeLogos ? (
-            <BrandHortLightMonoLogo h="1rem" />
-          ) : (
-            <BrandHortLogo h="1rem" />
-          )}
-        </Link>
-        <Divider
-          orientation="vertical"
-          color={compactMonochromeLogos ? 'neutral.300' : undefined}
-        />
-        <Link
-          isExternal
-          title={footerIconLink.label}
-          colorScheme={compactMonochromeLogos ? 'white' : textColorScheme}
-          href={footerIconLink.href}
-        >
-          <footerIconLink.Icon
-            fill={compactMonochromeLogos ? 'white' : undefined}
-            height="1.5rem"
-          />
-        </Link>
-      </Stack>
-
+    <CompactFooter.Container {...containerProps} justifyContent="flex-end">
       <Stack spacing="1.5rem">
         <Wrap
           flex={1}

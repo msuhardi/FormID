@@ -97,17 +97,12 @@ export const LoginPageTemplate: FC = ({ children }) => {
     [bannerContent],
   )
 
-  const bannerColorIntensity = 600
-  const bannerColor = `primary.${bannerColorIntensity}` // So banner colors are different from the blue background (left of login screen).
+  const bannerColor = `primary.400`
 
   return (
     <BackgroundBox>
       {bannerProps ? (
-        <Banner
-          useMarkdown
-          variant={bannerProps.variant}
-          bannerColor={bannerColor}
-        >
+        <Banner useMarkdown variant={bannerProps.variant}>
           {bannerProps.msg}
         </Banner>
       ) : null}
