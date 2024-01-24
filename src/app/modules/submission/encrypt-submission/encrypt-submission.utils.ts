@@ -204,7 +204,7 @@ const errorMapper: MapRouteError = (error) => {
       return {
         statusCode: StatusCodes.CONFLICT,
         errorMessage:
-          'The form has been updated. Please refresh and submit again.',
+          'The form has been updated. Please refresh and submit again. (Encrypt)',
       }
     case PaymentNotFoundError:
     case CreatePresignedPostError:

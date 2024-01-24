@@ -505,12 +505,9 @@ export const handleEncryptedSubmission = [
 ] as ControllerHandler[]
 
 export const handleStorageSubmission = [
-  CaptchaMiddleware.validateCaptchaParams,
-  TurnstileMiddleware.validateTurnstileParams,
   ReceiverMiddleware.receiveStorageSubmission,
   EncryptSubmissionMiddleware.validateStorageSubmissionParams,
   EncryptSubmissionMiddleware.createFormsgAndRetrieveForm,
-  EncryptSubmissionMiddleware.checkNewBoundaryEnabled,
   EncryptSubmissionMiddleware.scanAndRetrieveAttachments,
   EncryptSubmissionMiddleware.validateStorageSubmission,
   EncryptSubmissionMiddleware.encryptSubmission,

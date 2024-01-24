@@ -5,16 +5,13 @@ import { Banner } from '~components/Banner'
 
 import { useEnv } from '~features/env/queries'
 
-import { usePublicFormContext } from '../PublicFormContext'
-
 export const FormBanner = (): JSX.Element | null => {
   const { data: { siteBannerContent, isGeneralMaintenance } = {} } = useEnv()
-  const { form } = usePublicFormContext()
 
   const bannerContent = useMemo(
     // Use || instead of ?? so that we fall through even if previous banners are empty string.
     () => siteBannerContent || isGeneralMaintenance || undefined,
-    [form?.authType, isGeneralMaintenance, siteBannerContent],
+    [isGeneralMaintenance, siteBannerContent],
   )
 
   const bannerProps = useMemo(

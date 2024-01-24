@@ -63,4 +63,11 @@ export const common = {
     disabled: 'Submisi dinonaktifkan',
     enabled: 'Kirim respons',
   },
+  feedbackSubmission: {
+    title: 'Bagaimana pengalaman Anda mengisi formulir ini?',
+    ratingRequired: 'Wajib masukkan penilaian Anda',
+    feedbackPlaceholder:
+      'Beritahu kami bagaimana pengalaman Anda mengisi formulir ini',
+    cta: 'Kirim penilaian',
+  },
 }

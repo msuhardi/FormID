@@ -63,4 +63,10 @@ export const common = {
     disabled: 'Submission disabled',
     enabled: 'Submit now',
   },
+  feedbackSubmission: {
+    title: 'How was your form filling experience today?',
+    ratingRequired: 'Please select a rating',
+    feedbackPlaceholder: 'Tell us more about your experience',
+    cta: 'Submit feedback',
+  },
 }

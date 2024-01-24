@@ -127,8 +127,6 @@ export const submitEmailModeForm = async ({
   formLogics,
   formInputs,
   formId,
-  captchaResponse = null,
-  captchaType = '',
   responseMetadata,
 }: SubmitEmailFormArgs): Promise<SubmissionResponseDto> => {
   const filteredInputs = filterHiddenInputs({
@@ -142,15 +140,11 @@ export const submitEmailModeForm = async ({
     responseMetadata,
   })
 
+  console.log('submitEmailModeForm', formFields, formInputs, formData)
+
   return ApiService.post<SubmissionResponseDto>(
     `${PUBLIC_FORMS_ENDPOINT}/${formId}/submissions/email`,
     formData,
-    {
-      params: {
-        captchaResponse: String(captchaResponse),
-        captchaType: captchaType,
-      },
-    },
   ).then(({ data }) => data)
 }
 

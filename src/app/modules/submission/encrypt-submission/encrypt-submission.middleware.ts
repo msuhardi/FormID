@@ -401,7 +401,7 @@ export const validateStorageSubmission = async (
   }
 
   // Validate submission
-  return await SubmissionService.validateAttachments(
+  return SubmissionService.validateAttachments(
     req.body.responses,
     formDef.responseMode,
   )
