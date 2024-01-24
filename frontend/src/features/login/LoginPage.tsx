@@ -14,19 +14,14 @@ import {
 } from '~features/analytics/AnalyticsService'
 
 import { LoginForm, LoginFormInputs } from './components/LoginForm'
-import { OrDivider } from './components/OrDivider'
 import { OtpForm, OtpFormInputs } from './components/OtpForm'
-import { SgidLoginButton } from './components/SgidLoginButton'
 import { LoginPageTemplate } from './LoginPageTemplate'
-import { useIsIntranetCheck } from './queries'
 
 export type LoginOtpData = {
   email: string
 }
 
 export const LoginPage = (): JSX.Element => {
-  const { data: isIntranetIp } = useIsIntranetCheck()
-
   const [, setIsAuthenticated] = useLocalStorage<boolean>(LOGGED_IN_KEY)
   const [email, setEmail] = useState<string>()
   const [otpPrefix, setOtpPrefix] = useState<string>('')

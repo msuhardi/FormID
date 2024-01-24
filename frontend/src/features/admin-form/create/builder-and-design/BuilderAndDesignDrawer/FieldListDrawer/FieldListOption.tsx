@@ -105,7 +105,7 @@ export const BasicFieldOption = forwardRef<BasicFieldOptionProps, 'button'>(
 
     const newFieldMeta = useMemo(
       () => getFieldCreationMeta(fieldType, t),
-      [fieldType],
+      [fieldType, t],
     )
 
     const updateCreateState = useFieldBuilderStore(updateCreateStateSelector)

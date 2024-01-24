@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { chakra, Flex, FormControl } from '@chakra-ui/react'
 
 import { FormColorTheme } from '~shared/types/form'
@@ -25,6 +26,7 @@ export const FeedbackBlock = ({
   onSubmit,
   colorTheme = FormColorTheme.Blue,
 }: FeedbackBlockProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     control,
     register,
@@ -43,10 +45,12 @@ export const FeedbackBlock = ({
       <chakra.form w="100%" maxW="100%" noValidate onSubmit={handleFormSubmit}>
         <FormControl isInvalid={!!errors.rating} id="rating">
           <FormLabel isRequired color="content.strong">
-            How was your form filling experience today?
+            {t('features.common.feedbackSubmission.title')}
           </FormLabel>
           <Controller
-            rules={{ required: 'Please select a rating' }}
+            rules={{
+              required: t('features.common.feedbackSubmission.ratingRequired'),
+            }}
             control={control}
             name="rating"
             render={({ field }) => (
@@ -66,8 +70,12 @@ export const FeedbackBlock = ({
           isReadOnly={isSubmitting}
           mt="1rem"
           {...register('comment')}
-          aria-label="Tell us more about your experience"
-          placeholder="Tell us more about your experience"
+          aria-label={t(
+            'features.common.feedbackSubmission.feedbackPlaceholder',
+          )}
+          placeholder={t(
+            'features.common.feedbackSubmission.feedbackPlaceholder',
+          )}
         />
         <Button
           mt="1.5rem"
@@ -76,7 +84,7 @@ export const FeedbackBlock = ({
           colorScheme={colorScheme}
           isLoading={isSubmitting}
         >
-          Submit feedback
+          {t('features.common.feedbackSubmission.cta')}
         </Button>
       </chakra.form>
     </Flex>

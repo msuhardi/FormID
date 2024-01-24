@@ -97,8 +97,6 @@ export const LoginPageTemplate: FC = ({ children }) => {
     [bannerContent],
   )
 
-  const bannerColor = `primary.400`
-
   return (
     <BackgroundBox>
       {bannerProps ? (

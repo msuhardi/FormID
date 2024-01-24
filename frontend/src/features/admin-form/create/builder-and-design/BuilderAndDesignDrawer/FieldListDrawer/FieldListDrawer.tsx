@@ -3,20 +3,13 @@ import {
   Box,
   Divider,
   Flex,
-  TabList,
   TabPanel,
   TabPanels,
   Tabs,
   Text,
 } from '@chakra-ui/react'
 
-import { featureFlags } from '~shared/constants'
-
-import { Tab } from '~components/Tabs'
-
 import { useCreatePageSidebar } from '~features/admin-form/create/common/CreatePageSidebarContext'
-import { useFeatureFlags } from '~features/feature-flags/queries'
-import { useUser } from '~features/user/queries'
 
 import { useCreateTabForm } from '../../../builder-and-design/useCreateTabForm'
 import { CreatePageDrawerCloseButton } from '../../../common'
@@ -28,12 +21,6 @@ export const FieldListDrawer = (): JSX.Element => {
   const { t } = useTranslation()
   const { fieldListTabIndex, setFieldListTabIndex } = useCreatePageSidebar()
   const { isLoading } = useCreateTabForm()
-
-  const { user } = useUser()
-  const { data: flags } = useFeatureFlags()
-
-  const displayPayments =
-    user?.betaFlags?.payment || flags?.has(featureFlags.payment)
 
   const tabsDataList = [
     {

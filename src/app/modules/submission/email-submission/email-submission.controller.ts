@@ -1,19 +1,13 @@
-import { ok, okAsync, ResultAsync } from 'neverthrow'
+import { ok } from 'neverthrow'
 
 import {
   SubmissionErrorDto,
   SubmissionResponseDto,
 } from '../../../../../shared/types'
-import { CaptchaTypes } from '../../../../../shared/types/captcha'
-import { IPopulatedEmailForm } from '../../../../types'
 import { ParsedEmailModeSubmissionBody } from '../../../../types/api'
 import { createLoggerWithLabel } from '../../../config/logger'
-import * as CaptchaMiddleware from '../../../services/captcha/captcha.middleware'
-import * as CaptchaService from '../../../services/captcha/captcha.service'
 import MailService from '../../../services/mail/mail.service'
-import * as TurnstileMiddleware from '../../../services/turnstile/turnstile.middleware'
-import * as TurnstileService from '../../../services/turnstile/turnstile.service'
-import { createReqMeta, getRequestIp } from '../../../utils/request'
+import { createReqMeta } from '../../../utils/request'
 import { ControllerHandler } from '../../core/core.types'
 import { setFormTags } from '../../datadog/datadog.utils'
 import * as FormService from '../../form/form.service'
@@ -100,50 +94,6 @@ const submitEmailModeForm: ControllerHandler<
             return error
           }),
       )
-      .andThen((form) => {
-        // Check if respondent is a GSIB user
-        const isIntranetUser = FormService.checkIsIntranetFormAccess(
-          getRequestIp(req),
-          form,
-        )
-        // Check the captcha, provided user is not on GSIB
-        if (!isIntranetUser && form.hasCaptcha) {
-          switch (req.query.captchaType) {
-            case CaptchaTypes.Turnstile: {
-              return TurnstileService.verifyTurnstileResponse(
-                req.query.captchaResponse,
-                getRequestIp(req),
-              )
-                .map(() => form)
-                .mapErr((error) => {
-                  logger.error({
-                    message: 'Error while verifying turnstile captcha',
-                    meta: logMeta,
-                    error,
-                  })
-                  return error
-                })
-            }
-            case CaptchaTypes.Recaptcha: // fallthrough, defaults to recaptcha
-            default: {
-              return CaptchaService.verifyCaptchaResponse(
-                req.query.captchaResponse,
-                getRequestIp(req),
-              )
-                .map(() => form)
-                .mapErr((error) => {
-                  logger.error({
-                    message: 'Error while verifying captcha',
-                    meta: logMeta,
-                    error,
-                  })
-                  return error
-                })
-            }
-          }
-        }
-        return okAsync(form) as ResultAsync<IPopulatedEmailForm, never>
-      })
       .andThen((form) =>
         // Check that the form has not reached submission limits
         FormService.checkFormSubmissionLimitAndDeactivateForm(form)
@@ -324,9 +274,6 @@ const submitEmailModeForm: ControllerHandler<
 }
 
 export const handleEmailSubmission = [
-  // TODO: remove CaptchaMiddleware after extracting common components in Captcha and Turnstile
-  CaptchaMiddleware.validateCaptchaParams,
-  TurnstileMiddleware.validateTurnstileParams,
   ReceiverMiddleware.receiveEmailSubmission,
   EmailSubmissionMiddleware.validateResponseParams,
   submitEmailModeForm,
