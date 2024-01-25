@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiPlus } from 'react-icons/bi'
 import { Box, Stack, Text, VisuallyHidden } from '@chakra-ui/react'
 import simplur from 'simplur'
@@ -16,13 +17,19 @@ export const AddRowFooter = ({
   maxRows,
   handleAddRow: handleAddRowProp,
 }: AddRowFooterProps): JSX.Element => {
+  const { t, i18n } = useTranslation()
   // State to decide whether to announce row changes to screen readers
   const [hasAddedRows, setHasAddedRows] = useState(false)
   const maxRowDescription = useMemo(() => {
-    return maxRows
-      ? simplur`${currentRows} out of max ${maxRows} row[|s]`
-      : simplur`${currentRows} row[|s]`
-  }, [currentRows, maxRows])
+    const desc = maxRows
+      ? t('features.form.table.rowWithMax', {
+          row: currentRows,
+          maxRow: maxRows,
+        })
+      : t('features.form.table.row', { row: currentRows })
+
+    return i18n.language.startsWith('en') ? simplur(desc) : desc
+  }, [currentRows, maxRows, t, i18n.language])
 
   const maxRowAriaDescription = useMemo(() => {
     return maxRows
@@ -49,7 +56,7 @@ export const AddRowFooter = ({
         type="button"
         onClick={handleAddRow}
       >
-        Add another row
+        {t('features.form.table.addAnotherRow')}
         <VisuallyHidden>
           to the table field. {maxRowAriaDescription}
         </VisuallyHidden>

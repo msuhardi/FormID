@@ -143,9 +143,11 @@ export const EditEmail = ({ field }: EditEmailProps): JSX.Element => {
   )
   const pdfResponseToggleDescription = useMemo(() => {
     if (!isPdfResponseEnabled) {
-      return 'For security reasons, PDF responses are not included in email confirmations for Storage mode forms'
+      return t(
+        'features.adminFormBuilder.email.emailConfirmation.includePdfResponseWarning',
+      )
     }
-  }, [isPdfResponseEnabled])
+  }, [isPdfResponseEnabled, t])
 
   return (
     <CreatePageDrawerContentContainer>

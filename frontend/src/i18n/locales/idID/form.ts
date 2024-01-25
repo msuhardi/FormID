@@ -6,4 +6,9 @@ export const form = {
         'Seret <i>widget</i> dari <i>Builder</i> di kiri untuk mulai tambah pertanyaan',
     },
   },
+  table: {
+    addAnotherRow: 'Tambahkan baris',
+    rowWithMax: '{row}/{maxRow} baris',
+    row: '{row} baris',
+  },
 }

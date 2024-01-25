@@ -12,6 +12,8 @@ export const common = {
   loading: 'Loading',
   responses: 'Responses',
   feedback: 'Feedback',
+  verify: 'Verify',
+  verified: 'Verified',
   actionsDropdown: {
     ariaLabel: 'More actions',
     preview: 'Preview',
@@ -25,6 +27,11 @@ export const common = {
     validValue: 'Please enter a valid {fieldName}',
     image: {
       notProvided: 'Image not provided',
+    },
+    validation: {
+      mobileNoVerification: 'Please verify your mobile number',
+      emailVerification: 'Please verify your email address',
+      homeNo: 'Please enter a valid landline number',
     },
   },
   tooltip: {

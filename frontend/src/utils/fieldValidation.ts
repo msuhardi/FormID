@@ -109,10 +109,12 @@ const createBaseVfnFieldValidationRules: ValidationRuleFnEmailAndMobile<
           return true
         }
         if (schema.fieldType === BasicField.Mobile) {
-          return 'Please verify your mobile number'
+          return i18n.t(
+            'features.common.errors.validation.mobileNoVerification',
+          )
         }
         if (schema.fieldType === BasicField.Email) {
-          return 'Please verify your email address'
+          return i18n.t('features.common.errors.validation.emailVerification')
         }
       },
     },
@@ -184,7 +186,10 @@ export const createHomeNoValidationRules: ValidationRuleFn<HomenoFieldBase> = (
       required: requiredSingleAnswerValidationFn(schema),
       validHomeNo: (val?: string) => {
         if (!val) return true
-        return isHomePhoneNumber(val) || 'Please enter a valid landline number'
+        return (
+          isHomePhoneNumber(val) ||
+          i18n.t('features.common.errors.validation.homeNo')
+        )
       },
     },
   }
@@ -539,7 +544,7 @@ export const baseMobileValidationFn =
 
     // Valid mobile check
     return (
-      isMobilePhoneNumber(inputValue) || 'Please enter a valid mobile number'
+      isMobilePhoneNumber(inputValue) || 'Please enter a valid mobile number a'
     )
   }
 

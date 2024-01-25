@@ -12,6 +12,8 @@ export const common = {
   loading: 'Loading',
   responses: 'Respons',
   feedback: 'Masukan',
+  verify: 'Verifikasi',
+  verified: 'Terverifikasi',
   actionsDropdown: {
     ariaLabel: 'Opsi lainnya',
     preview: 'Lihat formulir',
@@ -25,6 +27,11 @@ export const common = {
     validValue: 'Harap masukan {fieldName} yang valid',
     image: {
       notProvided: 'Gambar tidak disediakan',
+    },
+    validation: {
+      mobileNoVerification: 'Wajib verifikasi nomor hp',
+      emailVerification: 'Wajib verifikasi alamat email',
+      homeNo: 'Harap masukkan nomor telpon yang valid',
     },
   },
   tooltip: {

@@ -97,6 +97,8 @@ export const adminFormBuilder = {
         placeholder: '',
       },
       includePdfResponse: 'Sertakan ringkasan respons PDF',
+      includePdfResponseWarning:
+        'Untuk alasan keamanan, ringkasan respons PDF tidak disertakan dalam konfirmasi email untuk mode penyimpanan',
     },
   },
   mobileNo: {

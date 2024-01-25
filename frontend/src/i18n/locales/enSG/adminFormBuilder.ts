@@ -98,6 +98,8 @@ export const adminFormBuilder = {
         placeholder: 'Default email body',
       },
       includePdfResponse: 'Include PDF response',
+      includePdfResponseWarning:
+        'For security reasons, PDF responses are not included in email confirmations for Storage mode forms',
     },
   },
   mobileNo: {
