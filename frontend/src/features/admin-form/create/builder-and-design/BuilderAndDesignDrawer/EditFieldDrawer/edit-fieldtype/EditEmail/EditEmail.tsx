@@ -147,7 +147,7 @@ export const EditEmail = ({ field }: EditEmailProps): JSX.Element => {
         'features.adminFormBuilder.email.emailConfirmation.includePdfResponseWarning',
       )
     }
-  }, [isPdfResponseEnabled])
+  }, [isPdfResponseEnabled, t])
 
   return (
     <CreatePageDrawerContentContainer>

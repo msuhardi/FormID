@@ -29,7 +29,7 @@ export const AddRowFooter = ({
       : t('features.form.table.row', { row: currentRows })
 
     return i18n.language.startsWith('en') ? simplur(desc) : desc
-  }, [currentRows, maxRows, t])
+  }, [currentRows, maxRows, t, i18n.language])
 
   const maxRowAriaDescription = useMemo(() => {
     return maxRows
