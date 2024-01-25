@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
-import { Flex, Text, Tooltip, useClipboard } from '@chakra-ui/react'
+import { Box, Flex, Text, Tooltip, useClipboard } from '@chakra-ui/react'
+
+import MissingFeedback from '~/assets/svgs/missing-feedback.svg'
 
 import { OGP_POSTMAN } from '~constants/links'
 import Link from '~components/Link'
-
-import { EmptyFeedbackSvgr } from './EmptyFeedbackSvgr'
 
 const PATH_REGEX = RegExp('/admin/form/(.*)/')
 
@@ -23,7 +23,14 @@ export const EmptyFeedback = (): JSX.Element => {
   const { onCopy, hasCopied } = useClipboard(shareLink)
 
   return (
-    <Flex justify="center" flexDir="column" align="center" px="2rem" py="4rem">
+    <Flex
+      justify="flex-start"
+      flexDir="column"
+      align="center"
+      px="2rem"
+      py="4rem"
+      h="100%"
+    >
       <Text as="h2" textStyle="h2" color="primary.500" mb="1rem">
         {t('features.emptyPlaceholder.emptyResponses.noFeedback')}
       </Text>
@@ -46,7 +53,13 @@ export const EmptyFeedback = (): JSX.Element => {
             ),
         })}
       </Text>
-      <EmptyFeedbackSvgr mt="1.5rem" w="380px" maxW="100%" />
+      <Box
+        w="100%"
+        flex={1}
+        bgImage={MissingFeedback}
+        bgRepeat="no-repeat"
+        bgPosition="center"
+      />
     </Flex>
   )
 }

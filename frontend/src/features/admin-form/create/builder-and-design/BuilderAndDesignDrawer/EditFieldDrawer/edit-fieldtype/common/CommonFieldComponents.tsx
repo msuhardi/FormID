@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Control,
   Controller,
@@ -99,7 +100,7 @@ export const RequiredToggle = ({
 }
 
 interface NumOfCharsAllowedProps extends CommonFieldComponentsProps {
-  control: Control<any, any>
+  control: Control<any>
   customValValidationOptions: RegisterOptions<
     any,
     'ValidationOptions.customVal'

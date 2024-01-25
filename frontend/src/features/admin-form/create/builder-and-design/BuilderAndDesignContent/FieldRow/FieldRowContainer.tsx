@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -428,6 +428,7 @@ const FieldButtonGroup = ({
 }
 
 type FieldRowProps = {
+  // eslint-disable-next-line
   field: FormFieldDto<any>
   colorTheme?: FormColorTheme
   showMyInfoBadge?: boolean
