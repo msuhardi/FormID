@@ -1,7 +1,7 @@
 import { chain, left, right } from 'fp-ts/lib/Either'
 import { flow } from 'fp-ts/lib/function'
 
-import { isValidNik } from '../../../../../frontend/src/utils/nikValidation'
+import { isValidNik } from '../../../../../shared/utils/nikValidation'
 import { ResponseValidator } from '../../../../types/field/utils/validation'
 import { ProcessedSingleAnswerResponse } from '../../../modules/submission/submission.types'
 
