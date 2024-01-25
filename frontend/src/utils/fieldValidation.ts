@@ -34,6 +34,7 @@ import {
   TextSelectedValidation,
 } from '~shared/types/field'
 import { isDateAnInvalidDay } from '~shared/utils/date-validation'
+import { isValidNik } from '~shared/utils/nikValidation'
 import {
   isHomePhoneNumber,
   isMobilePhoneNumber,
@@ -46,7 +47,6 @@ import {
   INVALID_EMAIL_ERROR,
   REQUIRED_ERROR,
 } from '~constants/validation'
-import { isValidNik } from '~utils/nikValidation'
 import {
   CheckboxFieldValues,
   SingleAnswerValue,
