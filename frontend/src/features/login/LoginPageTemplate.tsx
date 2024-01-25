@@ -4,6 +4,7 @@ import { Link as ReactLink } from 'react-router-dom'
 import { Box, chakra, Flex, GridItem, GridProps, Text } from '@chakra-ui/react'
 
 import { AppFooter } from '~/app/AppFooter'
+import LoginIllustration from '~/assets/svgs/illustration.svg'
 
 import { ReactComponent as BrandLogoSvg } from '~assets/svgs/brand/brand-hort-colour.svg'
 import { LANDING_ROUTE } from '~constants/routes'
@@ -13,8 +14,6 @@ import Link from '~components/Link'
 import { AppGrid } from '~templates/AppGrid'
 
 import { useEnv } from '~features/env/queries'
-
-import { LoginImageSvgr } from './components/LoginImageSvgr'
 
 export const BrandLogo = chakra(BrandLogoSvg, {
   baseStyle: {
@@ -69,12 +68,12 @@ export const FooterGridArea: FC = ({ children }) => (
 export const NonMobileSidebarGridArea: FC = ({ children }) => (
   <GridItem
     d={{ base: 'none', md: 'flex' }}
-    gridColumn={{ md: '1 / 13', lg: '2 / 6' }}
+    gridColumn={{ md: '1 / 13', lg: '1 / 6' }}
     // colSpan={{ md: 12, lg: 5 }}
     // pl={{ base: '1.5rem', lg: '8%' }}
     h={{ md: '20.5rem', lg: 'auto' }}
-    pt={{ base: '1.5rem', md: '2.5rem', lg: '3rem' }}
-    pb={{ lg: '3rem' }}
+    pt={{ base: '1.5rem', md: 0, lg: '3rem' }}
+    pb={{ md: '2.5rem', lg: '3rem' }}
     flexDir="column"
     alignItems={{ base: 'center', lg: 'flex-end' }}
     justifyContent="center"
@@ -106,7 +105,14 @@ export const LoginPageTemplate: FC = ({ children }) => {
       ) : null}
       <BaseGridLayout flex={1}>
         <NonMobileSidebarGridArea>
-          <LoginImageSvgr maxW="100%" aria-hidden />
+          <Box
+            w="100%"
+            h="100%"
+            bgSize="cover"
+            bgPosition="center"
+            bgRepeat="no-repeat"
+            bgImage={LoginIllustration}
+          />
         </NonMobileSidebarGridArea>
         <LoginGridArea>
           <Box minH={{ base: 'auto', lg: '17.25rem' }} w="100%">

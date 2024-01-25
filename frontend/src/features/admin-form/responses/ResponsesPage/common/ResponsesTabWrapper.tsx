@@ -6,7 +6,7 @@ export const ResponsesTabWrapper = ({
   children: React.ReactNode
 }): JSX.Element => {
   return (
-    <Box overflowY="auto">
+    <Box overflowY="auto" h="100%">
       <Container
         px={{ base: '1.5rem', md: '1.25rem' }}
         py={{ base: '1.5rem', md: '3rem' }}
@@ -15,6 +15,7 @@ export const ResponsesTabWrapper = ({
         display="flex"
         flexDir="column"
         color="secondary.500"
+        h="100%"
       >
         {children}
       </Container>

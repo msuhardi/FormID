@@ -89,6 +89,7 @@ export const EditFieldDrawer = (): JSX.Element | null => {
   )
 }
 
+// eslint-disable-next-line
 type MemoFieldDrawerContentProps = EditFieldProps<any>
 export const MemoFieldDrawerContent = memo<MemoFieldDrawerContentProps>(
   ({ field, ...props }: MemoFieldDrawerContentProps) => {

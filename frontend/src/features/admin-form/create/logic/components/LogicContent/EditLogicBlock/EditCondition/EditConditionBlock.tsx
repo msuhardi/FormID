@@ -153,6 +153,7 @@ export const EditConditionBlock = ({
 
   const conditionValueItems = useMemo(() => {
     if (!ifFieldIdValue || !mapIdToField) return []
+    // eslint-disable-next-line
     const mappedField: FormFieldWithQuestionNo<any> =
       mapIdToField[ifFieldIdValue]
     if (!mappedField) return []

@@ -1,12 +1,12 @@
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
-import { Flex, Text, Tooltip, useClipboard } from '@chakra-ui/react'
+import { Box, Flex, Text, Tooltip, useClipboard } from '@chakra-ui/react'
+
+import MissingResponse from '~/assets/svgs/missing-reponse.svg'
 
 import { OGP_POSTMAN } from '~constants/links'
 import Link from '~components/Link'
-
-import { EmptyResponsesSvgr } from './EmptyResponsesSvgr'
 
 const PATH_REGEX = RegExp('/admin/form/(.*)/')
 
@@ -23,7 +23,14 @@ export const EmptyResponses = (): JSX.Element => {
   const { onCopy, hasCopied } = useClipboard(shareLink)
 
   return (
-    <Flex justify="center" flexDir="column" align="center" px="2rem" py="4rem">
+    <Flex
+      justify="flex-start"
+      flexDir="column"
+      align="center"
+      px="2rem"
+      py="4rem"
+      h="100%"
+    >
       <Text as="h2" textStyle="h2" color="primary.500" mb="1rem">
         {t('features.emptyPlaceholder.emptyResponses.noResponses')}
       </Text>
@@ -46,7 +53,13 @@ export const EmptyResponses = (): JSX.Element => {
             ),
         })}
       </Text>
-      <EmptyResponsesSvgr mt="1.5rem" w="280px" maxW="100%" />
+      <Box
+        w="100%"
+        flex={1}
+        bgImage={MissingResponse}
+        bgRepeat="no-repeat"
+        bgPosition="center"
+      />
     </Flex>
   )
 }
