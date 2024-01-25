@@ -284,7 +284,7 @@ const encryptAttachment = async (
     }
 
     return { id, encryptedFile: encodedEncryptedAttachment }
-  } catch (error) {
+  } catch (error: any) {
     // TODO: remove error logging when error about arrayBuffer not being a function is resolved
     datadogLogs.logger.error(`encryptAttachment: ${label}: ${error?.message}`, {
       meta: {

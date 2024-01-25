@@ -3,7 +3,7 @@ import { errAsync, okAsync, ResultAsync } from 'neverthrow'
 
 import { PAYMENT_CONTACT_FIELD_ID } from '../../../../shared/constants'
 import { BasicField } from '../../../../shared/types'
-import { startsWithSgPrefix } from '../../../../shared/utils/phone-num-validation'
+import { startsWithIdPrefix } from '../../../../shared/utils/phone-num-validation'
 import {
   NUM_OTP_RETRIES,
   SMS_WARNING_TIERS,
@@ -599,7 +599,7 @@ export const shouldGenerateMobileOtp = (
 
   // Check if recipient is within the allowed countries set by the field
   const recipientIsWithinAllowedCountries =
-    startsWithSgPrefix(recipient) ||
+    startsWithIdPrefix(recipient) ||
     (field as IMobileFieldSchema).allowIntlNumbers
 
   return field.isVerifiable && recipientIsWithinAllowedCountries

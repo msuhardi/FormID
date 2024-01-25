@@ -3,7 +3,7 @@ import { flow } from 'fp-ts/lib/function'
 
 import {
   isMobilePhoneNumber,
-  startsWithSgPrefix,
+  startsWithIdPrefix,
 } from '../../../../../shared/utils/phone-num-validation'
 import {
   IMobileFieldSchema,
@@ -33,11 +33,11 @@ const mobilePhoneNumberValidator: MobileNoValidator = (response) => {
  * Returns a validator to check if mobile
  * number starts with singapore prefix.
  */
-const sgPrefixValidator: MobileNoValidator = (response) => {
-  return startsWithSgPrefix(response.answer)
+const idPrefixValidator: MobileNoValidator = (response) => {
+  return startsWithIdPrefix(response.answer)
     ? right(response)
     : left(
-        `MobileNoValidator:\t answer is not an SG number but intl numbers are not allowed`,
+        `MobileNoValidator:\t answer is not an ID number but intl numbers are not allowed`,
       )
 }
 
@@ -48,7 +48,7 @@ const sgPrefixValidator: MobileNoValidator = (response) => {
 const makePrefixValidator: MobileNoValidatorConstructor = (
   mobileNumberField,
 ) => {
-  return mobileNumberField.allowIntlNumbers ? right : sgPrefixValidator
+  return mobileNumberField.allowIntlNumbers ? right : idPrefixValidator
 }
 
 /**

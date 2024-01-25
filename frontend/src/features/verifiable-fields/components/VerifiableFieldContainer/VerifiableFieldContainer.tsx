@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiCheck } from 'react-icons/bi'
 import { Box, Stack } from '@chakra-ui/react'
 
@@ -29,6 +30,7 @@ export const VerifiableFieldContainer = ({
   colorTheme = FormColorTheme.Blue,
   children,
 }: VerifiableFieldContainerProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     isVfnBoxOpen,
     otpPrefix,
@@ -72,7 +74,7 @@ export const VerifiableFieldContainer = ({
               }
               aria-label={verifyButtonAriaLabel}
             >
-              {hasSignature ? 'Verified' : 'Verify'}
+              {t(`features.common.${hasSignature ? 'verified' : 'verify'}`)}
             </Button>
           </Box>
         </Stack>

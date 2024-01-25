@@ -3,7 +3,7 @@ import { flow } from 'fp-ts/lib/function'
 
 import {
   isHomePhoneNumber,
-  startsWithSgPrefix,
+  startsWithIdPrefix,
 } from '../../../../../shared/utils/phone-num-validation'
 import {
   IHomenoFieldSchema,
@@ -33,11 +33,11 @@ const homePhoneNumberValidator: HomeNoValidator = (response) => {
  * Returns a validator to check if home
  * number starts with singapore prefix.
  */
-const sgPrefixValidator: HomeNoValidator = (response) => {
-  return startsWithSgPrefix(response.answer)
+const idPrefixValidator: HomeNoValidator = (response) => {
+  return startsWithIdPrefix(response.answer)
     ? right(response)
     : left(
-        `HomeNoValidator:\t answer is not an SG number but intl numbers are not allowed`,
+        `HomeNoValidator:\t answer is not an ID number but intl numbers are not allowed`,
       )
 }
 
@@ -46,7 +46,7 @@ const sgPrefixValidator: HomeNoValidator = (response) => {
  * number prefix is correct.
  */
 const makePrefixValidator: HomeNoValidatorConstructor = (homeNumberField) => {
-  return homeNumberField.allowIntlNumbers ? right : sgPrefixValidator
+  return homeNumberField.allowIntlNumbers ? right : idPrefixValidator
 }
 
 /**

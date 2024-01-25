@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { BiCheck } from 'react-icons/bi'
 import { Box, FormControl, Skeleton, Stack } from '@chakra-ui/react'
 
@@ -131,6 +132,7 @@ const useContactNumberInput = () => {
 }
 
 export const ContactNumberInput = (): JSX.Element => {
+  const { t } = useTranslation()
   const {
     handleInputChange,
     handleSubmitContact,
@@ -188,7 +190,7 @@ export const ContactNumberInput = (): JSX.Element => {
                     isVerified ? <BiCheck fontSize="1.5rem" /> : undefined
                   }
                 >
-                  {isVerified ? 'Verified' : 'Verify'}
+                  {t(`features.common.${isVerified ? 'verified' : 'verify'}`)}
                 </Button>
               </Box>
             </Stack>
