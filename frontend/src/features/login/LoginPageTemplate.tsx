@@ -108,7 +108,7 @@ export const LoginPageTemplate: FC = ({ children }) => {
           <Box
             w="100%"
             h="100%"
-            bgSize="cover"
+            bgSize={{ sm: '50%', lg: '70%', xl: '60%' }}
             bgPosition="center"
             bgRepeat="no-repeat"
             bgImage={LoginIllustration}
