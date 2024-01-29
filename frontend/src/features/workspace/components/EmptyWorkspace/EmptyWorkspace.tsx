@@ -35,6 +35,7 @@ export const EmptyWorkspace = ({
       py="4rem"
       bg="neutral.100"
       css={fillHeightCss}
+      h="100%"
     >
       <Text
         as="h2"
@@ -63,8 +64,9 @@ export const EmptyWorkspace = ({
         w="100%"
         flex={1}
         bgImage={EmptyWorkspaceSvg}
+        bgSize="50%"
         bgRepeat="no-repeat"
-        bgPosition="center"
+        bgPosition="top center"
       />
     </Flex>
   )
