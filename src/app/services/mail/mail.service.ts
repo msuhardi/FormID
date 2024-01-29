@@ -374,7 +374,7 @@ export class MailService {
       const mail: MailOptions = {
         to: recipient,
         from: this.#senderFromString,
-        subject: `One-Time Password (OTP) for ${this.#appName}`,
+        subject: `Kode OTP ${this.#appName}`,
         html: loginHtml,
         headers: {
           [EMAIL_HEADERS.emailType]: EmailType.LoginOtp,

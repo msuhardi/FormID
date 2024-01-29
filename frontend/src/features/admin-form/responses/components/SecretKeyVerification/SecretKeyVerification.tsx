@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { RegisterOptions, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { BiUpload } from 'react-icons/bi'
 import {
   Container,
@@ -30,6 +31,7 @@ interface SecretKeyFormInputs {
 }
 
 const useSecretKeyVerification = () => {
+  const { t } = useTranslation()
   const { setSecretKey, formPublicKey, isLoading, totalResponsesCount } =
     useStorageResponsesContext()
 
@@ -45,7 +47,7 @@ const useSecretKeyVerification = () => {
 
   const secretKeyValidationRules: RegisterOptions = useMemo(() => {
     return {
-      required: "Please enter the form's secret key",
+      required: t('features.common.responsesResult.secretKey.required'),
       validate: (secretKey) => {
         // Should not see this error message.
         if (!formPublicKey) return 'This form is not a storage mode form'
@@ -55,10 +57,13 @@ const useSecretKeyVerification = () => {
           SECRET_KEY_REGEX.test(trimmedSecretKey) &&
           formsgSdk.crypto.valid(formPublicKey, trimmedSecretKey)
 
-        return isKeypairValid || 'The secret key provided is invalid'
+        return (
+          isKeypairValid ||
+          t('features.common.responsesResult.secretKey.incorrectSecretKey')
+        )
       },
     }
-  }, [formPublicKey])
+  }, [formPublicKey, t])
 
   const handleVerifyKeypair = handleSubmit(({ secretKey }) => {
     return setSecretKey(secretKey.trim())
@@ -85,7 +90,9 @@ const useSecretKeyVerification = () => {
             SECRET_KEY_NAME,
             {
               type: 'invalidFile',
-              message: 'Selected file seems to be invalid',
+              message: t(
+                'features.common.responsesResult.secretKey.incorrectSecretKeyFile',
+              ),
             },
             { shouldFocus: true },
           )
@@ -95,7 +102,7 @@ const useSecretKeyVerification = () => {
       }
       reader.readAsText(file)
     },
-    [setError, setValue],
+    [setError, setValue, t],
   )
 
   return {
@@ -121,6 +128,7 @@ export const SecretKeyVerification = ({
   label: string
   hideResponseCount?: boolean
 }): JSX.Element => {
+  const { t, i18n } = useTranslation()
   const {
     isLoading,
     totalResponsesCount,
@@ -134,6 +142,9 @@ export const SecretKeyVerification = ({
 
   const isMobile = useIsMobile()
 
+  const count = totalResponsesCount ?? 0
+  const title = t('features.common.responsesResult.title', { count })
+
   return (
     <Container p={0} maxW="42.5rem">
       <Stack spacing="2rem">
@@ -141,10 +152,7 @@ export const SecretKeyVerification = ({
         {!hideResponseCount ? (
           <Skeleton isLoaded={!isLoading} w="fit-content">
             <Text as="h2" textStyle="h2" whiteSpace="pre-wrap">
-              <Text color="primary.500" as="span">
-                {totalResponsesCount?.toLocaleString() ?? '-'}
-              </Text>
-              {simplur` ${[totalResponsesCount ?? 0]}response[|s] to date`}
+              {i18n.language.startsWith('en') ? simplur(title) : title}
             </Text>
           </Skeleton>
         ) : null}
@@ -159,7 +167,11 @@ export const SecretKeyVerification = ({
             display="none"
           />
           <FormControl isRequired isInvalid={!!errors.secretKey} mb="1rem">
-            <FormLabel description="Your Secret Key was downloaded when you created your form">
+            <FormLabel
+              description={t(
+                'features.common.responsesResult.secretKey.inputDescription',
+              )}
+            >
               {label}
             </FormLabel>
             <Stack direction="row" spacing="0.5rem">
@@ -192,7 +204,9 @@ export const SecretKeyVerification = ({
               {ctaText}
             </Button>
             <Link variant="standalone" isExternal href={GUIDE_SECRET_KEY_LOSS}>
-              Can't find your Secret Key?
+              {t(
+                'features.common.responsesResult.secretKey.missingSecretKeyCta',
+              )}
             </Link>
           </Stack>
         </form>

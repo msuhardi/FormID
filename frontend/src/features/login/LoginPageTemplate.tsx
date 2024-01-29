@@ -6,7 +6,7 @@ import { Box, chakra, Flex, GridItem, GridProps, Text } from '@chakra-ui/react'
 import { AppFooter } from '~/app/AppFooter'
 import LoginIllustration from '~/assets/svgs/illustration.svg'
 
-import { ReactComponent as BrandLogoSvg } from '~assets/svgs/brand/brand-hort-colour.svg'
+import { ReactComponent as BrandLogoSvg } from '~assets/svgs/brand/brand-mark-colour.svg'
 import { LANDING_ROUTE } from '~constants/routes'
 import { getBannerProps } from '~utils/getBannerProps'
 import { Banner } from '~components/Banner'
@@ -17,7 +17,7 @@ import { useEnv } from '~features/env/queries'
 
 export const BrandLogo = chakra(BrandLogoSvg, {
   baseStyle: {
-    h: { base: '1.5rem', lg: '2rem' },
+    h: { base: '2.5rem', lg: '2rem' },
   },
 })
 
@@ -131,7 +131,7 @@ export const LoginPageTemplate: FC = ({ children }) => {
                   to={LANDING_ROUTE}
                   mb={{ base: '0.75rem', lg: '1.5rem' }}
                 >
-                  <BrandLogo title="FormSG logo" />
+                  <BrandLogo title="FormID logo" />
                 </Link>
                 <Text textStyle="h4" color="secondary.500">
                   {t('features.login.LoginPage.slogan')}

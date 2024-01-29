@@ -1,11 +1,7 @@
-import { Box, Divider, Flex, Link, Stack, Text, Wrap } from '@chakra-ui/react'
+import { Divider, Flex, Link, Stack, Text, Wrap } from '@chakra-ui/react'
 
 import { AdaptedText } from '~components/Footer/AdaptedText'
 
-import {
-  DEFAULT_FOOTER_ICON_LINK,
-  DEFAULT_SOCIAL_MEDIA_LINKS,
-} from './common/constants'
 import { FooterContainerProps, FooterVariantProps } from './common/types'
 
 export const FullFooter = ({
@@ -13,8 +9,6 @@ export const FullFooter = ({
   appLink,
   tagline,
   footerLinks,
-  footerIconLink = DEFAULT_FOOTER_ICON_LINK,
-  socialMediaLinks = DEFAULT_SOCIAL_MEDIA_LINKS,
   textColorScheme = 'secondary',
   containerProps,
 }: FooterVariantProps): JSX.Element => {
@@ -70,54 +64,12 @@ export const FullFooter = ({
       </FullFooter.Section>
       <Divider my="1.5rem" />
       <FullFooter.Section>
-        <Box>
-          <Text
-            textStyle="caption-1"
-            color={`${textColorScheme}.500`}
-            mb="0.5rem"
-          >
-            Built by
+        <Stack spacing="1rem">
+          <AdaptedText />
+          <Text textStyle="legal" color={`${textColorScheme}.500`}>
+            ©{currentYear} FormID
           </Text>
-          <Link
-            isExternal
-            title={footerIconLink.label}
-            colorScheme={textColorScheme}
-            mb="2rem"
-            href={footerIconLink.href}
-          >
-            <footerIconLink.Icon width="183px"></footerIconLink.Icon>
-          </Link>
-        </Box>
-
-        <Box>
-          <Stack
-            spacing="1rem"
-            direction="row"
-            mt="2rem"
-            mb="0.5rem"
-            justify={{ base: 'normal', lg: 'flex-end' }}
-          >
-            {socialMediaLinks?.map(({ label, href, Icon }, index) => (
-              <Link
-                key={index}
-                isExternal
-                title={label}
-                w="2rem"
-                href={href}
-                colorScheme={textColorScheme}
-              >
-                <Icon />
-              </Link>
-            ))}
-          </Stack>
-          <Stack spacing="1rem">
-            <Text textStyle="legal" color={`${textColorScheme}.500`}>
-              ©{currentYear} Open Government Products
-            </Text>
-
-            <AdaptedText />
-          </Stack>
-        </Box>
+        </Stack>
       </FullFooter.Section>
     </FullFooter.Container>
   )

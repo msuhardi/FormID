@@ -85,6 +85,7 @@ export const SettingsPage = (): JSX.Element => {
         px={{ base: '1.5rem', md: '1.75rem', lg: '2rem' }}
         index={tabIndex === -1 ? 0 : tabIndex}
         onChange={handleTabChange}
+        h="100%"
       >
         <Flex
           h="max-content"
@@ -131,6 +132,7 @@ export const SettingsPage = (): JSX.Element => {
           maxW="42.5rem"
           // Offset start of tabpanel text from tablist.
           mt={{ md: '1rem' }}
+          h="100%"
         >
           <TabPanel>
             <SettingsGeneralPage />
@@ -138,7 +140,7 @@ export const SettingsPage = (): JSX.Element => {
           <TabPanel>
             <SettingsTwilioPage />
           </TabPanel>
-          <TabPanel>
+          <TabPanel h="100%">
             <SettingsWebhooksPage />
           </TabPanel>
         </TabPanels>

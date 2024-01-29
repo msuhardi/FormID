@@ -13,7 +13,7 @@ export const getMutationToastDescriptionFieldName = (field: FormFieldDto) => {
     case BasicField.Statement:
       return 'paragraph'
     default:
-      return `field "${field.title}"`
+      return `"${field.title}"`
   }
 }
 
