@@ -40,7 +40,7 @@ export const EmptyResponses = (): JSX.Element => {
             i18n.language === 'id-ID' ? (
               <>
                 <Tooltip
-                  label={hasCopied ? 'Copied!' : 'Klik untuk copy link'}
+                  label={hasCopied ? 'Telah dicopy!' : 'Klik untuk copy link'}
                   closeOnClick={false}
                 >
                   <Link onClick={onCopy}>disini</Link>

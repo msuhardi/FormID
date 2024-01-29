@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { BiRightArrowAlt, BiUpload } from 'react-icons/bi'
 import {
   Container,
@@ -149,6 +150,7 @@ export const SecretKeyActivationModal = ({
   isOpen,
   publicKey,
 }: SecretKeyActivationModalProps): JSX.Element => {
+  const { t } = useTranslation()
   const {
     fileUploadRef,
     handleFileSelect,
@@ -193,7 +195,9 @@ export const SecretKeyActivationModal = ({
                 mb="1rem"
                 isDisabled={isLoading}
               >
-                <FormLabel>Enter or upload Secret Key</FormLabel>
+                <FormLabel>
+                  {t('features.common.responsesResult.secretKey.inputName')}
+                </FormLabel>
                 <Stack direction="row" spacing="0.5rem">
                   <Input
                     type="password"

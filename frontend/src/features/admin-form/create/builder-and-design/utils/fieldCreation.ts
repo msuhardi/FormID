@@ -1,4 +1,4 @@
-import { TFunction } from 'i18next'
+import i18n, { TFunction } from 'i18next'
 
 import {
   AttachmentSize,
@@ -56,7 +56,10 @@ export const getFieldCreationMeta = (
           customMin: null,
         },
         validateByValue: false,
-        fieldOptions: ['Option 1', 'Option 2'],
+        fieldOptions: [
+          `${i18n.t('features.common.option')} 1`,
+          `${i18n.t('features.common.option')} 2`,
+        ],
         othersRadioButton: false,
       }
     }
@@ -117,7 +120,10 @@ export const getFieldCreationMeta = (
       return {
         fieldType,
         ...baseMeta,
-        fieldOptions: ['Option 1', 'Option 2'],
+        fieldOptions: [
+          `${i18n.t('features.common.option')} 1`,
+          `${i18n.t('features.common.option')} 2`,
+        ],
       }
     }
     case BasicField.Image: {
@@ -161,7 +167,10 @@ export const getFieldCreationMeta = (
       return {
         fieldType,
         ...baseMeta,
-        fieldOptions: ['Option 1', 'Option 2'],
+        fieldOptions: [
+          `${i18n.t('features.common.option')} 1`,
+          `${i18n.t('features.common.option')} 2`,
+        ],
         othersRadioButton: false,
       }
     }

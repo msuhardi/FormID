@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useThrottle } from 'react-use'
 import { Box, MenuButton, Text, useDisclosure } from '@chakra-ui/react'
 import simplur from 'simplur'
@@ -19,6 +20,7 @@ import { DownloadWithAttachmentModal } from './DownloadWithAttachmentModal'
 import { ProgressModal } from './ProgressModal'
 
 export const DownloadButton = (): JSX.Element => {
+  const { t } = useTranslation()
   const {
     isOpen: isDownloadModalOpen,
     onClose: onDownloadModalClose,
@@ -194,7 +196,7 @@ export const DownloadButton = (): JSX.Element => {
                 aria-label="Download options"
                 rightIcon={isOpen ? <BxsChevronUp /> : <BxsChevronDown />}
               >
-                Download
+                {t('features.common.download')}
               </MenuButton>
               <Menu.List>
                 <Menu.Item onClick={handleExportCsvNoAttachments}>

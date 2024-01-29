@@ -46,6 +46,7 @@ export const adminFormBuilder = {
       placeholder: 'Enter one option per line',
     },
     duplicateOptionsError: 'Please remove duplicate options',
+    otherInvalidInputError: 'Harap masukan input lainnya',
   },
   checkbox: {
     selectionLimit: {

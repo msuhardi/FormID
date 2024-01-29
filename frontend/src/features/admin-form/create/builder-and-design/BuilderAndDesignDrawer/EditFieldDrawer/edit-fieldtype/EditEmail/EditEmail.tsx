@@ -159,15 +159,15 @@ export const EditEmail = ({ field }: EditEmailProps): JSX.Element => {
       />
       <Description isLoading={isLoading} errors={errors} register={register} />
       <RequiredToggle isLoading={isLoading} register={register} />
-      <FormControl isReadOnly={isLoading}>
-        <Toggle
-          {...register('isVerifiable')}
-          label={t('features.adminFormBuilder.email.otpVerification.title')}
-          description={t(
-            'features.adminFormBuilder.email.otpVerification.description',
-          )}
-        />
-      </FormControl>
+      {/*<FormControl isReadOnly={isLoading}>*/}
+      {/*  <Toggle*/}
+      {/*    {...register('isVerifiable')}*/}
+      {/*    label={t('features.adminFormBuilder.email.otpVerification.title')}*/}
+      {/*    description={t(*/}
+      {/*      'features.adminFormBuilder.email.otpVerification.description',*/}
+      {/*    )}*/}
+      {/*  />*/}
+      {/*</FormControl>*/}
       <Box>
         <FormControl isReadOnly={isLoading}>
           <Toggle

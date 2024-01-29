@@ -2,6 +2,7 @@ export const common = {
   save: 'Simpan',
   cancel: 'Batal',
   title: 'Judul',
+  option: 'Opsi',
   optional: 'opsional',
   max: 'Maksimum',
   min: 'Minimum',
@@ -14,6 +15,9 @@ export const common = {
   feedback: 'Masukan',
   verify: 'Verifikasi',
   verified: 'Terverifikasi',
+  goToDashboardCta: 'Kembali ke dashboard',
+  download: 'Unduh',
+  createForm: 'Buat formulir',
   actionsDropdown: {
     ariaLabel: 'Opsi lainnya',
     preview: 'Lihat formulir',
@@ -33,6 +37,7 @@ export const common = {
       emailVerification: 'Wajib verifikasi alamat email',
       homeNo: 'Harap masukkan nomor telpon yang valid',
     },
+    pageNotFound: 'Halaman ini tidak ditemukan.',
   },
   tooltip: {
     deleteField: 'Hapus pertanyaan',
@@ -76,5 +81,21 @@ export const common = {
     feedbackPlaceholder:
       'Beritahu kami bagaimana pengalaman Anda mengisi formulir ini',
     cta: 'Kirim penilaian',
+  },
+  responsesResult: {
+    title: '{count} respons yang telah diterima',
+    secretKey: {
+      inputName: 'Masukkan atau unggah kunci rahasia',
+      inputDescription:
+        'Kunci rahasia yang diunduh saat Anda membuat formulir ini.',
+      cta: 'Buka respons',
+      missingSecretKeyCta: 'Kehilangan kunci rahasia?',
+      incorrectSecretKeyFile: 'File kunci rahasia invalid',
+      incorrectSecretKey: 'Kunci rahasia yang dimasukan invalid',
+      required: 'Wajib memasukan kunci rahasia formulir',
+    },
+  },
+  filteredResult: {
+    title: '{count} hasil ditemukan',
   },
 }

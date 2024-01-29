@@ -46,6 +46,7 @@ export const adminFormBuilder = {
       placeholder: 'Masukin satu opsi per baris',
     },
     duplicateOptionsError: 'Harap hapus opsi kembar',
+    otherInvalidInputError: 'Harap masukan input lainnya',
   },
   checkbox: {
     selectionLimit: {

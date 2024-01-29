@@ -2,6 +2,7 @@ export const common = {
   save: 'Save',
   cancel: 'Cancel',
   title: 'Title',
+  option: 'Option',
   optional: 'optional',
   maximum: 'Maximum',
   minimum: 'Minimum',
@@ -14,6 +15,9 @@ export const common = {
   feedback: 'Feedback',
   verify: 'Verify',
   verified: 'Verified',
+  goToDashboardCta: 'Go to dashboard',
+  download: 'Download',
+  createForm: 'Create form',
   actionsDropdown: {
     ariaLabel: 'More actions',
     preview: 'Preview',
@@ -33,6 +37,7 @@ export const common = {
       emailVerification: 'Please verify your email address',
       homeNo: 'Please enter a valid landline number',
     },
+    pageNotFound: 'This page could not be found.',
   },
   tooltip: {
     deleteField: 'Delete field',
@@ -75,5 +80,21 @@ export const common = {
     ratingRequired: 'Please select a rating',
     feedbackPlaceholder: 'Tell us more about your experience',
     cta: 'Submit feedback',
+  },
+  responsesResult: {
+    title: '{count} response[|s] to date',
+    secretKey: {
+      inputName: 'Enter or upload Secret Key',
+      inputDescription:
+        'Your Secret Key was downloaded when you created your form',
+      cta: 'Buka respons',
+      missingSecretKeyCta: "Can't find your Secret Key?",
+      incorrectSecretKeyFile: 'Selected file seems to be invalid',
+      incorrectSecretKey: 'The secret key provided is invalid',
+      required: "Please enter the form's secret key",
+    },
+  },
+  filteredResult: {
+    title: '{count} result[|s] found',
   },
 }

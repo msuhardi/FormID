@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, FormControl, useDisclosure } from '@chakra-ui/react'
+import { FormControl, useDisclosure } from '@chakra-ui/react'
 import { extend, pick } from 'lodash'
 
 import { MobileFieldBase } from '~shared/types/field'
@@ -11,7 +11,6 @@ import Toggle from '~components/Toggle'
 import { useFreeSmsQuota } from '~features/admin-form/common/queries'
 
 import { CreatePageDrawerContentContainer } from '../../../../../common'
-import { useCreateTabForm } from '../../../../useCreateTabForm'
 import {
   Description,
   Question,
@@ -21,9 +20,7 @@ import { FormFieldDrawerActions } from '../common/FormFieldDrawerActions'
 import { EditFieldProps } from '../common/types'
 import { useEditFieldForm } from '../common/useEditFieldForm'
 
-import { SmsCountMessage } from './SmsCountMessage'
 import { SmsCountsModal } from './SmsCountsModal'
-import { TwilioCredentialsMessage } from './TwilioCredentialsMessage'
 
 const EDIT_MOBILE_KEYS = [
   'title',
@@ -60,18 +57,7 @@ export const EditMobile = ({ field }: EditMobileProps): JSX.Element => {
     [],
   )
 
-  const { data: form } = useCreateTabForm()
-  const hasTwilioCredentials = useMemo(() => !!form?.msgSrvcName, [form])
-
   const { data: freeSmsCount } = useFreeSmsQuota()
-  const isToggleVfnDisabled = useMemo(() => {
-    if (!freeSmsCount) return true
-    return (
-      !field.isVerifiable &&
-      !hasTwilioCredentials &&
-      freeSmsCount.freeSmsCounts >= freeSmsCount.quota
-    )
-  }, [field.isVerifiable, freeSmsCount, hasTwilioCredentials])
 
   const smsCountsDisclosure = useDisclosure()
 
@@ -98,33 +84,33 @@ export const EditMobile = ({ field }: EditMobileProps): JSX.Element => {
             )}
           />
         </FormControl>
-        <Box>
-          <FormControl isReadOnly={isLoading} isDisabled={isToggleVfnDisabled}>
-            <Toggle
-              {...register('isVerifiable', {
-                onChange: (e) => {
-                  if (e.target.checked && !hasTwilioCredentials) {
-                    smsCountsDisclosure.onOpen()
-                  }
-                },
-              })}
-              label={t(
-                'features.adminFormBuilder.mobileNo.otpVerification.title',
-              )}
-              description={t(
-                'features.adminFormBuilder.mobileNo.otpVerification.description',
-              )}
-            />
-          </FormControl>
-          <SmsCountMessage
-            hasTwilioCredentials={hasTwilioCredentials}
-            freeSmsCount={freeSmsCount}
-          />
-          <TwilioCredentialsMessage
-            freeSmsCount={freeSmsCount}
-            hasTwilioCredentials={hasTwilioCredentials}
-          />
-        </Box>
+        {/*<Box>*/}
+        {/*  <FormControl isReadOnly={isLoading} isDisabled={isToggleVfnDisabled}>*/}
+        {/*    <Toggle*/}
+        {/*      {...register('isVerifiable', {*/}
+        {/*        onChange: (e) => {*/}
+        {/*          if (e.target.checked && !hasTwilioCredentials) {*/}
+        {/*            smsCountsDisclosure.onOpen()*/}
+        {/*          }*/}
+        {/*        },*/}
+        {/*      })}*/}
+        {/*      label={t(*/}
+        {/*        'features.adminFormBuilder.mobileNo.otpVerification.title',*/}
+        {/*      )}*/}
+        {/*      description={t(*/}
+        {/*        'features.adminFormBuilder.mobileNo.otpVerification.description',*/}
+        {/*      )}*/}
+        {/*    />*/}
+        {/*  </FormControl>*/}
+        {/*  <SmsCountMessage*/}
+        {/*    hasTwilioCredentials={hasTwilioCredentials}*/}
+        {/*    freeSmsCount={freeSmsCount}*/}
+        {/*  />*/}
+        {/*  <TwilioCredentialsMessage*/}
+        {/*    freeSmsCount={freeSmsCount}*/}
+        {/*    hasTwilioCredentials={hasTwilioCredentials}*/}
+        {/*  />*/}
+        {/*</Box>*/}
         <FormFieldDrawerActions
           isLoading={isLoading}
           buttonText={buttonText}

@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Controller, useFormContext, useFormState } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { FormControl, useMultiStyleConfig } from '@chakra-ui/react'
 import { get } from 'lodash'
 
@@ -27,6 +28,7 @@ export const RadioField = ({
   schema,
   colorTheme = FormColorTheme.Blue,
 }: RadioFieldProps): JSX.Element => {
+  const { t } = useTranslation()
   const fieldColorScheme = useMemo(
     () => `theme-${colorTheme}` as const,
     [colorTheme],
@@ -61,11 +63,11 @@ export const RadioField = ({
           !schema.othersRadioButton ||
           !(getValues(radioInputName) === RADIO_OTHERS_INPUT_VALUE) ||
           !!value ||
-          'Please specify a value for the "others" option'
+          t('features.adminFormBuilder.radio.otherInvalidInputError')
         )
       },
     }),
-    [getValues, radioInputName, schema.othersRadioButton],
+    [getValues, radioInputName, schema.othersRadioButton, t],
   )
 
   return (

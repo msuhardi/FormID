@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Box, Flex, Grid, Skeleton, Stack, Text } from '@chakra-ui/react'
 import simplur from 'simplur'
 
@@ -16,6 +17,7 @@ import { SubmissionSearchbar } from './SubmissionSearchbar'
 import { useUnlockedResponses } from './UnlockedResponsesProvider'
 
 export const UnlockedResponses = (): JSX.Element => {
+  const { t, i18n } = useTranslation()
   const {
     currentPage,
     setCurrentPage,
@@ -34,12 +36,17 @@ export const UnlockedResponses = (): JSX.Element => {
 
   const { dateRange, setDateRange } = useStorageResponsesContext()
 
+  const resultCount = (submissionId ? filteredCount : count) ?? 0
+  const title = t(
+    `features.common.${
+      submissionId ? 'filteredResult' : 'responsesResult'
+    }.title`,
+    { count: resultCount },
+  )
+
   const prettifiedResponsesCount = useMemo(
-    () =>
-      submissionId
-        ? simplur` ${[filteredCount ?? 0]}result[|s] found`
-        : simplur` ${[count ?? 0]}response[|s] to date`,
-    [submissionId, filteredCount, count],
+    () => (i18n.language.startsWith('en') ? simplur(title) : title),
+    [title, i18n.language],
   )
 
   return (
@@ -63,9 +70,6 @@ export const UnlockedResponses = (): JSX.Element => {
         >
           <Skeleton isLoaded={!isAnyFetching}>
             <Text textStyle="h4" mb="0.5rem">
-              <Text as="span" color="primary.500">
-                {countToUse?.toLocaleString()}
-              </Text>
               {prettifiedResponsesCount}
             </Text>
           </Skeleton>

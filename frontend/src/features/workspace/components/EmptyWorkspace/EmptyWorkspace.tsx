@@ -1,11 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import { BiPlus } from 'react-icons/bi'
-import { Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
 
+import EmptyWorkspaceSvg from '~assets/svgs/empty-workspace.svg'
 import { useIsMobile } from '~hooks/useIsMobile'
 import { fillHeightCss } from '~utils/fillHeightCss'
 import Button from '~components/Button'
-
-import { EmptyWorkspaceSvgr } from './EmptyWorkspaceSvgr'
 
 export interface EmptyWorkspacePage {
   isLoading: boolean
@@ -23,6 +23,7 @@ export const EmptyWorkspace = ({
   title,
   subText,
 }: EmptyWorkspaceProps): JSX.Element => {
+  const { t } = useTranslation()
   const isMobile = useIsMobile()
 
   return (
@@ -55,13 +56,15 @@ export const EmptyWorkspace = ({
           leftIcon={<BiPlus fontSize="1.5rem" />}
           mt={{ base: '2.5rem', md: '2rem' }}
         >
-          Buat Formulir
+          {t('features.common.createForm')}
         </Button>
       )}
-      <EmptyWorkspaceSvgr
-        mt={{ base: '2.5rem', md: '3.5rem' }}
-        w={{ base: '184px', md: '354px' }}
-        maxW="100%"
+      <Box
+        w="100%"
+        flex={1}
+        bgImage={EmptyWorkspaceSvg}
+        bgRepeat="no-repeat"
+        bgPosition="center"
       />
     </Flex>
   )

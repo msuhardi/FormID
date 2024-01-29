@@ -1,4 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiDownload } from 'react-icons/bi'
 import { useParams } from 'react-router-dom'
 import {
@@ -22,7 +23,6 @@ import { useStorageResponsesContext } from '../ResponsesPage/storage'
 import { DecryptedRow } from './DecryptedRow'
 import { IndividualResponseNavbar } from './IndividualResponseNavbar'
 import { useMutateDownloadAttachments } from './mutations'
-import { PaymentSection } from './PaymentSection'
 import { useIndividualSubmission } from './queries'
 
 const LoadingDecryption = memo(() => {
@@ -47,6 +47,7 @@ const LoadingDecryption = memo(() => {
 })
 
 export const IndividualResponsePage = (): JSX.Element => {
+  const { t } = useTranslation()
   const { submissionId, formId } = useParams()
   if (!submissionId) throw new Error('Missing submissionId')
   if (!formId) throw new Error('Missing formId')
@@ -86,8 +87,8 @@ export const IndividualResponsePage = (): JSX.Element => {
     return (
       <SecretKeyVerification
         heroSvg={<FormActivationSvg />}
-        ctaText="Unlock responses"
-        label="Enter or upload Secret Key"
+        ctaText={t('features.common.responsesResult.secretKey.cta')}
+        label={t('features.common.responsesResult.secretKey.inputName')}
       />
     )
 
@@ -161,9 +162,6 @@ export const IndividualResponsePage = (): JSX.Element => {
               ))}
               <Box />
             </Stack>
-            {data?.payment && (
-              <PaymentSection payment={data.payment} formId={formId} />
-            )}
           </>
         )}
       </Stack>
