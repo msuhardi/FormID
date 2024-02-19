@@ -1,15 +1,14 @@
-import { Container, Skeleton, Stack, Text } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
+import { Box, Container, Image, Skeleton, Stack, Text } from '@chakra-ui/react'
 import simplur from 'simplur'
 
-import { OGP_FORMSG_COLLATE } from '~constants/links'
-import Link from '~components/Link'
+import EmailResponsesSvg from '~/assets/svgs/email-responses.svg'
 
 import { useFormResponsesCount } from '../../queries'
 import { EmptyResponses } from '../common/EmptyResponses'
 
-import { EmailResponsesSvgr } from './EmailResponsesSvgr'
-
 export const EmailResponsesTab = (): JSX.Element => {
+  const { t, i18n } = useTranslation()
   const { data: responsesCount, isLoading: isFormResponsesLoading } =
     useFormResponsesCount()
 
@@ -17,25 +16,22 @@ export const EmailResponsesTab = (): JSX.Element => {
     return <EmptyResponses />
   }
 
+  const count = responsesCount ?? 0
+  const title = t('features.common.responsesResult.title', { count })
+
   return (
     <Container p={0} maxW="42.5rem">
       <Stack spacing="2rem">
-        <EmailResponsesSvgr />
+        <Box w={{ base: '55%', sm: '28%' }}>
+          <Image src={EmailResponsesSvg} />
+        </Box>
         <Skeleton isLoaded={!isFormResponsesLoading} w="fit-content">
           <Text as="h2" textStyle="h2" whiteSpace="pre-wrap">
-            <Text color="primary.500" as="span">
-              {responsesCount?.toLocaleString() ?? '-'}
-            </Text>
-            {simplur` ${[responsesCount ?? 0]}response[|s] to date`}
+            {i18n.language.startsWith('en') ? simplur(title) : title}
           </Text>
         </Skeleton>
         <Text textStyle="body-1">
-          FormSG does not store responses in Email mode. To collate the
-          responses in your Outlook Inbox, use the{' '}
-          <Link isExternal href={OGP_FORMSG_COLLATE}>
-            Data Collation Tool
-          </Link>
-          .
+          {t('features.common.responsesResult.email.info')}
         </Text>
       </Stack>
     </Container>

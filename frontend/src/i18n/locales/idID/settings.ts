@@ -3,6 +3,11 @@ export const settings = {
     general: 'Umum',
     twilioCredentials: 'Kredensial Twilio',
     webhooks: 'Webhooks',
+    routing: 'Routing',
+  },
+  routing: {
+    title: 'Pengaturan routing',
+    cta: 'Buat routing',
   },
   general: {
     title: 'Pengaturan umum',

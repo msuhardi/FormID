@@ -3,6 +3,11 @@ export const settings = {
     general: 'General',
     twilioCredentials: 'Twilio credentials',
     webhooks: 'Webhooks',
+    routing: 'Routing',
+  },
+  routing: {
+    title: 'Routing settings',
+    cta: 'New route map',
   },
   general: {
     title: 'General settings',

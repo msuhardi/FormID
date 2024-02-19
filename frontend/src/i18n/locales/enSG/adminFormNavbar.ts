@@ -3,6 +3,7 @@ export const adminFormNavbar = {
     create: 'Create',
     settings: 'Settings',
     results: 'Results',
+    routing: 'Routing',
   },
   manageCollaborators: 'Manage collaborators',
   previewForm: 'Preview form',

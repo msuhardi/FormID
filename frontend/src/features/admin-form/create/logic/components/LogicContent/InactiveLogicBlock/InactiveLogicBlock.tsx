@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiTrash } from 'react-icons/bi'
 import {
   Box,
@@ -33,6 +34,7 @@ export const InactiveLogicBlock = ({
   logic,
   handleOpenDeleteModal,
 }: InactiveLogicBlockProps): JSX.Element | null => {
+  const { t } = useTranslation()
   const { mapIdToField } = useAdminFormLogic()
   const setToEditing = useAdminLogicStore(setToEditingSelector)
   const stateData = useAdminLogicStore(createOrEditDataSelector)
@@ -80,7 +82,11 @@ export const InactiveLogicBlock = ({
       case LogicType.PreventSubmit:
         return (
           <>
-            <Text>then disable submission</Text>
+            <Text>
+              {`${t('features.logicPage.logicClause.then')} ${t(
+                'features.logicPage.actionTypes.disableSubmission',
+              )}`.toLowerCase()}
+            </Text>
             <LogicBadge>{logic.preventSubmitMessage}</LogicBadge>
           </>
         )
@@ -135,7 +141,13 @@ export const InactiveLogicBlock = ({
               color="secondary.500"
             >
               <Stack>
-                <Text>{index === 0 ? 'If' : 'and'}</Text>
+                <Text>
+                  {t(
+                    `features.logicPage.${
+                      index === 0 ? 'logicClause.if' : 'and'
+                    }`,
+                  )}
+                </Text>
                 <FieldLogicBadge
                   field={mapIdToField[condition.field]}
                   defaults={{
@@ -146,7 +158,9 @@ export const InactiveLogicBlock = ({
                 />
               </Stack>
               <Stack>
-                <Text>{condition.state}</Text>
+                <Text>
+                  {t(`features.logicPage.logicCondition.${condition.state}`)}
+                </Text>
                 <LogicConditionValues value={condition.value} />
               </Stack>
             </Stack>

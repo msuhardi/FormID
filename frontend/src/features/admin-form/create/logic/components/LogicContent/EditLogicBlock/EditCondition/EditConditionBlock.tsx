@@ -160,15 +160,22 @@ export const EditConditionBlock = ({
     switch (mappedField.fieldType) {
       case BasicField.YesNo:
         return [
-          t('features.adminFormBuilder.yesNo.yes'),
-          t('features.adminFormBuilder.yesNo.no'),
+          {
+            label: t('features.adminFormBuilder.yesNo.yes'),
+            value: 'Yes',
+          },
+          {
+            label: t('features.adminFormBuilder.yesNo.no'),
+            value: 'No',
+          },
         ]
       case BasicField.Radio:
         if (mappedField.othersRadioButton) {
           // 'Others' does not show up in fieldOptions
-          return mappedField.fieldOptions.concat(
-            t('features.adminFormBuilder.radio.others'),
-          )
+          return mappedField.fieldOptions.concat({
+            label: t('features.adminFormBuilder.radio.others'),
+            value: 'Others',
+          })
         }
         return mappedField.fieldOptions
       case BasicField.Dropdown:

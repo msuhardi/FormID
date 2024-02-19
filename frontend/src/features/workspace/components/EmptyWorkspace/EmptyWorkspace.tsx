@@ -4,7 +4,6 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 
 import EmptyWorkspaceSvg from '~assets/svgs/empty-workspace.svg'
 import { useIsMobile } from '~hooks/useIsMobile'
-import { fillHeightCss } from '~utils/fillHeightCss'
 import Button from '~components/Button'
 
 export interface EmptyWorkspacePage {
@@ -34,7 +33,6 @@ export const EmptyWorkspace = ({
       px="2rem"
       py="4rem"
       bg="neutral.100"
-      css={fillHeightCss}
       h="100%"
     >
       <Text

@@ -23,7 +23,7 @@ export const adminFormBuilder = {
     homeNumber: 'No. Telepon rumah',
     mobileNumber: 'No. HP',
     longText: 'Jawaban panjang',
-    nik: 'NIK',
+    nik: 'NIK / KK',
     number: 'Angka',
     radio: 'Pilihan ganda',
     rating: 'Rating',

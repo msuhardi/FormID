@@ -32,6 +32,7 @@ const FORM_SETTINGS_FIELDS = <const>[
   'submissionLimit',
   'title',
   'webhook',
+  'routeMap',
 ]
 
 export const EMAIL_FORM_SETTINGS_FIELDS = <const>[
@@ -47,6 +48,8 @@ export const STORAGE_FORM_SETTINGS_FIELDS = <const>[
 ]
 
 export const WEBHOOK_SETTINGS_FIELDS = <const>['responseMode', 'webhook']
+
+export const ROUTING_SETTINGS = <const>['routeMap']
 
 export const ADMIN_FORM_META_FIELDS = <const>[
   'admin',

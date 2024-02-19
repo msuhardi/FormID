@@ -45,7 +45,9 @@ export const FormResponseOptions = forwardRef<
         flex={1}
       >
         <Tile.Title>{t('features.common.responseMode.storage')}</Tile.Title>
-        <Tile.Subtitle>Lihat / unduh respons formulir di FormSG</Tile.Subtitle>
+        <Tile.Subtitle>
+          Lihat / unduh respons formulir melalui web
+        </Tile.Subtitle>
         <OptionDescription
           listItems={[
             'Maks. ukuran lampiran: 20MB per formulir',

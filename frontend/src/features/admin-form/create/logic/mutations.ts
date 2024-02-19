@@ -46,7 +46,7 @@ export const useLogicMutations = () => {
           return prev
         })
         toast({
-          description: 'The logic was successfully created.',
+          description: 'Kondisi berhasil ditambahkan!',
         })
       },
       onError: handleError,
@@ -67,7 +67,7 @@ export const useLogicMutations = () => {
           return prev
         })
         toast({
-          description: 'The logic was successfully deleted.',
+          description: 'Kondisi berhasil dihapus!',
         })
       },
       onError: handleError,
@@ -91,7 +91,7 @@ export const useLogicMutations = () => {
           return prev
         })
         toast({
-          description: 'The logic was successfully updated.',
+          description: 'Kondisi berhasil diubah!',
         })
       },
       onError: handleError,

@@ -54,7 +54,7 @@ export const PublicFormSubmitButton = ({
         type="button"
         isLoading={isSubmitting}
         isDisabled={!!preventSubmissionLogic || !onSubmit}
-        loadingText="Submitting"
+        loadingText={t('features.common.formSubmission.submitting')}
         onClick={onSubmit}
       >
         <VisuallyHidden>End of form.</VisuallyHidden>

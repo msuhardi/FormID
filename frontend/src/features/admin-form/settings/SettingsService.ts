@@ -120,6 +120,17 @@ export const updateFormWebhookRetries = async (
   })
 }
 
+export const updateFormRouteMap = async (
+  formId: string,
+  routeMap: FormSettings['routeMap'],
+  emails?: string[], // add the email that ingest the route map run
+) => {
+  return updateFormSettings(formId, {
+    routeMap,
+    emails,
+  })
+}
+
 export const updateBusinessInfo: UpdateStorageFormFn<'business'> = async (
   formId,
   newBusinessField: StorageFormSettings['business'],

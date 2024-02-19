@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
 
@@ -33,6 +34,7 @@ import {
 } from '../utils/getMutationMessage'
 
 export const useDeleteFormField = () => {
+  const { t } = useTranslation()
   const { formId } = useParams()
   if (!formId) throw new Error('No formId provided')
 
@@ -71,15 +73,14 @@ export const useDeleteFormField = () => {
     if (stateData.state !== FieldBuilderState.EditingField) {
       toast({
         status: 'warning',
-        description:
-          'Something went wrong when deleting your field. Please refresh and try again.',
+        description: t('features.toast.fieldDeleteError'),
       })
       return
     }
     toast({
-      description: `The ${getMutationToastDescriptionFieldName(
-        stateData.field,
-      )} was deleted.`,
+      description: t('features.toast.fieldDeletion', {
+        field: getMutationToastDescriptionFieldName(stateData.field),
+      }),
     })
     queryClient.setQueryData<AdminFormDto>(adminFormKey, (oldForm) => {
       // Should not happen, should not be able to update field if there is no
@@ -100,7 +101,7 @@ export const useDeleteFormField = () => {
       return oldForm
     })
     setToInactive()
-  }, [adminFormKey, stateData, queryClient, setToInactive, toast])
+  }, [adminFormKey, stateData, queryClient, setToInactive, toast, t])
 
   const handleError = useCallback(
     (error: Error) => {

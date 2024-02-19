@@ -7,6 +7,7 @@ import {
   AdminFormDto,
   FormAuthType,
   FormResponseMode,
+  FormRouteMap,
   FormSettings,
   FormStatus,
   StorageFormSettings,
@@ -34,6 +35,7 @@ import {
   updateFormInactiveMessage,
   updateFormIssueNotification,
   updateFormLimit,
+  updateFormRouteMap,
   updateFormStatus,
   updateFormTitle,
   updateFormWebhookRetries,
@@ -335,6 +337,24 @@ export const useMutateFormSettings = () => {
     },
   )
 
+  const mutateFormRouteMap = useMutation(
+    (routeMapSetting: { routeMap: FormRouteMap; emails: string[] }) =>
+      updateFormRouteMap(
+        formId,
+        routeMapSetting.routeMap,
+        routeMapSetting.emails,
+      ),
+    {
+      onSuccess: (newData) => {
+        handleSuccess({
+          newData,
+          toastDescription: `Berhasil ubah routing formulir!`,
+        })
+      },
+      onError: handleError,
+    },
+  )
+
   return {
     mutateWebhookRetries,
     mutateFormWebhookUrl,
@@ -349,6 +369,7 @@ export const useMutateFormSettings = () => {
     mutateFormEsrvcId,
     mutateFormBusiness,
     mutateGST,
+    mutateFormRouteMap,
   }
 }
 
