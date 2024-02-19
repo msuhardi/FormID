@@ -29,9 +29,10 @@ services:
       - VIRUS_SCANNER_QUARANTINE_S3_BUCKET=local-virus-scanner-quarantine-bucket
       - VIRUS_SCANNER_CLEAN_S3_BUCKET=local-virus-scanner-clean-bucket
       - FORMSG_SDK_MODE=development
-      - AWS_ACCESS_KEY_ID=AKIAYVTTRPKGWOIIBDW6
-      - AWS_SECRET_ACCESS_KEY=hpbhjma8YE+7Bij5Y+opvf3CbhbToG1p/xs5+Hfu
+      - AWS_ACCESS_KEY_ID=fakeKey
+      - AWS_SECRET_ACCESS_KEY=fakeSecret
       - SESSION_SECRET=thisisasecret
+      - AWS_ENDPOINT=http://localhost:4566
       - SECRET_ENV=development
       - SES_PORT=1025
       - SES_HOST=maildev
