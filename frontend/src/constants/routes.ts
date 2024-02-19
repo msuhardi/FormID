@@ -19,6 +19,7 @@ export const ADMINFORM_BUILD_SUBROUTE = ''
 export const ADMINFORM_SETTINGS_SUBROUTE = 'settings'
 export const ADMINFORM_RESULTS_SUBROUTE = 'results'
 export const ADMINFORM_PREVIEW_ROUTE = 'preview'
+export const ADMINFORM_ROUTING_ROUTE = 'routing'
 export const ADMINFORM_USETEMPLATE_ROUTE = 'use-template'
 
 /**
@@ -31,7 +32,7 @@ export const ADMINFORM_USETEMPLATE_ROUTE = 'use-template'
  * `/?` - optional trailing slash, also allows for ADMINFORM_BUILD_SUBROUTE to match
  */
 export const ACTIVE_ADMINFORM_BUILDER_ROUTE_REGEX = new RegExp(
-  `${ADMINFORM_ROUTE}/([a-fA-F0-9]{24})(/${ADMINFORM_SETTINGS_SUBROUTE}|/${ADMINFORM_RESULTS_SUBROUTE})?/?`,
+  `${ADMINFORM_ROUTE}/([a-fA-F0-9]{24})(/${ADMINFORM_SETTINGS_SUBROUTE}|/${ADMINFORM_RESULTS_SUBROUTE}|/${ADMINFORM_ROUTING_ROUTE})?/?`,
   'i',
 )
 

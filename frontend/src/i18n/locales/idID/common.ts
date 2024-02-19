@@ -4,8 +4,8 @@ export const common = {
   title: 'Judul',
   option: 'Opsi',
   optional: 'opsional',
-  max: 'Maksimum',
-  min: 'Minimum',
+  maximum: 'Maksimum',
+  minimum: 'Minimum',
   exact: 'Persis',
   delete: 'Hapus',
   back: 'Kembali',
@@ -74,6 +74,7 @@ export const common = {
   formSubmission: {
     disabled: 'Submisi dinonaktifkan',
     enabled: 'Kirim respons',
+    submitting: 'Mengirim',
   },
   feedbackSubmission: {
     title: 'Bagaimana pengalaman Anda mengisi formulir ini?',
@@ -93,6 +94,9 @@ export const common = {
       incorrectSecretKeyFile: 'File kunci rahasia invalid',
       incorrectSecretKey: 'Kunci rahasia yang dimasukan invalid',
       required: 'Wajib memasukan kunci rahasia formulir',
+    },
+    email: {
+      info: 'Maaf, FormID tidak menyimpan respons pada mode email. Harap hubungi kami untuk pertanyaan lebih lanjut.',
     },
   },
   filteredResult: {

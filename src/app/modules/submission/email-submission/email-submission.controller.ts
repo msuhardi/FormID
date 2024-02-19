@@ -47,8 +47,6 @@ const submitEmailModeForm: ControllerHandler<
     })
   }
 
-  let spcpSubmissionFailure: undefined | true
-
   const logMeta = {
     action: 'handleEmailSubmission',
     ...createReqMeta(req),
@@ -266,9 +264,7 @@ const submitEmailModeForm: ControllerHandler<
       )
       .mapErr((error) => {
         const { errorMessage, statusCode } = mapRouteError(error)
-        return res
-          .status(statusCode)
-          .json({ message: errorMessage, spcpSubmissionFailure })
+        return res.status(statusCode).json({ message: errorMessage })
       })
   )
 }

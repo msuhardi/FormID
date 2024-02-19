@@ -14,6 +14,7 @@ import { DateString } from '../generic'
 import { FormLogic, LogicDto } from './form_logic'
 import { PaymentChannel, PaymentMethodType, PaymentType } from '../payment'
 import { Product } from './product'
+import { FormRouteMap } from "../route-maps";
 
 export type FormId = Opaque<string, 'FormId'>
 
@@ -146,6 +147,8 @@ export interface FormBase {
   webhook: FormWebhook
 
   responseMode: FormResponseMode
+
+  routeMap?: FormRouteMap
 }
 
 export interface EmailFormBase extends FormBase {

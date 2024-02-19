@@ -2,7 +2,7 @@ export const adminFormBuilder = {
   thankYouPage: {
     title: 'Edit Thank You page',
     buttonText: 'Button text',
-    defaultButtonText: 'Isi formulir lagi',
+    defaultButtonText: 'Submit another response',
     followUpInstruction: 'Follow-up instruction',
     redirectLink: 'Button redirect link',
     defaultRedirectLink: 'Default form link',
@@ -23,7 +23,7 @@ export const adminFormBuilder = {
     homeNumber: 'Home number',
     mobileNumber: 'Mobile number',
     longText: 'Long answer',
-    nik: 'NIK',
+    nik: 'NIK / KK',
     number: 'Number',
     radio: 'Radio',
     rating: 'Rating',

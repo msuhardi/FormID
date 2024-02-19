@@ -32,6 +32,7 @@ import {
   ACTIVE_ADMINFORM_BUILDER_ROUTE_REGEX,
   ADMINFORM_BUILD_SUBROUTE,
   ADMINFORM_RESULTS_SUBROUTE,
+  ADMINFORM_ROUTING_ROUTE,
   ADMINFORM_SETTINGS_SUBROUTE,
 } from '~constants/routes'
 import { useDraggable } from '~hooks/useDraggable'
@@ -178,6 +179,13 @@ export const AdminFormNavbar = ({
           isActive={checkTabActive(ADMINFORM_RESULTS_SUBROUTE)}
         >
           {t('features.adminFormNavbar.tabs.results')}
+        </NavigationTab>
+        <NavigationTab
+          hidden={viewOnly}
+          to={ADMINFORM_ROUTING_ROUTE}
+          isActive={checkTabActive(ADMINFORM_ROUTING_ROUTE)}
+        >
+          {t('features.adminFormNavbar.tabs.routing')}
         </NavigationTab>
       </NavigationTabList>
       <Flex

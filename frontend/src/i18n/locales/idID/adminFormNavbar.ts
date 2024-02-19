@@ -3,6 +3,7 @@ export const adminFormNavbar = {
     create: 'Pertanyaan',
     settings: 'Pengaturan',
     results: 'Respons',
+    routing: 'Routing',
   },
   manageCollaborators: 'Kelola akses',
   previewForm: 'Lihat formulir',

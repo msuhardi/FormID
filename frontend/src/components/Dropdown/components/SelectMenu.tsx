@@ -64,6 +64,7 @@ export const SelectMenu = (): JSX.Element => {
   const listSx = {
     ...styles.list,
     ...(fullWidth ? { maxH: '100%' } : {}),
+    zIndex: 2200,
   }
 
   return (

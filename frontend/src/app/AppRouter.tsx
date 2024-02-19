@@ -7,6 +7,7 @@ import {
   ADMINFORM_PREVIEW_ROUTE,
   ADMINFORM_RESULTS_SUBROUTE,
   ADMINFORM_ROUTE,
+  ADMINFORM_ROUTING_ROUTE,
   ADMINFORM_SETTINGS_SUBROUTE,
   ADMINFORM_USETEMPLATE_ROUTE,
   DASHBOARD_ROUTE,
@@ -36,6 +37,7 @@ import {
 } from '~features/admin-form/responses'
 import { ChartsPage } from '~features/admin-form/responses/ChartsPage/ChartsPage'
 import { SettingsPage } from '~features/admin-form/settings/SettingsPage'
+import { SettingsRoutingPage } from '~features/admin-form/settings/SettingsRoutingPage'
 import { SelectProfilePage } from '~features/login'
 import { FormPaymentPage } from '~features/public-form/components/FormPaymentPage/FormPaymentPage'
 
@@ -143,6 +145,10 @@ export const AppRouter = (): JSX.Element => {
           <Route path={ADMINFORM_SETTINGS_SUBROUTE} element={<SettingsPage />}>
             <Route path={':settingsTab'} element={<SettingsPage />} />
           </Route>
+          <Route
+            path={ADMINFORM_ROUTING_ROUTE}
+            element={<SettingsRoutingPage />}
+          ></Route>
           <Route
             path={ADMINFORM_RESULTS_SUBROUTE}
             element={<FormResultsLayout />}

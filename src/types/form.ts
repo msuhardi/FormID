@@ -69,6 +69,7 @@ type FormDefaultableKey =
   | 'submissionLimit'
   | 'isListed'
   | 'webhook'
+  | 'routeMap'
 
 export type IForm = Merge<
   SetOptional<FormBase, FormDefaultableKey>,
@@ -80,6 +81,7 @@ export type IForm = Merge<
     form_logics?: FormLogicSchema[]
 
     webhook?: Partial<FormBase['webhook']>
+    routeMap?: Partial<FormBase['routeMap']>
     startPage?: Partial<FormBase['startPage']>
     endPage?: Partial<FormBase['endPage']>
 

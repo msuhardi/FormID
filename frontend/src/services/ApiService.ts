@@ -51,7 +51,7 @@ export const transformAxiosError = (error: Error): ApiError => {
         },
       })
       return new Error(
-        `There was a problem with your internet connection. Please check your network and try again. ${error.message}`,
+        'Ada masalah dengan koneksi internet Anda. Harap periksa jaringan Anda dan coba lagi.',
       )
     }
   }

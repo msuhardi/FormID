@@ -372,7 +372,7 @@ export const createNikValidationRules: ValidationRuleFn<NricFieldBase> = (
         if (!val) return true
         return (
           isValidNik(val) ||
-          i18n.t('features.common.errors.validValue', { fieldName: 'NIK' })
+          i18n.t('features.common.errors.validValue', { fieldName: 'NIK / KK' })
         )
       },
     },

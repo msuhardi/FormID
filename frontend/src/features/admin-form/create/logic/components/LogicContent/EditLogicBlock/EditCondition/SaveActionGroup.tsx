@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { BiTrash } from 'react-icons/bi'
 import { Box, Flex, Stack } from '@chakra-ui/react'
 
@@ -21,6 +22,7 @@ export const SaveActionGroup = ({
   isLoading,
 }: SaveActionGroupProps): JSX.Element => {
   const isMobile = useIsMobile()
+  const { t } = useTranslation()
 
   return (
     <Flex
@@ -62,7 +64,7 @@ export const SaveActionGroup = ({
           onClick={handleCancel}
           isFullWidth={isMobile}
         >
-          Cancel
+          {t('features.common.cancel')}
         </Button>
       </Stack>
     </Flex>

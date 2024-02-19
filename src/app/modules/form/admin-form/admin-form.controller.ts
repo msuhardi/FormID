@@ -10,7 +10,7 @@ import { ResultAsync } from 'neverthrow'
 import {
   MAX_UPLOAD_FILE_SIZE,
   VALID_UPLOAD_FILE_TYPES,
-} from '../../../../../shared/constants/file'
+} from '../../../../../shared/constants'
 import {
   AdminDashboardFormMetaDto,
   BasicField,

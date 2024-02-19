@@ -1,7 +1,18 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiPlus } from 'react-icons/bi'
-import { Divider, Flex, Grid, Icon, Stack, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  Image,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
+
+import EmptyLogicSvg from '~/assets/svgs/add-logic.svg'
 
 import { GUIDE_FORM_LOGIC } from '~constants/links'
 import Button from '~components/Button'
@@ -9,8 +20,6 @@ import Link from '~components/Link'
 
 import { useAdminLogicStore } from '../adminLogicStore'
 import { ALLOWED_FIELDS_META } from '../constants'
-
-import { LogicSvgr } from './LogicSvgr'
 
 export const EmptyLogic = (): JSX.Element => {
   const { t } = useTranslation()
@@ -42,7 +51,9 @@ export const EmptyLogic = (): JSX.Element => {
       >
         {t('features.logicPage.addLogicBtn')}
       </Button>
-      <LogicSvgr maxW="292px" />
+      <Box w="88%">
+        <Image src={EmptyLogicSvg} />
+      </Box>
       <Divider my="2.5rem" />
       <Stack spacing="1.5rem" textAlign="center" maxW="28rem">
         <Text textStyle="subhead-3">

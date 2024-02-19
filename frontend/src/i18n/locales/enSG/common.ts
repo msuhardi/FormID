@@ -74,6 +74,7 @@ export const common = {
   formSubmission: {
     disabled: 'Submission disabled',
     enabled: 'Submit now',
+    submitting: 'Submitting',
   },
   feedbackSubmission: {
     title: 'How was your form filling experience today?',

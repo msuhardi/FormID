@@ -21,6 +21,8 @@ import {
   WEBHOOK_SETTINGS_FIELDS,
 } from '../../../shared/constants'
 import {
+  ActionRoutingType,
+  ActionStepType,
   AdminDashboardFormMetaDto,
   BasicField,
   EmailFormSettings,
@@ -34,6 +36,7 @@ import {
   FormPaymentsField,
   FormPermission,
   FormResponseMode,
+  FormRouteMap,
   FormSettings,
   FormStartPage,
   FormStatus,
@@ -44,6 +47,7 @@ import {
   LogicType,
   PaymentChannel,
   PaymentType,
+  RouteStep,
   StorageFormSettings,
 } from '../../../shared/types'
 import { reorder } from '../../../shared/utils/immutable-array-fns'
@@ -135,6 +139,46 @@ const formSchemaOptions: SchemaOptions = {
     updatedAt: 'lastModified',
   },
 }
+
+const RouteMapSchema = new Schema<FormRouteMap>({
+  active: Boolean,
+  respondentEmailField: String,
+  emailSender: String,
+  isDecisionPublic: Boolean,
+})
+const RouteStepSchema = new Schema<RouteStep>()
+RouteStepSchema.add({
+  routeMap: RouteMapSchema,
+  type: {
+    type: String,
+    enum: Object.values(ActionStepType),
+  },
+  routingType: {
+    type: String,
+    enum: Object.values(ActionRoutingType),
+  },
+  emails: [String],
+  emailField: String,
+  checkboxField: {
+    question: String,
+    rules: [
+      {
+        answer: String,
+        emails: [String],
+      },
+    ],
+  },
+  question: String,
+  rules: [
+    {
+      conditionStep: String,
+      answer: String,
+      nextStep: RouteStepSchema,
+    },
+  ],
+  approvalStep: RouteStepSchema,
+  rejectionStep: RouteStepSchema,
+})
 
 export const formPaymentsFieldSchema = {
   enabled: {
@@ -512,6 +556,11 @@ const compileFormModel = (db: Mongoose): IFormModel => {
           type: Boolean,
           default: false,
         },
+      },
+
+      routeMap: {
+        type: RouteMapSchema,
+        required: false,
       },
 
       msgSrvcName: {

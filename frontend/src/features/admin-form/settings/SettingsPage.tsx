@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BiCodeBlock, BiCog, BiMessage } from 'react-icons/bi'
+import { BiCodeBlock, BiCog, BiMessage, BiNetworkChart } from 'react-icons/bi'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   Box,
@@ -85,7 +85,7 @@ export const SettingsPage = (): JSX.Element => {
         px={{ base: '1.5rem', md: '1.75rem', lg: '2rem' }}
         index={tabIndex === -1 ? 0 : tabIndex}
         onChange={handleTabChange}
-        h="100%"
+        minH="100%"
       >
         <Flex
           h="max-content"
@@ -132,7 +132,6 @@ export const SettingsPage = (): JSX.Element => {
           maxW="42.5rem"
           // Offset start of tabpanel text from tablist.
           mt={{ md: '1rem' }}
-          h="100%"
         >
           <TabPanel>
             <SettingsGeneralPage />
@@ -140,7 +139,7 @@ export const SettingsPage = (): JSX.Element => {
           <TabPanel>
             <SettingsTwilioPage />
           </TabPanel>
-          <TabPanel h="100%">
+          <TabPanel>
             <SettingsWebhooksPage />
           </TabPanel>
         </TabPanels>
