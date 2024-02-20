@@ -7,6 +7,8 @@ import { createLoggerWithLabel } from '../../config/logger'
 
 const logger = createLoggerWithLabel(module)
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export const handleIncomingEmail = async (req) => {
   const message = req.body
 
@@ -46,6 +48,8 @@ export const handleIncomingEmail = async (req) => {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const retrieveEmailFromS3 = async (message) => {
   logger.info({
     meta: { action: 'retrieveEmailFromS3', message },

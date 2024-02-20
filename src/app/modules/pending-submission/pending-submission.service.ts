@@ -25,7 +25,7 @@ export const findPendingSubmissionById = (
   IPendingSubmissionSchema,
   DatabaseError | PendingSubmissionNotFoundError
 > => {
-  if (!mongoose.Types.ObjectId.isValid(pendingSubmissionId)) {
+  if (!mongoose.isValidObjectId(pendingSubmissionId)) {
     return errAsync(new PendingSubmissionNotFoundError())
   }
   return ResultAsync.fromPromise(

@@ -157,6 +157,8 @@ export class MailService {
       ...loggerMeta,
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return promiseRetry<true>(async (retry, attemptNum) => {
       logger.info({
         message: `Attempt ${attemptNum} to send mail`,

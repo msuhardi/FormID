@@ -44,7 +44,7 @@ export const insertFormIssue = ({
   issue: string
   email?: string
 }): ResultAsync<IFormIssueSchema, FormNotFoundError | DatabaseError> => {
-  if (!mongoose.Types.ObjectId.isValid(formId)) {
+  if (!mongoose.isValidObjectId(formId)) {
     return errAsync(new FormNotFoundError())
   }
   return ResultAsync.fromPromise(

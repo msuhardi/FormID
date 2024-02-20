@@ -26,7 +26,7 @@ export const getRequestIp = <R extends LooseRequest>(req: R): string => {
   // If trust proxy setting is false, the app is understood as directly
   // facing the Internet and the client’s IP address is derived from
   // req.connection.remoteAddress.
-  return req.get('cf-connecting-ip') ?? req.ip
+  return (req.get('cf-connecting-ip') ?? req.ip) as string
 }
 
 export const getTrace = <R extends LooseRequest>(
