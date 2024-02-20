@@ -93,7 +93,7 @@ export const deactivateForm = (
 export const retrieveFullFormById = (
   formId: string,
 ): ResultAsync<IPopulatedForm, FormNotFoundError | DatabaseError> => {
-  if (!mongoose.Types.ObjectId.isValid(formId)) {
+  if (!mongoose.isValidObjectId(formId)) {
     return errAsync(new FormNotFoundError())
   }
 
@@ -130,7 +130,7 @@ export const retrieveFormKeysById = (
   formId: string,
   fields: (keyof IPopulatedForm)[],
 ): ResultAsync<IPopulatedForm, FormNotFoundError | DatabaseError> => {
-  if (!mongoose.Types.ObjectId.isValid(formId)) {
+  if (!mongoose.isValidObjectId(formId)) {
     return errAsync(new FormNotFoundError())
   }
 
@@ -161,7 +161,7 @@ export const retrieveFormKeysById = (
 export const retrieveFormById = (
   formId: string,
 ): ResultAsync<IFormSchema, FormNotFoundError | DatabaseError> => {
-  if (!mongoose.Types.ObjectId.isValid(formId)) {
+  if (!mongoose.isValidObjectId(formId)) {
     return errAsync(new FormNotFoundError())
   }
 

@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express'
 import helmet from 'helmet'
-import { ContentSecurityPolicyOptions } from 'helmet/dist/types/middlewares/content-security-policy'
 
 import config from '../../config/config'
 import { sentryConfig } from '../../config/features/sentry.config'
@@ -29,12 +28,14 @@ const helmetMiddlewares = () => {
     policy: 'strict-origin-when-cross-origin',
   })
 
-  const cspCoreDirectives: ContentSecurityPolicyOptions['directives'] =
-    CSP_CORE_DIRECTIVES
+  const cspCoreDirectives = CSP_CORE_DIRECTIVES
 
   const reportUri = sentryConfig.cspReportUri
 
-  const cspOptionalDirectives: ContentSecurityPolicyOptions['directives'] = {}
+  const cspOptionalDirectives: {
+    reportUri?: null | string[]
+    upgradeInsecureRequests?: null | string
+  } = {}
 
   // Add on reportUri CSP header if ReportUri exists
   // It is necessary to have the if statement for optional directives because falsey values

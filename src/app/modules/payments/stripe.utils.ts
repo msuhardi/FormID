@@ -128,7 +128,7 @@ export const getMetadataPaymentId = (
     })
     return err(new StripeMetadataInvalidError())
   }
-  if (!mongoose.Types.ObjectId.isValid(metadata.paymentId)) {
+  if (!mongoose.isValidObjectId(metadata.paymentId)) {
     logger.warn({
       message: 'Got Stripe metadata with invalid paymentId',
       meta: { ...logMeta, metadata },

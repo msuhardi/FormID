@@ -460,7 +460,7 @@ export const getSubmissionMetadata = (
   submissionId: string,
 ): ResultAsync<StorageModeSubmissionMetadata | null, DatabaseError> => {
   // Early return, do not even retrieve from database.
-  if (!mongoose.Types.ObjectId.isValid(submissionId)) {
+  if (!mongoose.isValidObjectId(submissionId)) {
     return okAsync(null)
   }
 
